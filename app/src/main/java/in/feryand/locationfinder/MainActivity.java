@@ -145,9 +145,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if ( getResources().getConfiguration().orientation != 1 ) {
             if ( (orientation == 270) || (phoneOrientation == 270) ) {
+                if(phoneOrientation == 90) {
+                    degree += 90;
+                }
                 phoneOrientation = 270;
                 degree += 90;
-            } else if ( (orientation == 90) || (phoneOrientation == 90) ){
+            }
+            if ( (orientation == 90) || (phoneOrientation == 90) ){
+                if(phoneOrientation == 270) {
+                    degree -= 90;
+                }
                 phoneOrientation = 90;
                 degree -= 90;
             }
