@@ -9,26 +9,63 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.content.Intent;
-import android.graphics.Point;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Display;
+import android.util.Log;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
     static final LatLng defaultLocation = new LatLng(-6.8899f, 107.6100f);
     private GoogleMap googleMap;
+
+    private ImageView compass;
+    private float compassDeg = 0f;
+    private SensorManager mSensorManager;
+
+    private float mDeviceOrientation;
+    private float phoneOrientation = 0;
+
+    private OrientationEventListener mOrientationEventListener;
+
+    RotateAnimation ra = new RotateAnimation(
+            compassDeg,
+            0,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        compass = (ImageView) findViewById(R.id.iv_compass);
+
+        OrientationEventListener mOrientationEventListener =
+                new OrientationEventListener(this, SensorManager.SENSOR_DELAY_GAME) {
+                    @Override
+                    public void onOrientationChanged(int orientation){
+                        mDeviceOrientation = orientation;
+                    }
+                };
+
+        if (mOrientationEventListener.canDetectOrientation()) {
+            mOrientationEventListener.enable();
+        }
+
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,7 +95,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 16.0f));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.setPadding(20, 150, 20, 150);
+
+        if ( getResources().getConfiguration().orientation == 1 ) {
+            googleMap.setPadding(20, 0, 20, 150);
+        } else {
+            googleMap.setPadding(0, 0, 150, 0);
+        }
     }
 
     @Override
@@ -81,5 +123,65 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+                SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float degree = Math.round(event.values[0]);
+        float orientation = (90*Math.round(mDeviceOrientation/90))%360;
+
+        if ( getResources().getConfiguration().orientation != 1 ) {
+            if ( (orientation == 270) || (phoneOrientation == 270) ) {
+                phoneOrientation = 270;
+                degree += 90;
+            } else if ( (orientation == 90) || (phoneOrientation == 90) ){
+                phoneOrientation = 90;
+                degree -= 90;
+            }
+        } else {
+            phoneOrientation = 0;
+            degree += 0;
+        }
+
+        Log.d("Device Orientation", String.valueOf((90*Math.round(mDeviceOrientation/90))%360));
+
+        ra = new RotateAnimation(
+                compassDeg,
+                (-degree),
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        ra.setDuration(200);
+        ra.setFillAfter(true);
+
+        compass.startAnimation(ra);
+        compassDeg = -degree;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if(hasFocus){
+            compass = (ImageView) findViewById(R.id.iv_compass);
+            compass.startAnimation(ra);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

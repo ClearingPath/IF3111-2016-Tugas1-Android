@@ -7,8 +7,10 @@
     android:fitsSystemWindows="true"
     tools:context="in.feryand.locationfinder.CameraActivity">
 
-
-    <include layout="@layout/content_camera" />
-
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"/>
 
 </android.support.design.widget.CoordinatorLayout>
