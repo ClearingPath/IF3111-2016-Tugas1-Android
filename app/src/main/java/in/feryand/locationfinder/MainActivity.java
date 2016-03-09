@@ -16,6 +16,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,9 @@ import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
     static final LatLng defaultLocation = new LatLng(-6.8899f, 107.6100f);
@@ -42,6 +46,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private OrientationEventListener mOrientationEventListener;
 
+    private SocketHandler sock;
+
+    // Handler untuk pesan
+    private String token;
+    private String nim;
+
     RotateAnimation ra = new RotateAnimation(
             compassDeg,
             0,
@@ -54,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setTitle("Map");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         compass = (ImageView) findViewById(R.id.iv_compass);
 
@@ -96,6 +111,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
+
+        sock = new SocketHandler();
+        Thread netThread = new Thread(sock);
+        netThread.start();
+
     }
 
     @Override
@@ -131,7 +151,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_start) {
+            try {
+                JSONObject receivedProblem = new JSONObject(sock.Send("{\"com\":\"req_loc\",\"nim\":\"13513042\"}"));
+                LatLng detectedLocation = new LatLng(Float.parseFloat(receivedProblem.optString("latitude").toString()),
+                                                     Float.parseFloat(receivedProblem.optString("longitude").toString()));
+                googleMap.clear();
+                googleMap.addMarker(new MarkerOptions()
+                        .position(detectedLocation)
+                        .title("Detected Location"));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 16.0f));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return true;
         }
 
