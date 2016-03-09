@@ -3,7 +3,9 @@
     package="in.feryand.locationfinder">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -30,6 +32,15 @@
         <activity
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="in.feryand.locationfinder.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AnswerActivity"
+            android:label="@string/title_activity_answer"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

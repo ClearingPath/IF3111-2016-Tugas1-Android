@@ -8,12 +8,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTitle("Map");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -75,6 +79,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, CameraActivity.class);
+                startActivity(i);
+            }
+        });
+
+        FloatingActionButton fab_answer = (FloatingActionButton) findViewById(R.id.fab_answer);
+        fab_answer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, AnswerActivity.class);
                 startActivity(i);
             }
         });
@@ -143,7 +156,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         float degree = Math.round(event.values[0]);
         float orientation = (90*Math.round(mDeviceOrientation/90))%360;
 
-        if ( getResources().getConfiguration().orientation != 1 ) {
+        boolean isOrientationEnabled;
+
+        try {
+            isOrientationEnabled = Settings.System.getInt(getContentResolver(),
+                    Settings.System.ACCELEROMETER_ROTATION) == 1;
+        } catch (Settings.SettingNotFoundException e) {
+            isOrientationEnabled = false;
+        }
+
+        if ( ( getResources().getConfiguration().orientation != 1 ) && ( isOrientationEnabled ) ) {
             if ( (orientation == 270) || (phoneOrientation == 270) ) {
                 if(phoneOrientation == 90) {
                     degree += 90;
@@ -162,8 +184,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             phoneOrientation = 0;
             degree += 0;
         }
-
-        Log.d("Device Orientation", String.valueOf((90*Math.round(mDeviceOrientation/90))%360));
 
         ra = new RotateAnimation(
                 compassDeg,
