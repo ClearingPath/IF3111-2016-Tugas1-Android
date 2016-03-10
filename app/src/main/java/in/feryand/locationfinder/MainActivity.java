@@ -5,12 +5,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,7 +18,6 @@ import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.Menu;
@@ -48,9 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private SocketHandler sock;
 
-    // Handler untuk pesan
-    private String token;
-    private String nim;
+    private Message msg = Message.getInstance();
 
     RotateAnimation ra = new RotateAnimation(
             compassDeg,
@@ -116,6 +110,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Thread netThread = new Thread(sock);
         netThread.start();
 
+        if (msg.getStarted()) {
+            LatLng detectedLocation = new LatLng(Float.parseFloat(msg.getLat()),
+                    Float.parseFloat(msg.getLng()));
+
+            /* Add Market to Maps */
+            googleMap.clear();
+            googleMap.addMarker(new MarkerOptions()
+                    .position(detectedLocation)
+                    .title("Detected Location"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 16.0f));
+        }
     }
 
     @Override
@@ -153,9 +158,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_start) {
             try {
-                JSONObject receivedProblem = new JSONObject(sock.Send("{\"com\":\"req_loc\",\"nim\":\"13513042\"}"));
-                LatLng detectedLocation = new LatLng(Float.parseFloat(receivedProblem.optString("latitude").toString()),
-                                                     Float.parseFloat(receivedProblem.optString("longitude").toString()));
+                JSONObject receivedProblem = new JSONObject(sock.Send("{\"com\":\"req_loc\",\"nim\":\"" + msg.getNim() + "\"}"));
+                msg.setStarted(true);
+
+                /* Saving the token for future requests */
+                msg.setToken(receivedProblem.optString("token"));
+
+                /* Get the first Lat Long */
+                msg.setLatLng(receivedProblem.optString("latitude"), receivedProblem.optString("longitude"));
+                LatLng detectedLocation = new LatLng(Float.parseFloat(msg.getLat()),
+                                                     Float.parseFloat(msg.getLng()));
+
+                /* Add Market to Maps */
                 googleMap.clear();
                 googleMap.addMarker(new MarkerOptions()
                         .position(detectedLocation)
