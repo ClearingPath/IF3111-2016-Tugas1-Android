@@ -7,6 +7,8 @@ import android.app.Application;
  */
 public class Message extends Application {
 
+    private SocketHandler sock;
+
     private String token;
     private String nim = "13513042";
     private String lat;
@@ -18,6 +20,11 @@ public class Message extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sock = new SocketHandler();
+        Thread netThread = new Thread(sock);
+        netThread.start();
+
         instance = this;
     }
 
@@ -48,10 +55,10 @@ public class Message extends Application {
         this.lng = lng;
     }
 
-    public boolean getStarted() { return started; };
+    public boolean getStarted() { return started; }
     public void setStarted(boolean started) {
         this.started = started;
     }
 
-
+    public SocketHandler getSock() { return sock; }
 }

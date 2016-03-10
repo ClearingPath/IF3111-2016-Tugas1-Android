@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
  */
 public class SocketHandler implements Runnable {
     private Socket socket;
-    private String ServerIP = "54.169.139.77";
+    private String ServerIP = "54.169.132.235";
     private static final int ServerPort = 12345;
 
     @Override
@@ -24,6 +24,7 @@ public class SocketHandler implements Runnable {
 
     public String Send(String s) {
         try {
+            Log.d("TCP", "Sending!");
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter output = new PrintWriter(
                     new OutputStreamWriter(

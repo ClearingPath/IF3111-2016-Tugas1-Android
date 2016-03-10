@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,8 +42,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private float phoneOrientation = 0;
 
     private OrientationEventListener mOrientationEventListener;
-
-    private SocketHandler sock;
 
     private Message msg = Message.getInstance();
 
@@ -96,8 +95,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         fab_answer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, AnswerActivity.class);
-                startActivity(i);
+                if ( msg.getStarted() ) {
+                    Intent i = new Intent(MainActivity.this, AnswerActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Game has not been started", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
@@ -105,22 +109,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-
-        sock = new SocketHandler();
-        Thread netThread = new Thread(sock);
-        netThread.start();
-
-        if (msg.getStarted()) {
-            LatLng detectedLocation = new LatLng(Float.parseFloat(msg.getLat()),
-                    Float.parseFloat(msg.getLng()));
-
-            /* Add Market to Maps */
-            googleMap.clear();
-            googleMap.addMarker(new MarkerOptions()
-                    .position(detectedLocation)
-                    .title("Detected Location"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 16.0f));
-        }
     }
 
     @Override
@@ -130,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void setUpMap(){
+        googleMap.clear();
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 16.0f));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -158,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_start) {
             try {
-                JSONObject receivedProblem = new JSONObject(sock.Send("{\"com\":\"req_loc\",\"nim\":\"" + msg.getNim() + "\"}"));
+                JSONObject receivedProblem = new JSONObject((msg.getSock()).Send("{\"com\":\"req_loc\",\"nim\":\"" + msg.getNim() + "\"}"));
                 msg.setStarted(true);
 
                 /* Saving the token for future requests */
@@ -175,13 +164,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .position(detectedLocation)
                         .title("Detected Location"));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 16.0f));
+                return true;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -189,6 +178,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onResume();
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
                 SensorManager.SENSOR_DELAY_GAME);
+
+        if (msg.getStarted()) {
+            LatLng detectedLocation = new LatLng(Float.parseFloat(msg.getLat()),
+                    Float.parseFloat(msg.getLng()));
+
+            /* Add Market to Maps */
+            googleMap.clear();
+            googleMap.addMarker(new MarkerOptions()
+                    .position(detectedLocation)
+                    .title("Detected Location"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 16.0f));
+        } else {
+            if ( googleMap != null ) {
+                googleMap.clear();
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 16.0f));
+            }
+        }
     }
 
     @Override
