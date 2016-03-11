@@ -24,7 +24,6 @@ public class SocketHandler implements Runnable {
 
     public String Send(String s) {
         try {
-            Log.d("TCP", "Sending!");
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter output = new PrintWriter(
                     new OutputStreamWriter(

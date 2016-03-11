@@ -35,7 +35,8 @@
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="landscape">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="in.feryand.locationfinder.MainActivity" />
