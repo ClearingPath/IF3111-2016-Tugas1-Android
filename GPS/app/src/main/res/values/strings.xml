@@ -17,5 +17,6 @@
         <item>pau</item>
         <item>kubus</item>
     </string-array>
+    <string name="title_activity_submission">Submit Answer</string>
 
 </resources>

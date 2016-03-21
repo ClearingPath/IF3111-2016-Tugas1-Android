@@ -1,13 +1,16 @@
 package com.example.user.gps;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 public class SubmitMessage extends Activity {
     private Spinner spinner1;
@@ -17,17 +20,15 @@ public class SubmitMessage extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_message);
-
         addListenerOnButton();
         addListenerOnSpinnerItemSelection();
     }
 
     public void addListenerOnSpinnerItemSelection() {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
-        //spinner1.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+
     }
 
-    // get the selected dropdown list value
     public void addListenerOnButton() {
 
         spinner1 = (Spinner) findViewById(R.id.spinner1);

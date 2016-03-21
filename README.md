@@ -52,15 +52,27 @@ Permintaan lokasi (pertama).
 {“com”:”req_loc”,”nim”:”13512999”}
 ```
 **Server Response** 
+Before :
 ```sh
 {“status”:”ok”,”nim”:”13512999”,”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
+```
+After :
+Longitude dan Latitude menggunakan tipe Long.
+```sh
+{“status”:”ok”,”nim”:”13512999”,”longitude”:6.234123132,”latitude”:0.1234123412,”token”:”21nu2f2n3rh23diefef23hr23ew”}
 ```
 ### Send Answer
 Mengirimkan jawaban dan menerima lokasi berikutnya
 
 **Client Request**
+Before :
 ```sh
 {“com”:”answer”,”nim”:”13512999”,”answer”:”labtek_v”, ”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
+```
+After :
+Longitude dan Latitude menggunakan tipe Long.
+```sh
+{“com”:”answer”,”nim”:”13512999”,”answer”:”labtek_v”, ”longitude”:6.234123132,”latitude”:0.1234123412,”token”:”21nu2f2n3rh23diefef23hr23ew”}
 ```
 **Server Response**
 Jika jawaban Anda **benar**, maka:
@@ -74,6 +86,16 @@ Jika jawaban Anda **salah**, maka:
 Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 ```sh
 {“status”:”finish”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
+```
+
+### Extra
+**No NIM**
+```sh
+{“status”:”err”,”nim”:””,”token”:”124fewfm32r32ifmwder42”}
+```
+**No Com command**
+```sh
+{“status”:”err”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”}
 ```
 ## Spesifikasi Tampilan
 **Tampilan horizontal**

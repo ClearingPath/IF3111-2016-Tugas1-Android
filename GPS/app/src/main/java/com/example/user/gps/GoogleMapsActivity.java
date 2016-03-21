@@ -8,6 +8,9 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +19,9 @@ import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,7 +31,21 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCallback,SensorEventListener {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
     private GoogleMap mMap;
     private ImageView mPointer;
@@ -41,6 +61,14 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     private float mCurrentDegree = 0f;
     private Button cameraButton;
     private Button messageButton;
+    private double lng;
+    private double ltd;
+    private String token = null;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +76,12 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         setContentView(R.layout.activity_google_maps);
         mPointer = (ImageView) findViewById(R.id.pointer);
         initializeMap();
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        cameraButton=(Button)findViewById(R.id.buttonCamera);
-        messageButton=(Button)findViewById(R.id.buttonMessage);
+        cameraButton = (Button) findViewById(R.id.buttonCamera);
+        messageButton = (Button) findViewById(R.id.buttonMessage);
 
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +97,9 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 startActivity(intent);
             }
         });
+
+        if(token == null)
+            new requestService().execute();
 
     }
 
@@ -92,26 +123,89 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     }
 
     private void initializeMap() {
-        // check if map is created
-        if(mMap == null) {
+        if (mMap == null) {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-
         }
+    }
+
+    private void setMarker(double ltd, double lng){
+        LatLng marker = new LatLng(ltd,lng);
+        mMap.addMarker(new MarkerOptions().position(marker).title("Designated Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 18));
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng itb = new LatLng(-6.891071, 107.610400);
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(itb, 18));
     }
+
+    private class requestService extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+
+            Socket socket = null;
+            String response = "";
+            JSONObject jsonRequest = new JSONObject();
+            try {
+                jsonRequest.put("com", "req_loc");
+                jsonRequest.put("nim", "13513003");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                socket = new Socket("167.205.34.132", 3111);
+
+                InputStream inputStream = socket.getInputStream();
+                OutputStream outputStream = socket.getOutputStream();
+                PrintWriter writer = new PrintWriter(outputStream);
+                writer.println(jsonRequest.toString());
+                writer.flush();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                response = reader.readLine();
+
+                return response;
+            } catch (UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                response = "UnknownHostException: " + e.toString();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                response = "IOException: " + e.toString();
+            } finally{
+                if(socket != null){
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonResponse = new JSONObject(result);
+                ltd = jsonResponse.getDouble("latitude");
+                lng = jsonResponse.getDouble("longitude");
+                token = jsonResponse.getString("token");
+                setMarker(ltd,lng);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+}
 
     public void onLocationChanged(Location location) {
         mMap.clear();
@@ -119,7 +213,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         marker.title("Current location");
         marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
         mMap.addMarker(marker);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 18));
     }
 
     @Override
@@ -135,7 +229,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
             SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
             SensorManager.getOrientation(mR, mOrientation);
             float azimuthInRadians = mOrientation[0];
-            float azimuthInDegress = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
+            float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
             RotateAnimation ra = new RotateAnimation(
                     mCurrentDegree,
                     -azimuthInDegress,
@@ -156,5 +250,45 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "GoogleMaps Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.user.gps/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "GoogleMaps Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.user.gps/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 }
