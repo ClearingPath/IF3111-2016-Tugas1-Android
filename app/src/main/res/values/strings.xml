@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">PBD</string>
+    <string name="title_activity_maps">PBD</string>
+    <string name="camera_button">Take a Photo</string>
+    <string name="answer_button">Submit Answer</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_answer">AnswerActivity</string>
+    <string-array name="answer_array">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>sunken</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
+    </string-array>
+</resources>
