@@ -18,5 +18,6 @@
         <item>kubus</item>
     </string-array>
     <string name="title_activity_submission">Submit Answer</string>
+    <string name="title_activity_a">a</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.user.gps;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -10,17 +11,19 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Debug;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,12 +34,13 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,6 +48,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
@@ -64,11 +70,8 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     private double lng;
     private double ltd;
     private String token = null;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,21 +89,35 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                imageUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(intent, 200);
             }
         });
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GoogleMapsActivity.this, SubmitMessage.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
+    }
 
-        if(token == null)
-            new requestService().execute();
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == 200)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                String pathToInternallyStoredImage = saveToInternalStorage(this, imageUri);
+            }
+            else if (resultCode == RESULT_CANCELED)
+            {
+                //Cancel code
+            }
+        }
     }
 
     @Override
@@ -142,6 +159,8 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
+        /*if(token == null)
+            new requestService().execute();*/
     }
 
     private class requestService extends AsyncTask<Void, Void, String> {
@@ -152,8 +171,8 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
             String response = "";
             JSONObject jsonRequest = new JSONObject();
             try {
-                jsonRequest.put("com", "req_loc");
                 jsonRequest.put("nim", "13513003");
+                jsonRequest.put("com", "req_loc");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -201,19 +220,94 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
         }
-
 }
+    public static Uri getOutputMediaFileUri(int type)
+    {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
 
-    public void onLocationChanged(Location location) {
-        mMap.clear();
-        MarkerOptions marker = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude()));
-        marker.title("Current location");
-        marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-        mMap.addMarker(marker);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 18));
+    public static File getOutputMediaFile(int type)
+    {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "camera");
+
+        createMediaStorageDir(mediaStorageDir);
+
+        return createFile(type, mediaStorageDir);
+    }
+
+    private static File getOutputInternalMediaFile(Context context, int type)
+    {
+        File mediaStorageDir = new File(context.getFilesDir(), "myInternalPicturesDir");
+
+        createMediaStorageDir(mediaStorageDir);
+
+        return createFile(type, mediaStorageDir);
+    }
+
+    private static void createMediaStorageDir(File mediaStorageDir)
+    {
+        if (!mediaStorageDir.exists())
+        {
+            mediaStorageDir.mkdirs();
+        }
+    }
+
+    private static File createFile(int type, File mediaStorageDir )
+    {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile = null;
+        if (type == MEDIA_TYPE_IMAGE)
+        {
+            mediaFile = new File(mediaStorageDir .getPath() + File.separator +
+                    "IMG_" + timeStamp + ".jpg");
+        }
+        return mediaFile;
+    }
+
+    public static String saveToInternalStorage(Context context, Uri tempUri)
+    {
+        InputStream in = null;
+        OutputStream out = null;
+
+        File sourceExternalImageFile = new File(tempUri.getPath());
+        File destinationInternalImageFile = new File(getOutputInternalMediaFile(context,MEDIA_TYPE_IMAGE).getPath());
+
+        try
+        {
+            destinationInternalImageFile.createNewFile();
+
+            in = new FileInputStream(sourceExternalImageFile);
+            out = new FileOutputStream(destinationInternalImageFile);
+
+            // Transfer bytes from in to out
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0)
+            {
+                out.write(buf, 0, len);
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            //Handle error
+        }
+        finally
+        {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+                if (out != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                // Eh
+            }
+        }
+        return destinationInternalImageFile.getPath();
     }
 
     @Override
@@ -250,45 +344,5 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "GoogleMaps Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.example.user.gps/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "GoogleMaps Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.example.user.gps/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 }
