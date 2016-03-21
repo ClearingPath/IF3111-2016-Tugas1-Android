@@ -1,6 +1,7 @@
 package com.example.user.gps;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,8 +10,10 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +39,8 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     private float[] mR = new float[9];
     private float[] mOrientation = new float[3];
     private float mCurrentDegree = 0f;
+    private Button cameraButton;
+    private Button messageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +51,24 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        cameraButton=(Button)findViewById(R.id.buttonCamera);
+        messageButton=(Button)findViewById(R.id.buttonMessage);
+
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
+            }
+        });
+        messageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GoogleMapsActivity.this, SubmitMessage.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -62,6 +84,11 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         super.onPause();
         mSensorManager.unregisterListener(this, mAccelerometer);
         mSensorManager.unregisterListener(this, mMagnetometer);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void initializeMap() {

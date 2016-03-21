@@ -1,4 +1,21 @@
 <resources>
-    <string name="app_name">GPS</string>
+    <string name="app_name">Map</string>
+    <string name="submit">Message Submission</string>
     <string name="title_activity_google_maps">GoogleMap</string>
+
+    <string name="location_name">Location Name:</string>
+
+    <string-array name="location_array">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>sunken</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
+    </string-array>
+
 </resources>
