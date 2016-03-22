@@ -48,7 +48,12 @@
         </activity>
         <activity
             android:name=".SubmitMessage"
-            android:label="@string/submit"></activity>
+            android:label="@string/submit"
+            android:parentActivityName="com.example.user.gps.GoogleMapsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.user.gps.GoogleMapsActivity" />
+        </activity>
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.

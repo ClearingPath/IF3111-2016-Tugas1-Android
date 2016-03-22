@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-public class SubmitMessage extends Activity {
+public class SubmitMessage extends AppCompatActivity {
     private Spinner spinner1;
     private Button submitButton;
     private Toolbar tb;
@@ -20,9 +20,12 @@ public class SubmitMessage extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tb = (Toolbar) findViewById(R.id.toolbar);
-        tb.setTitle("Submit Answer");
         setContentView(R.layout.activity_submit_message);
+        tb = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Submit Answer");
         addListenerOnButton();
         addListenerOnSpinnerItemSelection();
     }
