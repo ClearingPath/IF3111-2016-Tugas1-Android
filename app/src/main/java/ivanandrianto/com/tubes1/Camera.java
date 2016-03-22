@@ -30,8 +30,10 @@ public class Camera extends Activity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bp = (Bitmap) data.getExtras().get("data");
-        iv.setImageBitmap(bp);
+        if(data!=null){
+            Bitmap bp = (Bitmap) data.getExtras().get("data");
+            iv.setImageBitmap(bp);
+        }
     }
 
     @Override
