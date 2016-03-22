@@ -5,6 +5,12 @@
     android:orientation="vertical"
     tools:context=".MapActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+    </android.support.design.widget.AppBarLayout>
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -40,11 +46,4 @@
             android:contentDescription="@string/answer_button"/>
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/requestButton"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:text="Request"
-        android:layout_gravity="right|top" />
 </FrameLayout>
