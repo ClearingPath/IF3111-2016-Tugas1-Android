@@ -104,11 +104,11 @@ public class SubmitMessage extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Log.i("Str", result);
             try {
-                Log.i("Str", String.valueOf(Container.getLtd()));
-                Log.i("Str", String.valueOf(Container.getLng()));
                 JSONObject jsonResponse = new JSONObject(result);
                 Container.setStatus(jsonResponse.getString("status"));
-                if(Container.getStatus().equals("ok")){
+                if(Container.getStatus().equals("finish"))
+                    Container.setCheck(jsonResponse.getInt("check"));
+                else if(Container.getStatus().equals("ok")){
                     Container.setLtd(jsonResponse.getDouble("latitude"));
                     Container.setLng(jsonResponse.getDouble("longitude"));
                 }

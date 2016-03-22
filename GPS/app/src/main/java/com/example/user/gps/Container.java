@@ -5,8 +5,9 @@ public class Container {
     private static String token;
     private static double ltd;
     private static double lng;
-    private static String status;
+    private static String status = "no_status";
     private static boolean isFirst = true;
+    private static int check = 0;
 
     public static String getAnswer(){
         return answer;
@@ -22,6 +23,9 @@ public class Container {
     }
     public static String getStatus(){
         return status;
+    }
+    public static int getCheck(){
+        return check;
     }
     public static boolean getisFirst(){
         return isFirst;
@@ -40,6 +44,9 @@ public class Container {
     }
     public static void setStatus(String newVal){
         status = newVal;
+    }
+    public static void setCheck(int newVal){
+        check = newVal;
     }
     public static void setisFirst(boolean newVal){
         isFirst = newVal;

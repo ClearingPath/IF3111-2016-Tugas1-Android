@@ -13,6 +13,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -107,7 +110,6 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Log.i("Str",Container.getStatus());
         if (requestCode == IMAGE_CAPTURED)
         {
             if (resultCode == RESULT_OK)
@@ -125,16 +127,19 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
             }
         }
         else if(requestCode == RESPONSE_RECEIVED){
-            if(Container.getStatus().equals("ok")){
+            if(Container.getStatus().equals("no_status")){
+                //Do Nothing
+            }
+            else if(Container.getStatus().equals("ok")){
                 Toast.makeText(GoogleMapsActivity.this,
                         "Correct Answer, Please proceed to next location.",
                         Toast.LENGTH_SHORT).show();
-                setMarker(Container.getLng(),Container.getLng());           //dibalik
-            }else if(Container.getStatus().equals("wrong_answer")){
+                setMarker(Container.getLng(), Container.getLng());           //dibalik
+            }else if(Container.getStatus().equals("wrong_answer") && !(Container.getCheck() == 1)){
                 Toast.makeText(GoogleMapsActivity.this,
                         "Wrong Answer, Please try again.",
                         Toast.LENGTH_SHORT).show();
-            }else if(Container.getStatus().equals("finish")){
+            }else if(Container.getStatus().equals("finish") && (Container.getCheck() == 1)){
                 Toast.makeText(GoogleMapsActivity.this,
                         "Congratulations, You have reached the final location.",
                         Toast.LENGTH_SHORT).show();
@@ -164,8 +169,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     private void initializeMap() {
         if (mMap == null) {
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
         }
     }
@@ -210,13 +214,9 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 socket.close();
                 return response;
             } catch (UnknownHostException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
-                response = "UnknownHostException: " + e.toString();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
-                response = "IOException: " + e.toString();
             }
             return null;
         }
@@ -301,7 +301,6 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
             in = new FileInputStream(sourceExternalImageFile);
             out = new FileOutputStream(destinationInternalImageFile);
 
-            // Transfer bytes from in to out
             byte[] buf = new byte[1024];
             int len;
             while ((len = in.read(buf)) > 0)
@@ -312,7 +311,6 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         catch (IOException e)
         {
             e.printStackTrace();
-            //Handle error
         }
         finally
         {
@@ -324,7 +322,6 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                     in.close();
                 }
             } catch (IOException e) {
-                // Eh
             }
         }
         return destinationInternalImageFile.getPath();
