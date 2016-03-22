@@ -41,7 +41,6 @@ public class Container {
     public static void setStatus(String newVal){
         status = newVal;
     }
-
     public static void setisFirst(boolean newVal){
         isFirst = newVal;
     }

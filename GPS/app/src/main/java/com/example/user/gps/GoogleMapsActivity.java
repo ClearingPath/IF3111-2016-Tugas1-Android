@@ -3,15 +3,12 @@ package com.example.user.gps;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Debug;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
@@ -226,7 +223,6 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("Str","aaaaa");
             Log.i("Str",result);
             try {
                 if(result != null) {

@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -72,8 +71,8 @@ public class SubmitMessage extends AppCompatActivity {
                 jsonRequest.put("com", "answer");
                 jsonRequest.put("nim", "13513003");
                 jsonRequest.put("answer", Container.getAnswer());
-                jsonRequest.put("longitude", String.valueOf(Container.getLng()));
-                jsonRequest.put("latitude", String.valueOf(Container.getLtd()));
+                jsonRequest.put("longitude", Container.getLng());
+                jsonRequest.put("latitude", Container.getLtd());
                 jsonRequest.put("token", Container.getToken());
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -103,18 +102,20 @@ public class SubmitMessage extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("Str","bbbbbb");
             Log.i("Str", result);
             try {
+                Log.i("Str", String.valueOf(Container.getLtd()));
+                Log.i("Str", String.valueOf(Container.getLng()));
                 JSONObject jsonResponse = new JSONObject(result);
-                Container.setLtd(jsonResponse.getDouble("latitude"));
-                Container.setLng(jsonResponse.getDouble("longitude"));
-                Container.setToken(jsonResponse.getString("token"));
                 Container.setStatus(jsonResponse.getString("status"));
+                if(Container.getStatus().equals("ok")){
+                    Container.setLtd(jsonResponse.getDouble("latitude"));
+                    Container.setLng(jsonResponse.getDouble("longitude"));
+                }
+                Container.setToken(jsonResponse.getString("token"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             finish();
         }
     }
