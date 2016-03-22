@@ -64,10 +64,9 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     private float mCurrentDegree = 0f;
     private Button cameraButton;
     private Button messageButton;
-    private double lng;
-    private double ltd;
-    private String token = null;
     public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int IMAGE_CAPTURED = 100;
+    public static final int RESPONSE_RECEIVED = 200;
     private Uri imageUri;
 
     @Override
@@ -89,37 +88,60 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 imageUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, 200);
+                startActivityForResult(intent, IMAGE_CAPTURED);
             }
         });
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GoogleMapsActivity.this, SubmitMessage.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, RESPONSE_RECEIVED);
             }
         });
+        if(Container.getisFirst()) {
+            new requestService().execute();
+            Container.setisFirst(false);
+            Toast.makeText(GoogleMapsActivity.this,
+                    "Requesting first location.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == 200)
+        Log.i("Str",Container.getStatus());
+        if (requestCode == IMAGE_CAPTURED)
         {
             if (resultCode == RESULT_OK)
             {
                 String pathToInternallyStoredImage = saveToInternalStorage(this, imageUri);
                 Toast.makeText(GoogleMapsActivity.this,
-                        "OnClickListener : " +
                                 "Image saved to "+pathToInternallyStoredImage,
                         Toast.LENGTH_SHORT).show();
             }
             else if (resultCode == RESULT_CANCELED)
             {
                 Toast.makeText(GoogleMapsActivity.this,
-                        "OnClickListener : " +
-                                "Image failed to save",
+                                "No image was saved",
                         Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if(requestCode == RESPONSE_RECEIVED){
+            if(Container.getStatus().equals("ok")){
+                Toast.makeText(GoogleMapsActivity.this,
+                        "Correct Answer, Please proceed to next location.",
+                        Toast.LENGTH_SHORT).show();
+                setMarker(Container.getLng(),Container.getLng());           //dibalik
+            }else if(Container.getStatus().equals("wrong_answer")){
+                Toast.makeText(GoogleMapsActivity.this,
+                        "Wrong Answer, Please try again.",
+                        Toast.LENGTH_SHORT).show();
+            }else if(Container.getStatus().equals("finish")){
+                Toast.makeText(GoogleMapsActivity.this,
+                        "Congratulations, You have reached the final location.",
+                        Toast.LENGTH_SHORT).show();
+                mMap.clear();
             }
         }
     }
@@ -163,8 +185,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-        /*if(token == null)
-            new requestService().execute();*/
+
     }
 
     private class requestService extends AsyncTask<Void, Void, String> {
@@ -175,14 +196,13 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
             String response = "";
             JSONObject jsonRequest = new JSONObject();
             try {
-                jsonRequest.put("nim", "13513003");
                 jsonRequest.put("com", "req_loc");
+                jsonRequest.put("nim", "13513003");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             try {
                 socket = new Socket("167.205.34.132", 3111);
-
                 InputStream inputStream = socket.getInputStream();
                 OutputStream outputStream = socket.getOutputStream();
                 PrintWriter writer = new PrintWriter(outputStream);
@@ -190,7 +210,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 writer.flush();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 response = reader.readLine();
-
+                socket.close();
                 return response;
             } catch (UnknownHostException e) {
                 // TODO Auto-generated catch block
@@ -200,27 +220,27 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 response = "IOException: " + e.toString();
-            } finally{
-                if(socket != null){
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
+            Log.i("Str","aaaaa");
+            Log.i("Str",result);
             try {
-                JSONObject jsonResponse = new JSONObject(result);
-                ltd = jsonResponse.getDouble("latitude");
-                lng = jsonResponse.getDouble("longitude");
-                token = jsonResponse.getString("token");
-                setMarker(ltd,lng);
+                if(result != null) {
+                    JSONObject jsonResponse = new JSONObject(result);
+                    Container.setLtd(jsonResponse.getDouble("latitude"));
+                    Container.setLng(jsonResponse.getDouble("longitude"));
+                    Container.setToken(jsonResponse.getString("token"));
+                    setMarker(Container.getLng(), Container.getLtd());          //dibalik
+                }
+                else{
+                    Toast.makeText(GoogleMapsActivity.this,
+                            "Failed to receive response",
+                            Toast.LENGTH_SHORT).show();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
