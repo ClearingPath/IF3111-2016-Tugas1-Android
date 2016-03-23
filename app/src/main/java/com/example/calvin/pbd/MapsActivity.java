@@ -126,18 +126,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         protected void onPostExecute(String response) {
             try {
+                Toast.makeText(MapsActivity.this, response, Toast.LENGTH_LONG).show();
                 JSONObject responseJSON = new JSONObject(response);
 
                 SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
 
-                editor.putLong("latitude", responseJSON.getLong("longitude"));
-                editor.putLong("longitude", responseJSON.getLong("latitude"));
                 editor.putString("token", responseJSON.getString("token"));
                 editor.commit();
 
                 firstRequest = false;
-                setLocation(responseJSON.getDouble("longitude"), responseJSON.getDouble("latitude"));
+                setLocation(responseJSON.getDouble("longitude"), responseJSON.getDouble("latitude")); //Jangan lupa dibalik sebelum merge
             }
             catch (JSONException e) {
                 Log.d("MyApp", e.toString());
@@ -188,37 +187,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Toast t = Toast.makeText(this, "Image saved\n", Toast.LENGTH_LONG);
-                t.setGravity(Gravity.CENTER, 0, 0);
-                t.show();
+                Toast.makeText(this, "Image saved\n", Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
-                //
+                Toast.makeText(this, "Capture image canceled\n", Toast.LENGTH_LONG).show();
             } else {
-                Toast t = Toast.makeText(this, "Image capture failed\n", Toast.LENGTH_LONG);
-                t.setGravity(Gravity.CENTER, 0, 0);
-                t.show();
+                Toast.makeText(this, "Image capture failed\n", Toast.LENGTH_LONG).show();
             }
         }
-        if (requestCode == ANSWER_CODE) {
+        else if (requestCode == ANSWER_CODE) {
             if (resultCode == FINISH) {
-                Toast t = Toast.makeText(this, "Finish!\n", Toast.LENGTH_LONG);
-                t.setGravity(Gravity.CENTER, 0, 0);
-                t.show();
                 mMap.clear();
+                Toast.makeText(this, "Finish!\n", Toast.LENGTH_LONG).show();
             }
-            else if (resultCode == WRONG) {
-                Toast t = Toast.makeText(this, "Wrong answer, try again\n", Toast.LENGTH_LONG);
-                t.setGravity(Gravity.CENTER, 0, 0);
-                t.show();
-            }
+            else if (resultCode == WRONG)
+                Toast.makeText(this, "Wrong answer, try again\n", Toast.LENGTH_LONG).show();
             else if (resultCode == OK) {
-                Toast t = Toast.makeText(this, "Answer correct, move to next location\n", Toast.LENGTH_LONG);
-                t.setGravity(Gravity.CENTER, 0, 0);
-                t.show();
-
+                mMap.clear();
                 SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
-
-                setLocation(sp.getFloat("latitude", -1), sp.getFloat("longitude", -1));
+                setLocation(Double.longBitsToDouble(sp.getLong("latitude", -1)), Double.longBitsToDouble(sp.getLong("longitude", -1)));
+                Toast.makeText(this, "Answer correct, move to next location\n", Toast.LENGTH_LONG).show();
             }
         }
     }

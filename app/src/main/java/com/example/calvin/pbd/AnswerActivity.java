@@ -1,22 +1,32 @@
 package com.example.calvin.pbd;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.ext.Locator2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,19 +63,47 @@ public class AnswerActivity extends AppCompatActivity {
     }
 
     private class SubmitAnswer extends AsyncTask<String, Void, String> {
+        private double latitude;
+        private double longitude;
+
         @Override
         protected String doInBackground(String... params) {
+            Looper.prepare();
+            SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
+
             try {
                 Socket socket = new Socket("167.205.34.132", 3111);
 
-                SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
+                try {
+                    LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    LocationListener ll = new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {}
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                        @Override
+                        public void onProviderEnabled(String provider) {}
+
+                        @Override
+                        public void onProviderDisabled(String provider) {}
+                    };
+                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, ll);
+                    Location loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    latitude = loc.getLatitude();
+                    longitude = loc.getLongitude();
+                }
+                catch (SecurityException e) {
+                    Log.d("MyApp", e.toString());
+                }
 
                 JSONObject request = new JSONObject();
                 request.put("com", "answer");
                 request.put("nim", "13513077");
                 request.put("answer", params[0]);
-                request.put("latitude", sp.getLong("latitude", -1));
-                request.put("longitude", sp.getLong("longitude", -1));
+                request.put("latitude", latitude);
+                request.put("longitude", longitude);
                 request.put("token", sp.getString("token", null));
 
                 InputStream inputStream = socket.getInputStream();
@@ -78,7 +116,6 @@ public class AnswerActivity extends AppCompatActivity {
                 out.flush();
                 String response = in.readLine();
                 socket.close();
-                Log.d("MyApp", response);
                 return response;
             }
             catch (UnknownHostException e) {
@@ -105,20 +142,19 @@ public class AnswerActivity extends AppCompatActivity {
 
                 editor.putString("status", status);
                 if (status.equals("ok")) {
-                    editor.putLong("latitude", responseJSON.getLong("longitude"));
-                    editor.putLong("longitude", responseJSON.getLong("latitude"));
-                    editor.putString("token", responseJSON.getString("token"));
+                    editor.putLong("latitude", Double.doubleToLongBits(responseJSON.getDouble("latitude")));
+                    editor.putLong("longitude", Double.doubleToLongBits(responseJSON.getDouble("longitude")));
+                    editor.commit();
                     setResult(MapsActivity.OK);
                 }
                 else if (status.equals("wrong_answer")) {
-                    editor.putString("token", responseJSON.getString("token"));
                     setResult(MapsActivity.WRONG);
                 }
                 else if (status.equals("finish")) {
-                    editor.putString("token", responseJSON.getString("token"));
                     setResult(MapsActivity.FINISH);
                 }
 
+                Toast.makeText(AnswerActivity.this, response, Toast.LENGTH_LONG).show();
                 editor.putString("token", responseJSON.getString("token"));
                 editor.commit();
                 finish();
