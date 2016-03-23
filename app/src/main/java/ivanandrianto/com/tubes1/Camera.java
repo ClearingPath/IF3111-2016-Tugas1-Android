@@ -4,9 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Camera extends Activity {
     Button b1;
@@ -33,11 +42,47 @@ public class Camera extends Activity {
         if(data!=null){
             Bitmap bp = (Bitmap) data.getExtras().get("data");
             iv.setImageBitmap(bp);
+            storeImage(bp);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    private  File getOutputMediaFile(){
+        File dir = new File(Environment.getExternalStorageDirectory()
+                + "/Android/data/"
+                + getApplicationContext().getPackageName()
+                + "/Files");
+
+        if (! dir.exists()){
+            if (! dir.mkdirs()){
+                return null;
+            }
+        }
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+        String mImageName="IMAGE_"+ timeStamp +".jpg";
+        File myFile;
+        myFile = new File(dir.getPath() + File.separator + mImageName);
+        return myFile;
+    }
+
+    private void storeImage(Bitmap image) {
+        File imgFile = getOutputMediaFile();
+        if (imgFile == null) {
+            Log.d("z", "Error creating file: ");
+            return;
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(imgFile);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.d("z", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("z", "Error accessing file: " + e.getMessage());
+        }
     }
 }
