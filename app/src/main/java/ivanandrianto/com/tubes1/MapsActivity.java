@@ -20,8 +20,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 import java.util.concurrent.ExecutionException;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -30,6 +28,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     final String address = "167.205.34.132";
     final int port = 3111;
     String response = "";
+    double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +60,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             json.put("com", "req_loc");
             json.put("nim", "13513039");
 
-            //SocketClient myClient =
-            //myClient.execute();
             String response = new SocketClient(address,port,json).execute().get();
             Toast.makeText(getApplicationContext(), "zzz" + response, Toast.LENGTH_LONG).show();
+            JSONObject jsonObject = new JSONObject(response);
+            latitude = -6.8914906;
+            longitude = 107.6084704;
+            //sementara dibalik
+            latitude = Double.parseDouble(jsonObject.optString("longitude").toString());
+            longitude = Double.parseDouble(jsonObject.optString("latitude").toString());
         } catch (JSONException e){
             e.printStackTrace();
         } catch (ExecutionException e){
@@ -83,7 +86,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        LatLng itb = new LatLng(-6.8914906,107.6084704);
+        LatLng itb = new LatLng(latitude,longitude);
         map.addMarker(new MarkerOptions().position(itb).title("Marker in Indonesia"));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
