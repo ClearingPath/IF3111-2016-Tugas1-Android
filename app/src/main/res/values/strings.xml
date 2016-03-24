@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MainYukITB</string>
+    <string name="action_settings">Settings</string>
+    <string name="get">GET!</string>
+    <string name="title_activity_display_message">New Message</string>
+</resources>
