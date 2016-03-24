@@ -1,4 +1,5 @@
 <resources>
   <string name="app_name">ITBLocator</string>
   <string name="action_settings">Settings</string>
+  <string name="API_KEY">AIzaSyC5R9KIT-UG0Ur1aFPRwzeDHApaSoFxIU8</string>
 </resources>
