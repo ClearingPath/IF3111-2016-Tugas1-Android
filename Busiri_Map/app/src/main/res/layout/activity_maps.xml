@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:id="@+id/button_camera"
+            android:onClick="captureImage"
             android:src="@drawable/icon_camera" />
 
         <ImageButton
@@ -29,6 +30,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:id="@+id/button_submit"
+            android:onClick="openSubmit"
             android:src="@drawable/icon_submit" />
     </LinearLayout>
 
