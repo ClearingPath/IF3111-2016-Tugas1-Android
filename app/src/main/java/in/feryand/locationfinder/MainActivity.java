@@ -14,6 +14,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private OrientationEventListener mOrientationEventListener;
 
     private Message msg = Message.getInstance();
-
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    
     RotateAnimation ra = new RotateAnimation(
             compassDeg,
             0,
@@ -86,8 +88,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, CameraActivity.class);
-                startActivity(i);
+/*                Intent i = new Intent(MainActivity.this, CameraActivity.class);
+                startActivity(i);*/
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
             }
         });
 
@@ -162,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 googleMap.addMarker(new MarkerOptions()
                         .position(detectedLocation)
                         .title("Detected Location"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 16.0f));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 18.0f));
 
                 String toToast = "Directed to Lat(" + detectedLocation.latitude + ") Long(" + detectedLocation.longitude + ")";
                 msg.setLatLng(receivedProblem.optDouble("longitude"), receivedProblem.optDouble("latitude"));

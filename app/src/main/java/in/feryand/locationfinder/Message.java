@@ -52,8 +52,8 @@ public class Message extends Application {
         return lng;
     }
     public void setLatLng(double lat, double lng) {
-        this.lat = lng;
-        this.lng = lat;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public boolean getStarted() { return started; }

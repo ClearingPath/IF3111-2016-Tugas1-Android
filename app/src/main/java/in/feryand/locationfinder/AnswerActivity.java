@@ -48,7 +48,7 @@ public class AnswerActivity extends AppCompatActivity implements AdapterView.OnI
                         toToast = "Wrong Answer, Please Start Over.";
                     } else if ((receivedProblem.optString("status")).equals("finish")) {
                         msg.setStarted(false);
-                        toToast = "Congratulations! You've 3 Right Answer in Row.";
+                        toToast = "Congratulations You've Finished All!";
                     } else if ((receivedProblem.optString("status")).equals("err")) {
                         msg.setStarted(false);
                         toToast = "Server says error.";

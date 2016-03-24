@@ -40,7 +40,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/Message.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="64" column="25" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="25" />
+              <caret line="55" column="22" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -48,21 +48,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SocketHandler.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SocketHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/SocketHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7042683">
-              <caret line="27" column="31" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="31" />
+            <state vertical-scroll-proportion="-7.965517">
+              <caret line="27" column="54" selection-start-line="27" selection-start-column="54" selection-end-line="27" selection-end-column="54" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5994398">
+              <caret line="48" column="4" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CameraActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/CameraActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="149" column="75" selection-start-line="149" selection-start-column="60" selection-end-line="149" selection-end-column="75" />
+              <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -71,11 +81,11 @@
       <file leaf-file-name="AnswerActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/AnswerActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.1724138">
-              <caret line="41" column="43" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
+            <state vertical-scroll-proportion="-6.6896553">
+              <caret line="50" column="71" selection-start-line="50" selection-start-column="71" selection-end-line="50" selection-end-column="71" />
               <folding>
-                <element signature="e#1220#2921#0" expanded="true" />
-                <element signature="e#2920#2921#0" expanded="true" />
+                <element signature="e#1220#2911#0" expanded="true" />
+                <element signature="e#2910#2911#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1926,10 +1936,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/SocketHandler.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/AnswerActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/Message.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/SocketHandler.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -2276,8 +2286,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="52" column="84" selection-start-line="52" selection-start-column="84" selection-end-line="54" selection-end-column="113" />
           <folding>
-            <element signature="e#1220#2921#0" expanded="true" />
-            <element signature="e#2920#2921#0" expanded="true" />
+            <element signature="e#1220#2911#0" expanded="true" />
+            <element signature="e#2910#2911#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2313,8 +2323,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="52" column="84" selection-start-line="52" selection-start-column="84" selection-end-line="54" selection-end-column="113" />
           <folding>
-            <element signature="e#1220#2921#0" expanded="true" />
-            <element signature="e#2920#2921#0" expanded="true" />
+            <element signature="e#1220#2911#0" expanded="true" />
+            <element signature="e#2910#2911#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2350,8 +2360,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="52" column="84" selection-start-line="52" selection-start-column="84" selection-end-line="54" selection-end-column="113" />
           <folding>
-            <element signature="e#1220#2921#0" expanded="true" />
-            <element signature="e#2920#2921#0" expanded="true" />
+            <element signature="e#1220#2911#0" expanded="true" />
+            <element signature="e#2910#2911#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2374,21 +2384,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="149" column="75" selection-start-line="149" selection-start-column="60" selection-end-line="149" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/AnswerActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.1724138">
-          <caret line="41" column="43" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
+        <state vertical-scroll-proportion="-6.6896553">
+          <caret line="50" column="71" selection-start-line="50" selection-start-column="71" selection-end-line="50" selection-end-column="71" />
           <folding>
-            <element signature="e#1220#2921#0" expanded="true" />
-            <element signature="e#2920#2921#0" expanded="true" />
+            <element signature="e#1220#2911#0" expanded="true" />
+            <element signature="e#2910#2911#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2396,7 +2398,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/Message.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="64" column="25" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="25" />
+          <caret line="55" column="22" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -2405,8 +2407,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/SocketHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7042683">
-          <caret line="27" column="31" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="31" />
+        <state vertical-scroll-proportion="-7.965517">
+          <caret line="27" column="54" selection-start-line="27" selection-start-column="54" selection-end-line="27" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/CameraActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/in/feryand/locationfinder/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5994398">
+          <caret line="48" column="4" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="4" />
           <folding />
         </state>
       </provider>
