@@ -154,9 +154,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 msg.setToken(receivedProblem.optString("token"));
 
                 /* Get the first Lat Long */
-                msg.setLatLng(receivedProblem.optString("latitude"), receivedProblem.optString("longitude"));
-                LatLng detectedLocation = new LatLng(Float.parseFloat(msg.getLat()),
-                                                     Float.parseFloat(msg.getLng()));
+                msg.setLatLng(receivedProblem.optDouble("latitude"), receivedProblem.optDouble("longitude"));
+                LatLng detectedLocation = new LatLng((msg.getLat()),(msg.getLng()));
 
                 /* Add Market to Maps */
                 googleMap.clear();
@@ -164,6 +163,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .position(detectedLocation)
                         .title("Detected Location"));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 16.0f));
+
+                String toToast = "Directed to Lat(" + detectedLocation.latitude + ") Long(" + detectedLocation.longitude + ")";
+                msg.setLatLng(receivedProblem.optDouble("longitude"), receivedProblem.optDouble("latitude"));
+                Toast toast = Toast.makeText(getApplicationContext(), toToast, Toast.LENGTH_SHORT);
+                toast.show();
                 return true;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -180,8 +184,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 SensorManager.SENSOR_DELAY_GAME);
 
         if (msg.getStarted()) {
-            LatLng detectedLocation = new LatLng(Float.parseFloat(msg.getLat()),
-                    Float.parseFloat(msg.getLng()));
+            LatLng detectedLocation = new LatLng((msg.getLat()),(msg.getLng()));
 
             /* Add Market to Maps */
             googleMap.clear();

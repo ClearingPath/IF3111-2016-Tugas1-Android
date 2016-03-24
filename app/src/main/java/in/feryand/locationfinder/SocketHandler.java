@@ -10,8 +10,8 @@ import java.net.UnknownHostException;
  */
 public class SocketHandler implements Runnable {
     private Socket socket;
-    private String ServerIP = "54.169.83.148";
-    private static final int ServerPort = 12345;
+    private String ServerIP = "167.205.34.132";
+    private static final int ServerPort = 3111;
 
     @Override
     public void run() {
@@ -22,15 +22,24 @@ public class SocketHandler implements Runnable {
         }
     }
 
+    public void reconnect() {
+        try {
+            if (socket != null) socket.close();
+            socket = new Socket(ServerIP, ServerPort);
+        } catch(Exception e) {
+            // Die Bitch Die
+        }
+    }
+
     public String Send(String s) {
         try {
-            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter output = new PrintWriter(
                     new OutputStreamWriter(
                             socket.getOutputStream()));
 
             output.print(s + "\n");
             output.flush();
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             return input.readLine();
         } catch (UnknownHostException e) {

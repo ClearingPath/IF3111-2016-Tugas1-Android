@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,10 +37,11 @@ public class AnswerActivity extends AppCompatActivity implements AdapterView.OnI
             public void onClick(View v) {
                 v.setEnabled(false);
                 try {
-                    JSONObject receivedProblem = new JSONObject(
-                            (msg.getSock()).Send("{\"com\":\"answer\",\"nim\":\"" + msg.getNim() + "\",\"answer\":\"" + answer + "\",\"longitude\":\"" + msg.getLng() + "\",\"latitude\":\"" + msg.getLat() + "\",\"token\":\"" + msg.getToken() + "\"}"));
 
-                    String toToast = "Error Occurred.";
+                    JSONObject receivedProblem = new JSONObject(
+                            (msg.getSock()).Send("{\"com\":\"answer\",\"nim\":\"" + msg.getNim() + "\",\"answer\":\"" + answer + "\",\"longitude\":" + msg.getLng() + ",\"latitude\":" + msg.getLat() + ",\"token\":\"" + msg.getToken() + "\"}"));
+
+                    String toToast = receivedProblem.toString();
 
                     if ((receivedProblem.optString("status")).equals("wrong_answer")) {
                         msg.setStarted(false);
@@ -47,9 +49,12 @@ public class AnswerActivity extends AppCompatActivity implements AdapterView.OnI
                     } else if ((receivedProblem.optString("status")).equals("finish")) {
                         msg.setStarted(false);
                         toToast = "Congratulations! You've 3 Right Answer in Row.";
+                    } else if ((receivedProblem.optString("status")).equals("err")) {
+                        msg.setStarted(false);
+                        toToast = "Server says error.";
                     } else if ((receivedProblem.optString("status")).equals("ok")) {
                         toToast = "Correct! Now Back to Map.";
-                        msg.setLatLng(receivedProblem.optString("longitude"), receivedProblem.optString("latitude"));
+                        msg.setLatLng(receivedProblem.optDouble("longitude"), receivedProblem.optDouble("latitude"));
                     }
 
                     Toast toast = Toast.makeText(getApplicationContext(), toToast, Toast.LENGTH_SHORT);

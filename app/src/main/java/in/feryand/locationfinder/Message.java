@@ -1,6 +1,7 @@
 package in.feryand.locationfinder;
 
 import android.app.Application;
+import android.util.Log;
 
 /**
  * Created by Asus on 10/03/2016.
@@ -11,8 +12,8 @@ public class Message extends Application {
 
     private String token;
     private String nim = "13513042";
-    private String lat;
-    private String lng;
+    private double lat;
+    private double lng;
     private boolean started = false;
 
     private static Message instance = null;
@@ -46,13 +47,13 @@ public class Message extends Application {
         this.nim = nim;
     }
 
-    public String getLat() { return lat; }
-    public String getLng() {
+    public double getLat() { return lat; }
+    public double getLng() {
         return lng;
     }
-    public void setLatLng(String lat, String lng) {
-        this.lat = lat;
-        this.lng = lng;
+    public void setLatLng(double lat, double lng) {
+        this.lat = lng;
+        this.lng = lat;
     }
 
     public boolean getStarted() { return started; }
@@ -60,5 +61,8 @@ public class Message extends Application {
         this.started = started;
     }
 
-    public SocketHandler getSock() { return sock; }
+    public SocketHandler getSock() {
+        sock.reconnect();
+        return sock;
+    }
 }
