@@ -10,16 +10,17 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FC9"
-        android:gravity="center"
+        android:background="#4052b5"
+        android:gravity="left|center"
+        android:layout_alignParentTop="true">
         >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Fixed Header"
-            android:textColor="#000"
+            android:text="Maps"
+            android:textColor="#ffffff"
             android:textSize="20sp"
             />
     </RelativeLayout>
@@ -30,23 +31,33 @@
         android:layout_height="match_parent"
 
         android:screenOrientation="portrait">
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/contentfooter"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:background="#FC0"
+            android:background="#cbcbcb"
+            android:orientation="vertical"
             android:gravity="center">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="Fixed Header"
-                android:textColor="#000"
-                android:textSize="20sp"
-                />
-        </RelativeLayout>
+            <ImageButton
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:padding="0dp"
+                android:id="@+id/imageButton"
+                android:layout_weight="1"
+                android:src="@drawable/camera_icon"
+                android:gravity="center"/>
+
+
+            <ImageButton
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:id="@+id/imageButton2"
+                android:layout_weight="1"
+                android:src="@drawable/chat_icon"
+                android:gravity="center"/>
+        </LinearLayout>
 
 
         <RelativeLayout
@@ -63,6 +74,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:context="com.example.yoga.tubes1android.MapsActivity"
+                />
+            <ImageView
+                android:id="@+id/imageViewCompass"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:src="@drawable/compass"
+                android:layout_margin="20dp"
+                android:layout_alignParentRight="true"
                 />
         </RelativeLayout>
 
