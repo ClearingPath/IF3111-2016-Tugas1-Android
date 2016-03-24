@@ -72,6 +72,15 @@
             tools:context="com.example.yoga.tubes1android.MapsActivity"
             />
 
+        <ImageView
+            android:id="@+id/imageViewCompass"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@drawable/compass"
+            android:layout_margin="20dp"
+            android:layout_alignParentRight="true"
+            />
+
     </RelativeLayout>
 
 

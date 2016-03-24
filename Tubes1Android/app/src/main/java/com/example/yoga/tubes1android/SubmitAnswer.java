@@ -1,11 +1,21 @@
 package com.example.yoga.tubes1android;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -14,6 +24,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -43,12 +54,25 @@ public class SubmitAnswer extends AppCompatActivity {
     private Spinner spinner;
     private Button button;
     static private double targetlatitude, targetlongitude;
-    static private String token, nim,status;
+    static private String token, nim, status;
     static String ans;
     PrintWriter out;
     BufferedReader input;
-    String json,response;
+    String json, response;
     Intent intent;
+    double mylongitude, mylatitude;
+    private LocationManager locationManager = null;
+    private LocationListener locationListener = null;
+    private static final String[] INITIAL_PERMS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_CONTACTS
+    };
+    private static final int INITIAL_REQUEST = 1337;
+    private static final String[] LOCATION_PERMS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+    private static final int LOCATION_REQUEST = INITIAL_REQUEST + 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +81,74 @@ public class SubmitAnswer extends AppCompatActivity {
         setSupportActionBar(toolbar);
         addListenerOnButton();
 
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Intent lastintent=getIntent();
-        token=lastintent.getStringExtra("token");
-        nim=lastintent.getStringExtra("nim");
-        targetlatitude=lastintent.getDoubleExtra("latitude", 1);
-        targetlongitude=lastintent.getDoubleExtra("longitude",1.0);
+        Intent lastintent = getIntent();
+        token = lastintent.getStringExtra("token");
+        nim = lastintent.getStringExtra("nim");
+        targetlatitude = lastintent.getDoubleExtra("latitude", 1);
+        targetlongitude = lastintent.getDoubleExtra("longitude", 1.0);
         Toast.makeText(getApplicationContext(), String.valueOf(targetlatitude), Toast.LENGTH_LONG).show();
+        try {
+            locationManager = (LocationManager)
+                    getSystemService(getApplicationContext().LOCATION_SERVICE);
+            locationListener = new MyLocationListener();
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                ActivityCompat.requestPermissions(this, LOCATION_PERMS, 1);
+                return;
+            }
+            Location loc = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
+            mylatitude=loc.getLatitude();
+            mylongitude=loc.getLongitude();
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        switch (requestCode) {
+
+            case 1:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                }
+                return;
+
+        }
+    }
+
+    private class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            mylongitude = loc.getLongitude();
+            mylatitude = loc.getLatitude();
+        }
+
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+
+        @Override
+        public void onProviderEnabled(String provider) {}
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
     }
 
 
@@ -76,7 +161,6 @@ public class SubmitAnswer extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "wowww", Toast.LENGTH_LONG).show();
                 switch(String.valueOf(spinner.getSelectedItem())){
                     case "GKU Barat":ans="gku_barat";
                         break;
@@ -128,8 +212,8 @@ public class SubmitAnswer extends AppCompatActivity {
                 jsonObject.put("com", "answer");
                 jsonObject.put("nim", nim);
                 jsonObject.put("answer", ans);
-                jsonObject.put("latitude", String.valueOf(targetlatitude));
-                jsonObject.put("longitude", String.valueOf(targetlongitude));
+                jsonObject.put("latitude", String.valueOf(mylatitude));
+                jsonObject.put("longitude", String.valueOf(mylongitude));
 
                 jsonObject.put("token", token);
                 json = jsonObject.toString();
@@ -174,5 +258,6 @@ public class SubmitAnswer extends AppCompatActivity {
 
 
     }
+
 
 }

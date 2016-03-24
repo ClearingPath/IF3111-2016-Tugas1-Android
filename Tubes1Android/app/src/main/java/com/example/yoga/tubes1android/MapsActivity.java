@@ -1,21 +1,35 @@
 package com.example.yoga.tubes1android;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,16 +61,20 @@ import java.util.concurrent.ExecutionException;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
-        View.OnClickListener {
+        View.OnClickListener,
+        SensorEventListener {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private GoogleMap mMap;
     private double targetlongitude, targetlatitude;
-    private static boolean first=true;
-    private String status,nim,token;
+    private String status, nim, token;
     private Socket socket;
     PrintWriter out;
     BufferedReader input;
-    String json,response;
+    String json, response;
+    double mylongitude, mylatitude;
+    private ImageView image;
+    private float currentDegree = 0f;
+    private SensorManager mSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +90,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ImageButton two = (ImageButton) findViewById(R.id.imageButton2);
         two.setOnClickListener(this);
 
-        new Connect().execute("");
+        image = (ImageView) findViewById(R.id.imageViewCompass);
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        //new Connect().execute("");
+
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mSensorManager.unregisterListener(this);
 
     }
 
@@ -143,6 +177,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float degree = Math.round(event.values[0]);
+        RotateAnimation ra = new RotateAnimation(currentDegree,-degree,Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        ra.setDuration(210);
+        ra.setFillAfter(true);
+        image.startAnimation(ra);
+        currentDegree = -degree;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
 
     private class Connect extends AsyncTask<String, Void, String> {
 
@@ -159,7 +208,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         e.printStackTrace();
                     }
 
-            if(first) {
                 try {
                     json = "";
                     //build jsonObject
@@ -183,15 +231,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                first=false;
 
-            }else{
-                Intent lastintent=getIntent();
-                token=lastintent.getStringExtra("token");
-                nim=lastintent.getStringExtra("nim");
-                targetlatitude=lastintent.getDoubleExtra("latitude", 1);
-                targetlongitude=lastintent.getDoubleExtra("longitude", 1.0);
-            }
 
             return "Executed";
         }
@@ -205,7 +245,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
         }
-
-
     }
+
 }
