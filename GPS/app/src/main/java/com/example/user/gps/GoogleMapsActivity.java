@@ -2,6 +2,8 @@ package com.example.user.gps;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -133,7 +135,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 Toast.makeText(GoogleMapsActivity.this,
                         "Correct Answer, Please proceed to next location.",
                         Toast.LENGTH_SHORT).show();
-                setMarker(Container.getLng(), Container.getLtd());           //dibalik
+                setMarker(Container.getLtd(), Container.getLng());           //telah dibalik
             }else if(Container.getStatus().equals("wrong_answer") && !(Container.getCheck() == 1)){
                 Toast.makeText(GoogleMapsActivity.this,
                         "Wrong Answer, Please try again.",
@@ -228,12 +230,10 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                     Container.setLtd(jsonResponse.getDouble("latitude"));
                     Container.setLng(jsonResponse.getDouble("longitude"));
                     Container.setToken(jsonResponse.getString("token"));
-                    setMarker(Container.getLng(), Container.getLtd());          //dibalik
+                    setMarker(Container.getLtd(), Container.getLng());          //telah dibalik
                 }
                 else{
-                    Toast.makeText(GoogleMapsActivity.this,
-                            "Failed to receive response",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GoogleMapsActivity.this, "Failed to receive response", Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -355,6 +355,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
             mCurrentDegree = -azimuthInDegress;
         }
     }
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
