@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Tubes1-Android</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="map_title">Map</string>
+    <string name="title_activity_submit_answer">Submit Answer</string>
+</resources>
