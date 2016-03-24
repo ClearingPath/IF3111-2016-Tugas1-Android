@@ -1,6 +1,5 @@
 package com.example.user.gps;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -81,7 +80,6 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
 
         cameraButton = (Button) findViewById(R.id.buttonCamera);
         messageButton = (Button) findViewById(R.id.buttonMessage);
-
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,10 +129,11 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 //Do Nothing
             }
             else if(Container.getStatus().equals("ok")){
+                mMap.clear();
                 Toast.makeText(GoogleMapsActivity.this,
                         "Correct Answer, Please proceed to next location.",
                         Toast.LENGTH_SHORT).show();
-                setMarker(Container.getLng(), Container.getLng());           //dibalik
+                setMarker(Container.getLng(), Container.getLtd());           //dibalik
             }else if(Container.getStatus().equals("wrong_answer") && !(Container.getCheck() == 1)){
                 Toast.makeText(GoogleMapsActivity.this,
                         "Wrong Answer, Please try again.",
@@ -186,7 +185,6 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-
     }
 
     private class requestService extends AsyncTask<Void, Void, String> {
@@ -223,7 +221,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("Str",result);
+            Log.i("response : ",result);
             try {
                 if(result != null) {
                     JSONObject jsonResponse = new JSONObject(result);
@@ -322,6 +320,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                     in.close();
                 }
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         return destinationInternalImageFile.getPath();

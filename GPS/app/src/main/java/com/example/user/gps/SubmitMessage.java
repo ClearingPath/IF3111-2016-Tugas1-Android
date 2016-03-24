@@ -1,8 +1,12 @@
 package com.example.user.gps;
 
-import android.app.Activity;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -54,27 +58,56 @@ public class SubmitMessage extends AppCompatActivity {
             public void onClick(View v) {
                 Container.setAnswer(String.valueOf(spinner1.getSelectedItem()));
                 new sendAnswer().execute();
-                        Toast.makeText(SubmitMessage.this,
-                                "Answer selected : " + String.valueOf(spinner1.getSelectedItem()),
-                                Toast.LENGTH_SHORT).show();
+                Toast.makeText(SubmitMessage.this,
+                        "Answer selected : " + String.valueOf(spinner1.getSelectedItem()),
+                        Toast.LENGTH_SHORT).show();
             }
 
         });
     }
+
     private class sendAnswer extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... params) {
+            Looper.prepare();
             Socket socket = null;
             String response = "";
             JSONObject jsonRequest = new JSONObject();
             try {
+                LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                LocationListener mlocListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location loc) {
+                    }
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle bundle) {
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                    }
+
+                };
+                mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
+                Location loc = mlocManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                Container.setLtd(loc.getLatitude());
+                Container.setLng(loc.getLongitude());
+
                 jsonRequest.put("com", "answer");
                 jsonRequest.put("nim", "13513003");
                 jsonRequest.put("answer", Container.getAnswer());
-                jsonRequest.put("longitude", Container.getLng());
-                jsonRequest.put("latitude", Container.getLtd());
+                jsonRequest.put("longitude", loc.getLongitude());
+                jsonRequest.put("latitude", loc.getLatitude());
                 jsonRequest.put("token", Container.getToken());
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch(SecurityException e){
                 e.printStackTrace();
             }
             try {
@@ -89,20 +122,16 @@ public class SubmitMessage extends AppCompatActivity {
                 socket.close();
                 return response;
             } catch (UnknownHostException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
-                response = "UnknownHostException: " + e.toString();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
-                response = "IOException: " + e.toString();
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("Str", result);
+            Log.i("response : ", result);
             try {
                 JSONObject jsonResponse = new JSONObject(result);
                 Container.setStatus(jsonResponse.getString("status"));
