@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,16 +54,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static boolean first=true;
     private String status,nim,token;
     private Socket socket;
-    private static final int SERVERPORT = 3111;
-    private static final String SERVER_IP = "167.205.34.132";
     PrintWriter out;
     BufferedReader input;
+    String json,response;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -73,62 +71,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         one.setOnClickListener(this); // calling onClick() method
         ImageButton two = (ImageButton) findViewById(R.id.imageButton2);
         two.setOnClickListener(this);
-        new Thread(new ClientThread()).start();
 
-        if(first) {
-            try {
-                String json = "";
+        new Connect().execute("");
 
-                // 3. build jsonObject
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("com","req_loc");
-                jsonObject.accumulate("nim","13513030");
-
-
-                // 4. convert JSONObject to JSON to String
-                json = jsonObject.toString();
-                out.print(json);
-                String response=input.readLine();
-                Toast.makeText(getBaseContext(), response, Toast.LENGTH_LONG).show();
-                final JSONObject obj=new JSONObject(response);
-                token=obj.getString("token");
-                status=obj.getString("status");
-                nim=obj.getString("status");
-                targetlatitude=obj.getDouble("latitude");
-                targetlongitude=obj.getDouble("longitude");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            first=false;
-
-        }else{
-            Bundle b = getIntent().getExtras();
-            token=b.getString("token");
-            nim=b.getString("nim");
-            targetlatitude=b.getFloat("latitude");
-            targetlongitude=b.getFloat("longitude");
-        }
     }
-
-    class ClientThread implements  Runnable{
-        @Override
-        public  void run(){
-            InetAddress serverAddr = null;
-            try {
-                serverAddr = InetAddress.getByName(SERVER_IP);
-                socket = new Socket(serverAddr, SERVERPORT);
-                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                input= new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
 
     /**
@@ -143,11 +89,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng target = new LatLng(targetlatitude, targetlongitude);
-        mMap.addMarker(new MarkerOptions().position(target).title("target"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target,17));
     }
 
     @Override
@@ -162,14 +103,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Do something in response to button
                 Intent intent = new Intent(this, SubmitAnswer.class);
-                Bundle b = new Bundle();
-                b.putString("token", token);
-                b.putString("nim",nim);
-                b.putDouble("latitude", targetlatitude);
-                b.putDouble("longitude",targetlongitude);
-                intent.putExtras(b); //Put your id to your next Intent
-                startActivity(intent);
-                finish();
+                //Bundle b = new Bundle();
+                intent.putExtra("token", token);
+                intent.putExtra("nim",nim);
+                intent.putExtra("latitude", targetlatitude);
+                intent.putExtra("longitude", targetlongitude);
+                startActivityForResult(intent, 1);
+                LatLng target = new LatLng(targetlongitude, targetlatitude);
+                mMap.addMarker(new MarkerOptions().position(target).title("target"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 17));
                 break;
 
 
@@ -177,10 +119,93 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (1) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    token=data.getStringExtra("token");
+                    nim=data.getStringExtra("nim");
+                    targetlatitude=data.getDoubleExtra("latitude", 1);
+                    targetlongitude=data.getDoubleExtra("longitude",1.0);
+                }
+                break;
+            }
+        }
+    }
+
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+    }
+
+
+    private class Connect extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+                try {
+                        socket = new Socket("167.205.34.132", 3111);
+                        out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                        input= new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+            if(first) {
+                try {
+                    json = "";
+                    //build jsonObject
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("com", "req_loc");
+                    jsonObject.put("nim", "13513030");
+                    //convert JSONObject to JSON to String
+                    json = jsonObject.toString();
+                    System.out.println(json);
+                    out.println(json);
+                    response=input.readLine();
+                    System.out.println(response);
+                    final JSONObject obj=new JSONObject(response);
+                    token=obj.getString("token");
+                    status=obj.getString("status");
+                    nim=obj.getString("nim");
+                    targetlatitude=obj.getDouble("latitude");
+                    targetlongitude=obj.getDouble("longitude");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                first=false;
+
+            }else{
+                Intent lastintent=getIntent();
+                token=lastintent.getStringExtra("token");
+                nim=lastintent.getStringExtra("nim");
+                targetlatitude=lastintent.getDoubleExtra("latitude", 1);
+                targetlongitude=lastintent.getDoubleExtra("longitude", 1.0);
+            }
+
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            LatLng target = new LatLng(targetlongitude, targetlatitude);
+            mMap.addMarker(new MarkerOptions().position(target).title("target"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target,17));
+            Toast.makeText(getApplicationContext(), json, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
+        }
+
+
     }
 }

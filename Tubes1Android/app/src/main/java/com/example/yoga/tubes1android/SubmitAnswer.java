@@ -1,5 +1,6 @@
 package com.example.yoga.tubes1android;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -35,8 +40,6 @@ import java.util.concurrent.ExecutionException;
 
 public class SubmitAnswer extends AppCompatActivity {
     private Socket socket;
-    private static final int SERVERPORT = 5000;
-    private static final String SERVER_IP = "10.0.2.2";
     private Spinner spinner;
     private Button button;
     static private double targetlatitude, targetlongitude;
@@ -44,6 +47,8 @@ public class SubmitAnswer extends AppCompatActivity {
     static String ans;
     PrintWriter out;
     BufferedReader input;
+    String json,response;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,25 +58,12 @@ public class SubmitAnswer extends AppCompatActivity {
         addListenerOnButton();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Bundle b = getIntent().getExtras();
-        token=b.getString("token");
-        nim=b.getString("nim");
-        targetlatitude=b.getFloat("latitude");
-        targetlongitude=b.getFloat("longitude");
-
-            InetAddress serverAddr = null;
-            try {
-                serverAddr = InetAddress.getByName(SERVER_IP);
-                socket = new Socket(serverAddr, SERVERPORT);
-                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                input= new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
+        Intent lastintent=getIntent();
+        token=lastintent.getStringExtra("token");
+        nim=lastintent.getStringExtra("nim");
+        targetlatitude=lastintent.getDoubleExtra("latitude", 1);
+        targetlongitude=lastintent.getDoubleExtra("longitude",1.0);
+        Toast.makeText(getApplicationContext(), String.valueOf(targetlatitude), Toast.LENGTH_LONG).show();
     }
 
 
@@ -84,7 +76,7 @@ public class SubmitAnswer extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(getApplicationContext(), "wowww", Toast.LENGTH_LONG).show();
                 switch(String.valueOf(spinner.getSelectedItem())){
                     case "GKU Barat":ans="gku_barat";
                         break;
@@ -107,55 +99,80 @@ public class SubmitAnswer extends AppCompatActivity {
                     case "Kubus":ans="kubus";
                         break;
                 }
-
-                try {
-                    String json = "";
-
-                    // 3. build jsonObject
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.accumulate("com","answer");
-                    jsonObject.accumulate("nim",nim);
-                    jsonObject.accumulate("answer",ans);
-                    jsonObject.accumulate("longitude",targetlongitude);
-                    jsonObject.accumulate("latitude",targetlatitude);
-                    jsonObject.accumulate("token",token);
+                new Connect().execute("");
 
 
-                    // 4. convert JSONObject to JSON to String
-                    json = jsonObject.toString();
-                    out.print(json);
-                    String response=input.readLine();
-                    Toast.makeText(getBaseContext(), response, Toast.LENGTH_LONG).show();
-                    final JSONObject obj=new JSONObject(response);
-                    status=obj.getString("status");
-                    if(status.equals("ok")){
-                        token=obj.getString("token");
-                        nim=obj.getString("status");
-                        targetlatitude=obj.getDouble("latitude");
-                        targetlongitude=obj.getDouble("longitude");
-                    }else{
-                        token=obj.getString("token");
-                        nim=obj.getString("status");
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Intent intent = new Intent(v.getContext(), MapsActivity.class);
-                Bundle b = new Bundle();
-                b.putString("token", token);
-                b.putString("nim",nim);
-                b.putDouble("latitude",targetlatitude);
-                b.putDouble("longitude",targetlongitude);
-                intent.putExtras(b); //Put your id to your next Intent
-                startActivity(intent);
-                finish();
             }
 
         });
+    }
+
+    private class Connect extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                socket = new Socket("167.205.34.132", 3111);
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                input= new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                json = "";
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("com", "answer");
+                jsonObject.put("nim", nim);
+                jsonObject.put("answer", ans);
+                jsonObject.put("latitude", String.valueOf(targetlatitude));
+                jsonObject.put("longitude", String.valueOf(targetlongitude));
+
+                jsonObject.put("token", token);
+                json = jsonObject.toString();
+                System.out.println(json);
+                out.println(json);
+                response=input.readLine();
+                System.out.println(response);
+                final JSONObject obj=new JSONObject(response);
+                status=obj.getString("status");
+                if(status.equals("ok")){
+                    token=obj.getString("token");
+                    nim=obj.getString("nim");
+                    targetlatitude=obj.getDouble("latitude");
+                    targetlongitude=obj.getDouble("longitude");
+                }else{
+                    token=obj.getString("token");
+                    nim=obj.getString("nim");
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(getApplicationContext(), json, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("token", token);
+            resultIntent.putExtra("nim",nim);
+            resultIntent.putExtra("latitude", targetlatitude);
+            resultIntent.putExtra("longitude", targetlongitude);
+            setResult(Activity.RESULT_OK, resultIntent);
+            finish();
+
+        }
+
+
     }
 
 }
