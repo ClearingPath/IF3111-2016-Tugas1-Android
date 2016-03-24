@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Dimana</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_login">Login</string>
+
+    <string name="nim">NIM</string>
+    <string name="button_send">Submit</string>
+    <string name="action_settings">Settings</string>
+</resources>
