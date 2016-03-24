@@ -8,15 +8,33 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AnswerActivity">
-
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location Name:"
+        android:textColor="@color/colorAnswer"/>
     <Spinner
+        android:id="@+id/spinner1"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/text1"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        style="@style/spinner_style" />
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_below="@+id/spinner1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner1"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"/>
+        android:layout_marginTop="10dp"
+        android:text="SUBMIT"
+        android:background="@color/colorAnswer"
+        android:textColor="@color/colorAnswerButtonText"/>
 
+    <TextView
+        android:id="@+id/tv"
+        android:layout_below="@+id/button_submit"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="gila"/>
 </RelativeLayout>
