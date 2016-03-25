@@ -61,6 +61,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /** Called when the user clicks the Answer button */
     public void answer(View view) {
         Intent intent = new Intent(this, Answer.class);
+        intent.putExtra("longitude", longitude);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("token", token);
         startActivity(intent);
     }
 

@@ -18,19 +18,19 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class SocketHub extends AsyncTask<Void, Void, Void> {
-    private String host = "167.205.34.132";
-    private int port = 3111;
+    private String host = "api.nitho.me";
+    private int port = 8080;
 
     private JSONObject message = null;
-    private JSONObject response = null;
-    private Boolean done = false;
+    private String responseLine;
 
     public static final String TAG = SocketHub.class.getSimpleName();
 
-    public SocketHub(JSONObject msg, JSONObject res, Boolean done) {
+    public AsyncResponse delegate = null;
+
+    public SocketHub(AsyncResponse delegate, JSONObject msg) {
+        this.delegate = delegate;
         this.message = msg;
-        this.response = res;
-        this.done = done;
     }
 
     @Override
@@ -43,28 +43,21 @@ public class SocketHub extends AsyncTask<Void, Void, Void> {
             PrintStream ps = new PrintStream(os);
             ps.print(message.toString());
 
+            Log.d(TAG, "UDAH KEKIRIM LHOOO");
+
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
             byte[] buffer = new byte[1024];
 
-            Log.d(TAG, "socket: " + (socket != null));
             int bytesRead;
             InputStream inputStream = socket.getInputStream();
 
-            // notice: inputStream.read() will block if no data return
-            String responseLine = "";
+            Log.d(TAG, "BERHASIL AMBIL INPUTSTREAM");
 
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 byteArrayOutputStream.write(buffer, 0, bytesRead);
                 responseLine += byteArrayOutputStream.toString("UTF-8");
+                Log.d(TAG, "RECEIVING FROM SERVER "+ bytesRead + " BYTES");
             }
-            try {
-                JSONParser parser = new JSONParser();
-                Object obj = parser.parse(responseLine);
-                response = (JSONObject) obj;
-            } catch (ParseException ex) {
-                Log.d(TAG, ex.toString());
-            }
-            done = true;
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -87,6 +80,17 @@ public class SocketHub extends AsyncTask<Void, Void, Void> {
     }
     @Override
     protected void onPostExecute(Void result) {
+        JSONObject response = new JSONObject();
+        try {
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(responseLine);
+            response = (JSONObject) obj;
+        } catch (ParseException ex) {
+            Log.d(TAG, ex.toString());
+        }
+        delegate.processFinish(response);
         super.onPostExecute(result);
     }
+
+
 }

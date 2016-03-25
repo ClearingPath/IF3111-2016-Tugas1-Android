@@ -8,7 +8,7 @@ import android.widget.TextView;
 import android.util.Log;
 import org.json.simple.JSONObject;
 
-public class Opening extends AppCompatActivity {
+public class Opening extends AppCompatActivity implements AsyncResponse {
     private Boolean done = false;
     private JSONObject response;
 
@@ -33,19 +33,15 @@ public class Opening extends AppCompatActivity {
         JSONObject message = new JSONObject();
         message.put("com", "req_loc");
         message.put("nim", "13513024");
-        SocketHub socketHub = new SocketHub(message, response, done);
-        socketHub.execute();
-        int counter = 0;
-        while(!done) {
-            try {
-                Thread.sleep(3000);                 //1000 milliseconds is one second.
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-            counter++;
-            Log.d(TAG, "sleep " + counter);
-        }
 
+        Log.d(TAG, "berhasil buat json object");
+
+        SocketHub socketHub = new SocketHub(this, message);
+        socketHub.execute();
+    }
+
+    @Override
+    public void processFinish(JSONObject response){
         String status = (String) response.get("status");
         Log.d(TAG, "status " + status);
         double longitude = Double.parseDouble((String) response.get("longitude"));
