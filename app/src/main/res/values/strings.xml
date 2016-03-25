@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Tubes1-Android</string>
+    <string name="home_name">Android Map ITB Project</string>
     <string name="action_settings">Settings</string>
 </resources>
