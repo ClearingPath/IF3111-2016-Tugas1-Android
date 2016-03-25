@@ -1,11 +1,13 @@
 package com.example.erickchandra.tubes1_android;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
@@ -50,6 +52,12 @@ public class HomeActivity extends AppCompatActivity {
         button_start.setText("Start Seeking");
         LinearLayout.LayoutParams lp_button_start = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         button_start.setLayoutParams(lp_button_start);
+        button_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchMap();
+            }
+        });
 
         LinearLayout linearLayout_button_start = new LinearLayout(this);
         linearLayout_button_start.addView(button_start);
@@ -64,5 +72,10 @@ public class HomeActivity extends AppCompatActivity {
         linearLayout_whole.setOrientation(LinearLayout.VERTICAL);
         linearLayout_whole.setGravity(Gravity.BOTTOM);
         setContentView(linearLayout_whole);
+    }
+
+    public void launchMap() {
+        Intent mapIntent = new Intent(this, MapsActivity.class);
+        startActivity(mapIntent);
     }
 }
