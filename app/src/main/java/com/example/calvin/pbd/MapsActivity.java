@@ -174,6 +174,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setCompassEnabled(false);
     }
 
     public void setLocation(double latitude, double longitude) {
@@ -187,25 +188,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Image saved\n", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Image saved\n", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Capture image canceled\n", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Capture image canceled\n", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Image capture failed\n", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Image capture failed\n", Toast.LENGTH_SHORT).show();
             }
         }
         else if (requestCode == ANSWER_CODE) {
             if (resultCode == FINISH) {
                 mMap.clear();
-                Toast.makeText(this, "Finish!\n", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Finish!\n", Toast.LENGTH_SHORT).show();
             }
             else if (resultCode == WRONG)
-                Toast.makeText(this, "Wrong answer, try again\n", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Wrong answer, try again\n", Toast.LENGTH_SHORT).show();
             else if (resultCode == OK) {
                 mMap.clear();
                 SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
                 setLocation(Double.longBitsToDouble(sp.getLong("latitude", -1)), Double.longBitsToDouble(sp.getLong("longitude", -1)));
-                Toast.makeText(this, "Answer correct, move to next location\n", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Answer correct, move to next location\n", Toast.LENGTH_SHORT).show();
             }
         }
     }
