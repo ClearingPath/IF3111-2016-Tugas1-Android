@@ -16,6 +16,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -24,13 +30,24 @@ import org.json.JSONObject;
 public class SocketClient extends AsyncTask<String, String, String> {
     String address = "api.nitho.me";
     int port = 8080;
-    String response =  "";
+    String response = "";
     String message;
     private boolean success;
-    SocketClient(String message)
+    GoogleMap mMap;
+
+    SocketClient(String message, GoogleMap mMap)
     {
         this.message = message;
+        this.mMap = mMap;
     }
+
+  /*  public double getJSONLat() throws JSONException {
+        return this.json.getDouble("latitude");
+    }
+
+    public double getJSONLong() throws JSONException {
+        return this.json.getDouble("longitude");
+    }*/
 
     protected String doInBackground(String... params) {
         Socket socket = null;
@@ -50,13 +67,13 @@ public class SocketClient extends AsyncTask<String, String, String> {
             out.println(message);
 
             // Thread will wait till server replies
-            Log.d("HAHAHAHA", "HHAHAAHAH");
             int c;
             while((c = in.read()) != -1)
             {
                 response += (char) c;
             }
-            Log.d("HAHAHAHA", response);
+            Log.d("RESPONSE", response);
+
             if (response != null){
                 publishProgress(response);
                 success = true;
@@ -96,11 +113,33 @@ public class SocketClient extends AsyncTask<String, String, String> {
                 }
             }
         }
-        return null;
+        return response;
     }
 
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
+
+        try {
+            JSONObject json = new JSONObject(result);
+            double lat = json.getDouble("latitude");
+            double longit = json.getDouble("longitude");
+            LatLng itb = new LatLng(longit, lat);
+            mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(itb, 20.0f));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
+
+
+   /* public void receiveResponse(JSONObject json)
+    {
+        try {
+            json = new JSONObject(this.response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }*/
 }

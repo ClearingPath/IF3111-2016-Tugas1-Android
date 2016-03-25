@@ -5,6 +5,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -26,7 +27,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-
+    private static final int MARKER = 200;
+    String response = "";
+    double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +55,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        /*LatLng itb = new LatLng(-6.891192, 107.610402);
-        mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(itb, 20.0f)); */
         sendRequest();
     }
 
@@ -93,6 +91,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
                         .show();
             }
+        /*} else if (requestCode == MARKER) {
+            if (resultCode == RESULT_OK) {
+                *//*lat = json.getDouble("latitude");
+                longit = json.getDouble("longitude");
+                Log.d("Laatitude", lat.toString());
+                Log.d("Longitude", longit.toString());*//*
+                LatLng itb = new LatLng(-6.890356, 107.610359);
+                mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(itb, 20.0f));
+                Intent intent = new Intent(this, MapsActivity.class);
+                startActivityForResult(intent, MARKER);
+            }*/
         }
     }
 
@@ -103,12 +114,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             json.put("com", "req_loc");
             json.put("nim", "13513111");
-            SocketClient socket = new SocketClient(json.toString());
+            SocketClient socket = new SocketClient(json.toString(), mMap);
             socket.execute();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
+
 
 }

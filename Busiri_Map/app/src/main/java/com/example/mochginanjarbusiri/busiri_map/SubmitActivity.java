@@ -8,9 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SubmitActivity extends AppCompatActivity {
     private String[] states;
     private Spinner spinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +32,28 @@ public class SubmitActivity extends AppCompatActivity {
 
     public void Submit(View view)
     {
+        sendAnswer();
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
+    }
+
+    public void sendAnswer()
+    {
+        /*JSONObject json = new JSONObject();
+        SocketClient socket = new SocketClient();
+
+        try
+        {
+            json.put("com", "answer");
+            json.put("nim", "13513111");
+            json.put("answer", spinner.getOnItemSelectedListener());
+            json.put("longitude",socket.json.optDouble("longitude"));
+            json.put("latitude", socket.json.optDouble("latitude"));
+            json.put("token", socket.json.optString("token"));
+            SocketClient socketP = new SocketClient(json.toString());
+            socketP.execute();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }*/
     }
 }
