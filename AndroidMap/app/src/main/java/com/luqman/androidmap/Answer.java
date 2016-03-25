@@ -6,14 +6,25 @@ import android.view.View;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.util.Log;
+import org.json.simple.JSONObject;
 
 public class Answer extends AppCompatActivity {
     public static final String TAG = Answer.class.getSimpleName();
+
+    private double longitude;
+    private double latitude;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
+
+        // get information from intent
+        Bundle bundle = getIntent().getExtras();
+        longitude = Double.parseDouble(bundle.getString("longitude"));
+        latitude = Double.parseDouble(bundle.getString("latitude"));
+        token = (String) bundle.getString("token");
 
         Spinner spinner = (Spinner) findViewById(R.id.locations_spinner);
 
@@ -33,7 +44,6 @@ public class Answer extends AppCompatActivity {
         String ans = spinner.getSelectedItem().toString();
 
         Log.d(TAG, "answer is " + ans);
-
 
     }
 }
