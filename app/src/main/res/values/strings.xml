@@ -1,5 +1,7 @@
 <resources>
-  <string name="app_name">ITBLocator</string>
+  <string name="app_name">ITB Locator</string>
   <string name="action_settings">Settings</string>
-  <string name="API_KEY">AIzaSyC5R9KIT-UG0Ur1aFPRwzeDHApaSoFxIU8</string>
+  <string name="title_activity_maps">Map</string>
+  <string name="title_activity_record">Challenge Record</string>
+  <string name="title_activity_answer">Submit Answer</string>
 </resources>
