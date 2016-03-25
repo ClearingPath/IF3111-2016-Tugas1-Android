@@ -63,7 +63,6 @@ public class AnswerActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             Looper.prepare();
             SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
 
             try {
                 Socket socket = new Socket(MapsActivity.serverIP, 3111);

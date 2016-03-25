@@ -14,10 +14,9 @@
         android:layout_height="match_parent"
         tools:context="com.example.calvin.pbd.MapsActivity" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1">
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/logButton"
@@ -28,37 +27,48 @@
 
         <ListView
             android:id="@+id/logList"
+            android:layout_below="@+id/logButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
         </ListView>
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="2"
-        android:alpha="0.7">
-
-        <ImageButton
-            android:id="@+id/cameraButton"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
+        <ImageView
+            android:id="@+id/compass"
             android:layout_weight="1"
-            android:layout_gravity="bottom"
-            android:scaleType="fitCenter"
-            android:src="@drawable/camera"
-            android:contentDescription="@string/camera_button" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/arrow"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
 
-        <ImageButton
-            android:id="@+id/answerButton"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:layout_gravity="bottom"
-            android:scaleType="fitCenter"
-            android:src="@drawable/answer"
-            android:contentDescription="@string/answer_button"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2"
+            android:alpha="0.7"
+            android:layout_below="@+id/logButton"
+            android:layout_alignParentStart="true">
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/cameraButton"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:scaleType="fitCenter"
+                android:src="@drawable/camera"
+                android:contentDescription="@string/camera_button" />
+
+            <ImageButton
+                android:id="@+id/answerButton"
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:scaleType="fitCenter"
+                android:src="@drawable/answer"
+                android:contentDescription="@string/answer_button"/>
+        </LinearLayout>
 </FrameLayout>
