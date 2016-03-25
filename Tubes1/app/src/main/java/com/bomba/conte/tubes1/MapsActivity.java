@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -33,41 +34,45 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     static final int REQUEST_TAKE_PHOTO = 1;
-    private String serverAddress = "167.205.24.132";
+    private String serverAddress = "167.205.34.132";
     private int serverPort = 3111;
     private JSONObject obj;
+    String response = "";
 
     ImageButton camera, chat;
     String currentPhotoPath;
 
     private class Mediator extends AsyncTask<Void, Void, String> {
 
-        String response = "";
-        TextView textResponse;
+
 
         @Override
         protected String doInBackground(Void... arg0) {
 
             Socket socket = null;
-            DataOutputStream output;
-            DataInputStream input;
+            PrintWriter printer;
+            BufferedReader reader;
 
             try {
                 socket = new Socket(serverAddress, serverPort);
 
-                output = new DataOutputStream(socket.getOutputStream());
-                input = new DataInputStream(socket.getInputStream());
-                output.writeUTF(obj.toString());
-                return input.readUTF();
+                printer = new PrintWriter(socket.getOutputStream(), true);
+                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                printer.println(obj.toString());
+                Log.d("MyMaps", obj.toString());
+                response = reader.readLine();
 
             } catch (UnknownHostException e) {
                 // TODO Auto-generated catch block
@@ -87,14 +92,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
             }
-            return null;
+            Log.d("MyMaps", response);
+            return response;
         }
 
         @Override
         protected void onPostExecute(String result) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
-            Log.d("Result", result);
-            builder.setTitle("RESUPONSU ALART!!!")
+            Log.d("MyMaps", result);
+            builder.setTitle("LESPON ALART!!!")
                     .setMessage(result)
                     .setPositiveButton("Tararengkiu Pak Seper", new DialogInterface.OnClickListener() {
                         @Override
@@ -167,6 +173,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        try {
+            obj = new JSONObject();
+            obj.put("com", "req_loc");
+            obj.put("nim", "13513013");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new Mediator().execute();
     }
 
 
@@ -181,21 +196,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
+        double Lat = 0;
+        double Lng = 0;
         try {
-            obj = new JSONObject();
-            obj.put("com", "req_loc");
-            obj.put("nim", "13513013");
+            JSONObject Coordinate = new JSONObject(response);
+            Lat = Coordinate.getDouble("latitude");
+            Lng = Coordinate.getDouble("longitude");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        new Mediator().execute();
+        mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng Someplace = new LatLng(Lat,Lng);
+        mMap.addMarker(new MarkerOptions().position(Someplace).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(Someplace));
     }
 }
