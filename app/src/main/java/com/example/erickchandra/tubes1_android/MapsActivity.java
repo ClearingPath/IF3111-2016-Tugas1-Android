@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Surface;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -67,6 +68,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        // For Message Submit Button
+        ImageButton msgSubmitButton = (ImageButton) findViewById(R.id.button_message);
+        msgSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchMsgSubmit();
+            }
+        });
+
         // For Compass
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -105,20 +115,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             RotateAnimation ra;
 //            System.out.println("ORIENTATION: " + getResources().getConfiguration().orientation + "   " + ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             if (getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                ra = new RotateAnimation(
-                        mCurrentDegree,
-                        -azimuthInDegrees,
-                        Animation.RELATIVE_TO_SELF, 0.5f,
-                        Animation.RELATIVE_TO_SELF,
-                        0.5f);
+                if (this.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_0) {
+                    ra = new RotateAnimation(
+                            mCurrentDegree,
+                            -azimuthInDegrees,
+                            Animation.RELATIVE_TO_SELF, 0.5f,
+                            Animation.RELATIVE_TO_SELF,
+                            0.5f);
+                }
+                else {
+                    ra = new RotateAnimation(
+                            mCurrentDegree + 180,
+                            -azimuthInDegrees,
+                            Animation.RELATIVE_TO_SELF, 0.5f,
+                            Animation.RELATIVE_TO_SELF,
+                            0.5f);
+                }
             }
-            else {
-                ra = new RotateAnimation(
-                        mCurrentDegree + 90,
-                        -azimuthInDegrees,
-                        Animation.RELATIVE_TO_SELF, 0.5f,
-                        Animation.RELATIVE_TO_SELF,
-                        0.5f);
+            else { // SCREEN_ORIENTATION_LANDSCAPE
+                if (this.getWindowManager().getDefaultDisplay().getRotation() == Surface.ROTATION_90) {
+                    ra = new RotateAnimation(
+                            mCurrentDegree - 90,
+                            -azimuthInDegrees,
+                            Animation.RELATIVE_TO_SELF, 0.5f,
+                            Animation.RELATIVE_TO_SELF,
+                            0.5f);
+                }
+                else {
+                    ra = new RotateAnimation(
+                            mCurrentDegree + 90,
+                            -azimuthInDegrees,
+                            Animation.RELATIVE_TO_SELF, 0.5f,
+                            Animation.RELATIVE_TO_SELF,
+                            0.5f);
+                }
             }
 
             ra.setDuration(250);
@@ -196,5 +226,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
+    }
+
+    public void launchMsgSubmit() {
+        Intent msgSubmitIntent = new Intent(this, SubmitActivity.class);
+        startActivity(msgSubmitIntent);
     }
 }
