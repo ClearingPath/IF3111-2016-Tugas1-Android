@@ -20,19 +20,38 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/cameraButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/camera"
-            android:layout_weight="1"/>
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/chatButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/chat"
-            android:layout_weight="1"/>
+            <ImageButton
+                android:id="@+id/cameraButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/camera"
+                android:layout_weight="1"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/centerPoint"/>
+
+            <TextView
+                android:id="@+id/centerPoint"
+                android:text=""
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageButton
+                android:id="@+id/chatButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/chat"
+                android:layout_weight="1"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@+id/centerPoint"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 
