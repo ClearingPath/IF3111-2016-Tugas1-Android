@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/buttonsgroup">
+
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:paddingBottom="16dp"-->
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:id="@+id/v1"></View>
+    <Button
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:id="@+id/camerabutton"
+        android:background="@drawable/camera_button"
+        android:onClick="takePhoto"
+        />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:id="@+id/v2"></View>
+    <Button
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:id="@+id/sendbutton"
+        android:background="@drawable/send_button"
+        android:onClick="submitAnswer"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:id="@+id/v3"></View>
+</LinearLayout>

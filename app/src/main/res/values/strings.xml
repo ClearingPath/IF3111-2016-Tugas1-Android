@@ -1,7 +1,27 @@
 <resources>
     <string name="app_name">Tubes1-Android</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="map_title">Map</string>
     <string name="title_activity_submit_answer">Submit Answer</string>
+    <string name="location_name">Location Name:</string>
+    <string name="gku_barat_name">GKU Barat</string>
+    <string name="gku_timur_name">GKU Timur</string>
+    <string name="intel_name">Intel</string>
+    <string name="cc_barat_name">CC Barat</string>
+    <string name="cc_timur_name">CC Timur</string>
+    <string name="dpr_name">DPR</string>
+    <string name="sunken_name">Sunken Court</string>
+    <string name="perpustakaan_name">Perpustakaan</string>
+    <string name="pau_name">PAU</string>
+    <string name="kubus_name">Kubus</string>
+    <string name="gku_barat_code">gku_barat</string>
+    <string name="gku_timur_code">gku_timur</string>
+    <string name="intel_code">intel</string>
+    <string name="cc_barat_code">cc_barat</string>
+    <string name="cc_timur_code">cc_timur</string>
+    <string name="dpr_code">dpr</string>
+    <string name="sunken_code">sunken</string>
+    <string name="perpustakaan_code">perpustakaan</string>
+    <string name="pau_code">pau</string>
+    <string name="kubus_code">kubus</string>
+    <string name="submit_text">Submit</string>
 </resources>

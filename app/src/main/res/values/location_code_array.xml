@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="location_code_array">
+        <item>@string/gku_barat_code</item>
+        <item>@string/gku_timur_code</item>
+        <item>@string/intel_code</item>
+        <item>@string/cc_barat_code</item>
+        <item>@string/cc_timur_code</item>
+        <item>@string/dpr_code</item>
+        <item>@string/sunken_code</item>
+        <item>@string/perpustakaan_code</item>
+        <item>@string/pau_code</item>
+        <item>@string/kubus_code</item>
+    </string-array>
+</resources>
