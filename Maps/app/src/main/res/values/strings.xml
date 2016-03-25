@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Maps</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_submit">Submit Answer</string>
+    <string-array name="locations">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>sunken</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
+    </string-array>
+    <string name="servAdd">167.205.34.132</string>
+    <string name="port">3111</string>
+</resources>
