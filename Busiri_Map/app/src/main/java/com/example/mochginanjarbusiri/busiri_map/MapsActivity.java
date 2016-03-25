@@ -16,10 +16,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +53,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng itb = new LatLng(-6.891192, 107.610402);
+        /*LatLng itb = new LatLng(-6.891192, 107.610402);
         mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(itb, 20.0f)); */
+        sendRequest();
     }
 
     public void openSubmit(View view)
@@ -85,6 +94,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .show();
             }
         }
+    }
+
+    public void sendRequest()
+    {
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("com", "req_loc");
+            json.put("nim", "13513111");
+            SocketClient socket = new SocketClient(json.toString());
+            socket.execute();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
