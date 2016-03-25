@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">Tubes1-Android</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_text_request">TextRequestActivity</string>
+    <string name="title_activity_submit_answer">SUBMIT ANSWER</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="label_location_name">Location Name:</string>
+    <string-array name="kemungkinan_jawaban_array">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>sunken</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
+    </string-array>
+    <string name="label_submit">SUBMIT</string>
 </resources>
