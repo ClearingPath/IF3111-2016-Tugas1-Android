@@ -1,6 +1,8 @@
 package com.example.erickchandra.tubes1_android;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -98,20 +100,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
             SensorManager.getOrientation(mR, mOrientation);
             float azimuthInRadians = mOrientation[0];
-            float azimuthInDegress = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
-            RotateAnimation ra = new RotateAnimation(
-                    mCurrentDegree,
-                    -azimuthInDegress,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f);
+            float azimuthInDegrees = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
+
+            RotateAnimation ra;
+//            System.out.println("ORIENTATION: " + getResources().getConfiguration().orientation + "   " + ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            if (getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                ra = new RotateAnimation(
+                        mCurrentDegree,
+                        -azimuthInDegrees,
+                        Animation.RELATIVE_TO_SELF, 0.5f,
+                        Animation.RELATIVE_TO_SELF,
+                        0.5f);
+            }
+            else {
+                ra = new RotateAnimation(
+                        mCurrentDegree + 90,
+                        -azimuthInDegrees,
+                        Animation.RELATIVE_TO_SELF, 0.5f,
+                        Animation.RELATIVE_TO_SELF,
+                        0.5f);
+            }
 
             ra.setDuration(250);
 
             ra.setFillAfter(true);
 
             mPointer.startAnimation(ra);
-            mCurrentDegree = -azimuthInDegress;
+            mCurrentDegree = -azimuthInDegrees;
         }
     }
 
