@@ -2,22 +2,16 @@ package com.example.calvin.pbd;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,7 +20,6 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xml.sax.ext.Locator2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -73,7 +66,7 @@ public class AnswerActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sp.edit();
 
             try {
-                Socket socket = new Socket("167.205.34.132", 3111);
+                Socket socket = new Socket(MapsActivity.serverIP, 3111);
 
                 try {
                     LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -117,6 +110,9 @@ public class AnswerActivity extends AppCompatActivity {
                 out.flush();
                 String response = in.readLine();
                 socket.close();
+
+                MapsActivity.commLog.add(request.toString());
+                MapsActivity.commLog.add(response);
                 return response;
             }
             catch (UnknownHostException e) {

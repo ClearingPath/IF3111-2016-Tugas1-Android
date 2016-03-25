@@ -3,21 +3,21 @@ package com.example.calvin.pbd;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,34 +27,33 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int ANSWER_CODE = 2;
     public static final int OK = 3;
     public static final int FINISH = 4;
     public static final int WRONG = 5;
+    public static ArrayList<String> commLog = new ArrayList<>();
+    public static String serverIP = "167.205.34.132";
     private GoogleMap mMap;
     private Uri fileUri;
     private boolean firstRequest = true;
+    private boolean logVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,20 +61,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        if (firstRequest)
-            new RequestLocation().execute();
+        getSupportActionBar().setTitle("Map");
+
+        ((Button) findViewById(R.id.logButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MapsActivity.this, android.R.layout.simple_list_item_1, commLog);
+                ListView lv = (ListView)findViewById(R.id.logList);
+                lv.setBackgroundColor(Color.WHITE);
+                lv.setAdapter(arrayAdapter);
+                if (!logVisible)
+                    lv.setVisibility(View.VISIBLE);
+                else
+                    lv.setVisibility(View.INVISIBLE);
+                logVisible = !logVisible;
+            }
+        });
 
         ((ImageButton)findViewById(R.id.cameraButton)).setOnClickListener(
-            new ImageButton.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                    fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                new ImageButton.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
-                    startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                    }
                 }
-            }
         );
 
         ((ImageButton)findViewById(R.id.answerButton)).setOnClickListener(
@@ -87,13 +100,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         );
+
+        if (firstRequest)
+            new RequestLocation().execute();
     }
 
     private class RequestLocation extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... args) {
             try {
-                Socket socket = new Socket("167.205.34.132", 3111);
+                Socket socket = new Socket(serverIP, 3111);
 
                 JSONObject request = new JSONObject();
                 request.put("com", "req_loc");
@@ -107,8 +123,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 out.println(request.toString());
                 out.flush();
+
                 String response = in.readLine();
                 socket.close();
+
+                commLog.add(request.toString());
+                commLog.add(response);
                 return response;
             }
             catch (UnknownHostException e) {
