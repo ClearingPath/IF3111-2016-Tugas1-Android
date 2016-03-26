@@ -5,20 +5,23 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,22 +34,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInput;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.StringTokenizer;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
 
     private GoogleMap mMap;
     public static final int REQUEST_TAKE_PHOTO = 1;
@@ -58,18 +55,52 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static int serverPort = 3111;
     private JSONObject obj;
     private boolean firstReq = true;
+    private float currentDegree = 0f;
     String response = "";
-    double Lat = 0;
-    double Lng = 0;
 
     ImageButton camera, chat;
+    ImageView compass;
+    SensorManager manager;
     String currentPhotoPath;
     android.support.v7.widget.Toolbar titlebar;
 
+    public void changeMarker(double latitude, double longitude, String tag) {
+        LatLng loc = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(loc).title(tag));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(loc));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        manager.registerListener(this, manager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float degree = Math.round(event.values[0]);
+
+        RotateAnimation ra = new RotateAnimation(currentDegree, -degree, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        ra.setDuration(210);
+        ra.setFillAfter(true);
+
+        compass.startAnimation(ra);
+        currentDegree = -degree;
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        manager.unregisterListener(this);
+    }
 
     private class Mediator extends AsyncTask<Void, Void, String> {
-
-
 
         @Override
         protected String doInBackground(Void... arg0) {
@@ -91,11 +122,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.d("CommLog", response);
 
             } catch (UnknownHostException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 response = "UnknownHostException: " + e.toString();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 response = "IOException: " + e.toString();
             } finally {
@@ -103,7 +132,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     try {
                         socket.close();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
@@ -114,18 +142,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         @Override
         protected void onPostExecute(String result) {
-            JSONObject resultJSON = null;
             SharedPreferences storage = getSharedPreferences("Maps", Activity.MODE_PRIVATE);
             SharedPreferences.Editor writer = storage.edit();
+
             try {
+                JSONObject resultJSON;
+
                 resultJSON = new JSONObject(result);
+
+                writer.commit();
                 writer.putString("Token", resultJSON.getString("token"));
                 writer.putLong("Latitude", resultJSON.getLong("latitude"));
                 writer.putLong("Longitude", resultJSON.getLong("longitude"));
-                writer.commit();
+                changeMarker(Double.longBitsToDouble(storage.getLong("Latitude", 53)), Double.longBitsToDouble(storage.getLong("Longitude", 13)), "Target");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            writer.commit();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
             builder.setTitle("LESPON ALART!!!")
@@ -175,6 +208,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         titlebar = (android.support.v7.widget.Toolbar)findViewById(R.id.titlebar);
         setSupportActionBar(titlebar);
         getSupportActionBar().setTitle("Map");
+
+        compass = (ImageView)findViewById(R.id.compassArrow);
+        manager = (SensorManager)getSystemService(SENSOR_SERVICE);
+
         chat = (ImageButton)findViewById(R.id.chatButton);
         chat.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -225,18 +262,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        SharedPreferences storage = getSharedPreferences("Maps", Activity.MODE_PRIVATE);
-        Lat = Double.longBitsToDouble(storage.getLong("Latitude", -1));
-        Lng = Double.longBitsToDouble(storage.getLong("Longitude", -1));
-
         mMap = googleMap;
-
-        LatLng Someplace = new LatLng(Lat,Lng);
-        mMap.addMarker(new MarkerOptions().position(Someplace).title("Destination"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(Someplace));
+        mMap.getUiSettings().setCompassEnabled(false);
     }
 
     @Override
@@ -244,23 +273,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (requestCode == SUBMIT_CODE) {
             if (resultCode == OK) {
                 mMap.clear();
-
-                SharedPreferences storage = getSharedPreferences("Maps", Activity.MODE_PRIVATE);
-                Lat = Double.longBitsToDouble(storage.getLong("Latitude", -1));
-                Lng = Double.longBitsToDouble(storage.getLong("Longitude", -1));
-                LatLng Someplace = new LatLng(Lat,Lng);
-                mMap.addMarker(new MarkerOptions().position(Someplace).title("Destination"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(Someplace));
-
                 Toast.makeText(this, "Correct! NEW LOCATION!", Toast.LENGTH_SHORT).show();
+                SharedPreferences storage = getSharedPreferences("Maps", Activity.MODE_PRIVATE);
+                changeMarker(Double.longBitsToDouble(storage.getLong("Latitude", -1)), Double.longBitsToDouble(storage.getLong("Longitude", -1)), "Target");
             }
             else if (resultCode == WRONG) {
                 mMap.clear();
-                Toast.makeText(this, "Ya' filthy dog! TRY AGAIN!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Too Bad! TRY AGAIN!", Toast.LENGTH_SHORT).show();
             }
             else if (resultCode == DONE) {
                 mMap.clear();
                 Toast.makeText(this, "Well Done", Toast.LENGTH_SHORT).show();
+                SharedPreferences storage = getSharedPreferences("Maps", Activity.MODE_PRIVATE);
+                changeMarker(Double.longBitsToDouble(storage.getLong("Latitude", -1)), Double.longBitsToDouble(storage.getLong("Longitude", -1)), "Safe House");
             }
         }
     }

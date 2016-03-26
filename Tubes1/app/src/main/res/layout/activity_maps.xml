@@ -1,20 +1,24 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:weightSum="1">
+    android:layout_width="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/titlebar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#3F51B5"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/titlebar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#3F51B5"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
@@ -25,44 +29,55 @@
             tools:context="com.bomba.conte.tubes1.MapsActivity"
             tools:layout="@layout/abc_action_bar_title_item" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent">
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/cameraButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/camera"
-                android:layout_weight="1"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/centerPoint"/>
+                <ImageButton
+                    android:id="@+id/cameraButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/camera"
+                    android:layout_weight="1"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/centerPoint"/>
 
-            <TextView
-                android:id="@+id/centerPoint"
-                android:text=""
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_centerHorizontal="true"/>
+                <TextView
+                    android:id="@+id/centerPoint"
+                    android:text=""
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"/>
 
-            <ImageButton
-                android:id="@+id/chatButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/chat"
-                android:layout_weight="1"
-                android:layout_alignParentRight="true"
-                android:layout_toRightOf="@+id/centerPoint"/>
+                <ImageButton
+                    android:id="@+id/chatButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/chat"
+                    android:layout_weight="1"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/centerPoint"/>
 
-        </RelativeLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/compassArrow"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/arrow"
+        android:paddingTop="20dp"
+        android:layout_gravity="right"/>
+
+
+</FrameLayout>

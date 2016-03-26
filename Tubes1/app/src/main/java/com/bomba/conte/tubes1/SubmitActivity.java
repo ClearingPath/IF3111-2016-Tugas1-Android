@@ -1,9 +1,7 @@
 package com.bomba.conte.tubes1;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,11 +12,9 @@ import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -178,6 +174,7 @@ public class SubmitActivity extends AppCompatActivity {
             try {
                 resultJSON = new JSONObject(result);
                 status = resultJSON.getString("status");
+                writer.commit();
                 writer.putString("Status", status);
                 writer.putString("Token", resultJSON.getString("token"));
                 if (status.equals("ok")) {
@@ -189,6 +186,8 @@ public class SubmitActivity extends AppCompatActivity {
                     setResult(MapsActivity.WRONG);
                 }
                 else if (status.equals("finish")) {
+                    writer.putLong("Longitude", Double.doubleToRawLongBits(13.409779));
+                    writer.putLong("Latitude", Double.doubleToRawLongBits(52.520645));
                     setResult(MapsActivity.DONE);
                 }
             } catch (JSONException e) {
