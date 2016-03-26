@@ -43,6 +43,26 @@
             android:id="@+id/button"
             android:textColor="@color/colorAccent"
             android:background="@color/colorPrimary"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message Log"
+            android:id="@+id/textView"
+            android:textSize="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp" />
+
+        <ListView
+            android:id="@+id/listViewLog"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0.1dp"
+            android:divider="#0000CC"
+            >
+        </ListView>
+
     </LinearLayout>
 
 </RelativeLayout>

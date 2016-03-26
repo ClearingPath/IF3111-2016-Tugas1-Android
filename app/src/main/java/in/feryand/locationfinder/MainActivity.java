@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Message msg = Message.getInstance();
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    
+
     RotateAnimation ra = new RotateAnimation(
             compassDeg,
             0,
@@ -153,8 +153,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_start) {
             try {
+                msg.addLog("{\"com\":\"req_loc\",\"nim\":\"" + msg.getNim() + "\"}");
                 JSONObject receivedProblem = new JSONObject((msg.getSock()).Send("{\"com\":\"req_loc\",\"nim\":\"" + msg.getNim() + "\"}"));
                 msg.setStarted(true);
+                msg.addLog(receivedProblem.toString());
 
                 /* Saving the token for future requests */
                 msg.setToken(receivedProblem.optString("token"));

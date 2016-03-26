@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -31,6 +32,11 @@ public class AnswerActivity extends AppCompatActivity implements AdapterView.OnI
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        ListView logList =(ListView)findViewById(R.id.listViewLog);
+        ArrayAdapter<String> arrayAdapter =
+                new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, msg.log);
+        logList.setAdapter(arrayAdapter);
+
         Button submit = (Button) findViewById(R.id.button);
         submit.setEnabled(true);
         submit.setOnClickListener(new View.OnClickListener() {
@@ -38,8 +44,10 @@ public class AnswerActivity extends AppCompatActivity implements AdapterView.OnI
                 v.setEnabled(false);
                 try {
 
+                    msg.addLog("{\"com\":\"answer\",\"nim\":\"" + msg.getNim() + "\",\"answer\":\"" + answer + "\",\"longitude\":" + msg.getLng() + ",\"latitude\":" + msg.getLat() + ",\"token\":\"" + msg.getToken() + "\"}");
                     JSONObject receivedProblem = new JSONObject(
                             (msg.getSock()).Send("{\"com\":\"answer\",\"nim\":\"" + msg.getNim() + "\",\"answer\":\"" + answer + "\",\"longitude\":" + msg.getLng() + ",\"latitude\":" + msg.getLat() + ",\"token\":\"" + msg.getToken() + "\"}"));
+                    msg.addLog(receivedProblem.toString());
 
                     String toToast = receivedProblem.toString();
 

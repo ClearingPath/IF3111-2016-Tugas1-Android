@@ -3,6 +3,9 @@ package in.feryand.locationfinder;
 import android.app.Application;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 /**
  * Created by Asus on 10/03/2016.
  */
@@ -15,6 +18,8 @@ public class Message extends Application {
     private double lat;
     private double lng;
     private boolean started = false;
+
+    public ArrayList<String> log = new ArrayList<>();
 
     private static Message instance = null;
 
@@ -64,5 +69,19 @@ public class Message extends Application {
     public SocketHandler getSock() {
         sock.reconnect();
         return sock;
+    }
+
+    public void addLog(String s) {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int sec = cal.get(Calendar.SECOND);
+
+        String ts = day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + sec;
+
+        log.add("[" + ts + "] " + s);
     }
 }
