@@ -17,5 +17,6 @@
         <item>PAU</item>
         <item>Kubus</item>
     </string-array>
+    <string name="title_activity_setup">SetupActivity</string>
 
 </resources>

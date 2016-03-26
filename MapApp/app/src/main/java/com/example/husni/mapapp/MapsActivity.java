@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,12 +31,9 @@ import java.util.Date;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
 
-    private GoogleMap mMap;
-
     private static final int REQUEST_TAKE_PHOTO = 1;
-
+    private GoogleMap mMap;
     String mCurrentPhotoPath;
-
     private ImageView mPointer;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -47,6 +45,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private float[] mR = new float[9];
     private float[] mOrientation = new float[3];
     private float mCurrentDegree = 0f;
+
+    String status;
+    double latitude;
+    double longitude;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mPointer = (ImageView) findViewById(R.id.pointerView);
+
+        Bundle bundle = getIntent().getExtras();
+        status = (String) bundle.get("status");
+        longitude = (double) bundle.get("longitude");
+        latitude = (double) bundle.get("latitude");
+        token = (String) bundle.getString("token");
     }
 
 
@@ -118,14 +127,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng latlng = new LatLng(-6.891065, 107.610327);
+        LatLng latlng = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(latlng).title("My Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17));
     }
 
     public void submitAnswer(View view) {
         Intent intent = new Intent(this, SubmitAnswerActivity.class);
+        intent.putExtra("status", status);
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
+        intent.putExtra("token", token);
         startActivity(intent);
     }
 
