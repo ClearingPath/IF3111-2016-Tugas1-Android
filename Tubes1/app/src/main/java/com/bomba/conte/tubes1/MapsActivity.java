@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,11 +51,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int SUBMIT_CODE = 2;
+    public static final int OK = 3;
+    public static final int WRONG = 4;
+    public static final int DONE = 5;
     public static String serverAddress = "167.205.34.132";
     public static int serverPort = 3111;
     private JSONObject obj;
     private boolean firstReq = true;
     String response = "";
+    double Lat = 0;
+    double Lng = 0;
 
     ImageButton camera, chat;
     String currentPhotoPath;
@@ -222,17 +228,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        long Lat = 0;
-        long Lng = 0;
         SharedPreferences storage = getSharedPreferences("Maps", Activity.MODE_PRIVATE);
-        Lat = storage.getLong("Latitude", -1);
-        Lng = storage.getLong("Longitude", -1);
+        Lat = Double.longBitsToDouble(storage.getLong("Latitude", -1));
+        Lng = Double.longBitsToDouble(storage.getLong("Longitude", -1));
 
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
         LatLng Someplace = new LatLng(Lat,Lng);
         mMap.addMarker(new MarkerOptions().position(Someplace).title("Destination"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(Someplace));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SUBMIT_CODE) {
+            if (resultCode == OK) {
+                mMap.clear();
+
+                SharedPreferences storage = getSharedPreferences("Maps", Activity.MODE_PRIVATE);
+                Lat = Double.longBitsToDouble(storage.getLong("Latitude", -1));
+                Lng = Double.longBitsToDouble(storage.getLong("Longitude", -1));
+                LatLng Someplace = new LatLng(Lat,Lng);
+                mMap.addMarker(new MarkerOptions().position(Someplace).title("Destination"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(Someplace));
+
+                Toast.makeText(this, "Correct! NEW LOCATION!", Toast.LENGTH_SHORT).show();
+            }
+            else if (resultCode == WRONG) {
+                mMap.clear();
+                Toast.makeText(this, "Ya' filthy dog! TRY AGAIN!", Toast.LENGTH_SHORT).show();
+            }
+            else if (resultCode == DONE) {
+                mMap.clear();
+                Toast.makeText(this, "Well Done", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
