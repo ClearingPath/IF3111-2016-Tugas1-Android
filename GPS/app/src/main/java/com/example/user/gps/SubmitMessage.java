@@ -26,11 +26,15 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class SubmitMessage extends AppCompatActivity {
     private Spinner spinner1;
     private Button submitButton;
     private Toolbar tb;
+    private DateFormat df;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class SubmitMessage extends AppCompatActivity {
         getSupportActionBar().setTitle("Submit Answer");
         addListenerOnButton();
         addListenerOnSpinnerItemSelection();
+        df = new SimpleDateFormat("EEE, dd MMM yyyy, HH:mm:ss");
     }
 
     public void addListenerOnSpinnerItemSelection() {
@@ -111,15 +116,19 @@ public class SubmitMessage extends AppCompatActivity {
                 e.printStackTrace();
             }
             try {
-                socket = new Socket("167.205.34.132", 3111);
+                socket = new Socket(Container.getServerIP(), Container.getPort());
                 InputStream inputStream = socket.getInputStream();
                 OutputStream outputStream = socket.getOutputStream();
                 PrintWriter writer = new PrintWriter(outputStream);
                 writer.println(jsonRequest.toString());
                 writer.flush();
+                String date = df.format(Calendar.getInstance().getTime());
+                GoogleMapsActivity.actLog.add(jsonRequest.toString() + " ,time: " + date.toString());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 response = reader.readLine();
                 socket.close();
+                date = df.format(Calendar.getInstance().getTime());
+                GoogleMapsActivity.actLog.add(response+" ,time: " + date.toString());
                 return response;
             } catch (UnknownHostException e) {
                 e.printStackTrace();
@@ -131,17 +140,28 @@ public class SubmitMessage extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("response : ", result);
+            if(result != null) {
+                String date = df.format(Calendar.getInstance().getTime());
+                Log.i("response : ", result + " ,time: " + date.toString());
+                Toast.makeText(SubmitMessage.this, "response : " + result + " ,time: " + date.toString(), Toast.LENGTH_SHORT).show();
+            }
             try {
-                JSONObject jsonResponse = new JSONObject(result);
-                Container.setStatus(jsonResponse.getString("status"));
-                if(Container.getStatus().equals("finish"))
-                    Container.setCheck(jsonResponse.getInt("check"));
-                else if(Container.getStatus().equals("ok")){
-                    Container.setLtd(jsonResponse.getDouble("latitude"));
-                    Container.setLng(jsonResponse.getDouble("longitude"));
+                if(result != null) {
+                    JSONObject jsonResponse = new JSONObject(result);
+                    Container.setStatus(jsonResponse.getString("status"));
+                    if (Container.getStatus().equals("finish"))
+                        Container.setCheck(jsonResponse.getInt("check"));
+                    else if (Container.getStatus().equals("ok")) {
+                        Container.setLtd(jsonResponse.getDouble("latitude"));
+                        Container.setLng(jsonResponse.getDouble("longitude"));
+                    }
+                    Container.setToken(jsonResponse.getString("token"));
                 }
-                Container.setToken(jsonResponse.getString("token"));
+                else{
+                    Toast.makeText(SubmitMessage.this, "Failed to receive response", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SubmitMessage.this, "Sending another request", Toast.LENGTH_SHORT).show();
+                    new sendAnswer().execute();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

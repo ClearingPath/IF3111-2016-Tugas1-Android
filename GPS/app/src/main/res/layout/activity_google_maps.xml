@@ -17,6 +17,22 @@
         android:layout_gravity="center|top"
         android:paddingTop="20dp"
         android:src="@drawable/compass_pointer"/>
+    <Button
+        android:id="@+id/logButton"
+        android:background="@drawable/log"
+        android:textAllCaps="false"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+    <ListView
+        android:id="@+id/logList"
+        android:layout_below="@+id/logButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="80dp">
+    </ListView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -50,7 +66,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="70dp">
-                >
                 <Button
                     android:layout_width="50dp"
                     android:layout_height="50dp"

@@ -14,15 +14,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,7 +45,10 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
@@ -56,19 +58,22 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private Sensor mMagnetometer;
-    private float[] mLastAccelerometer = new float[3];
-    private float[] mLastMagnetometer = new float[3];
-    private boolean mLastAccelerometerSet = false;
-    private boolean mLastMagnetometerSet = false;
-    private float[] mR = new float[9];
-    private float[] mOrientation = new float[3];
-    private float mCurrentDegree = 0f;
+    private float[] valuesAccelerometer = new float[3];
+    private float[] valuesMagneticField = new float[3];
+    private float[] matrixR = new float[9];
+    private float[] matrixI = new float[9];
+    private float[] matrixValues = new float[3];
+    private double mCurrentDegree = 0f;
     private Button cameraButton;
     private Button messageButton;
+    private Button logButton;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int IMAGE_CAPTURED = 100;
     public static final int RESPONSE_RECEIVED = 200;
     private Uri imageUri;
+    private DateFormat df;
+    public static ArrayList<String> actLog = new ArrayList<>();
+    private boolean logVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +84,10 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
+        df = new SimpleDateFormat("EEE, dd MMM yyyy, HH:mm:ss");
         cameraButton = (Button) findViewById(R.id.buttonCamera);
         messageButton = (Button) findViewById(R.id.buttonMessage);
+        logButton = (Button) findViewById(R.id.logButton);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +102,20 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
             public void onClick(View v) {
                 Intent intent = new Intent(GoogleMapsActivity.this, SubmitMessage.class);
                 startActivityForResult(intent, RESPONSE_RECEIVED);
+            }
+        });
+        logButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(GoogleMapsActivity.this, android.R.layout.simple_list_item_1, actLog);
+                ListView lv = (ListView) findViewById(R.id.logList);
+                lv.setBackgroundColor(0xFFFFFF);
+                lv.setAdapter(arrayAdapter);
+                if (!logVisible)
+                    lv.setVisibility(View.VISIBLE);
+                else
+                    lv.setVisibility(View.INVISIBLE);
+                logVisible = !logVisible;
             }
         });
         if(Container.getisFirst()) {
@@ -135,7 +155,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 Toast.makeText(GoogleMapsActivity.this,
                         "Correct Answer, Please proceed to next location.",
                         Toast.LENGTH_SHORT).show();
-                setMarker(Container.getLtd(), Container.getLng());           //telah dibalik
+                setMarker(Container.getLng(), Container.getLtd());           //telah dibalik
             }else if(Container.getStatus().equals("wrong_answer") && !(Container.getCheck() == 1)){
                 Toast.makeText(GoogleMapsActivity.this,
                         "Wrong Answer, Please try again.",
@@ -184,9 +204,30 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        switch(event.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER: System.arraycopy(event.values, 0, valuesAccelerometer, 0, event.values.length); break;
+            case Sensor.TYPE_MAGNETIC_FIELD: System.arraycopy(event.values, 0, valuesMagneticField, 0, event.values.length); break;
+        }
+
+        boolean success = SensorManager.getRotationMatrix(matrixR, matrixI, valuesAccelerometer, valuesMagneticField);
+        if(success) {
+            SensorManager.remapCoordinateSystem(matrixR, SensorManager.AXIS_X, SensorManager.AXIS_Z, matrixR);
+            SensorManager.getOrientation(matrixR, matrixValues);
+        }
+
+        double degree = (float) (Math.toDegrees(matrixValues[0]) + 360) % 360;
+        RotateAnimation ra = new RotateAnimation(Float.parseFloat(Double.toString(mCurrentDegree)), Float.parseFloat(Double.toString(-degree)), Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        ra.setDuration(250);
+        ra.setFillAfter(true);
+        mPointer.startAnimation(ra);
+        mCurrentDegree = -degree;
     }
 
     private class requestService extends AsyncTask<Void, Void, String> {
@@ -203,15 +244,19 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 e.printStackTrace();
             }
             try {
-                socket = new Socket("167.205.34.132", 3111);
+                socket = new Socket(Container.getServerIP(), Container.getPort());
                 InputStream inputStream = socket.getInputStream();
                 OutputStream outputStream = socket.getOutputStream();
                 PrintWriter writer = new PrintWriter(outputStream);
                 writer.println(jsonRequest.toString());
                 writer.flush();
+                String date = df.format(Calendar.getInstance().getTime());
+                actLog.add(jsonRequest.toString() + " ,time: "+date.toString());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 response = reader.readLine();
                 socket.close();
+                date = df.format(Calendar.getInstance().getTime());
+                actLog.add(response+" ,time: "+date.toString());
                 return response;
             } catch (UnknownHostException e) {
                 e.printStackTrace();
@@ -223,17 +268,23 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i("response : ",result);
+            if(result != null) {
+                String date = df.format(Calendar.getInstance().getTime());
+                Log.i("response : ", result + " ,time: " + date.toString());
+                Toast.makeText(GoogleMapsActivity.this, "response : " + result + " ,time: " + date.toString(), Toast.LENGTH_SHORT).show();
+            }
             try {
                 if(result != null) {
                     JSONObject jsonResponse = new JSONObject(result);
                     Container.setLtd(jsonResponse.getDouble("latitude"));
                     Container.setLng(jsonResponse.getDouble("longitude"));
                     Container.setToken(jsonResponse.getString("token"));
-                    setMarker(Container.getLtd(), Container.getLng());          //telah dibalik
+                    setMarker(Container.getLng(), Container.getLtd());          //telah dibalik
                 }
                 else{
                     Toast.makeText(GoogleMapsActivity.this, "Failed to receive response", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GoogleMapsActivity.this, "Sending another request", Toast.LENGTH_SHORT).show();
+                    new requestService().execute();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -325,37 +376,6 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         }
         return destinationInternalImageFile.getPath();
     }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor == mAccelerometer) {
-            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
-            mLastAccelerometerSet = true;
-        } else if (event.sensor == mMagnetometer) {
-            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
-            mLastMagnetometerSet = true;
-        }
-        if (mLastAccelerometerSet && mLastMagnetometerSet) {
-            SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
-            SensorManager.getOrientation(mR, mOrientation);
-            float azimuthInRadians = mOrientation[0];
-            float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
-            RotateAnimation ra = new RotateAnimation(
-                    mCurrentDegree,
-                    -azimuthInDegress,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f);
-
-            ra.setDuration(250);
-
-            ra.setFillAfter(true);
-
-            mPointer.startAnimation(ra);
-            mCurrentDegree = -azimuthInDegress;
-        }
-    }
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
