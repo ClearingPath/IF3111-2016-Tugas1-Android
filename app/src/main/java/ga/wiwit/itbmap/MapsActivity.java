@@ -1,7 +1,9 @@
 package ga.wiwit.itbmap;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,10 +39,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
         LatLng itb = new LatLng(-6.891323, 107.610445);
         mMap.addMarker(new MarkerOptions().position(itb).title("Marker in ITB Ganesha"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(itb, 17));
+    }
+
+    public void goCamera(View view) {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
+    }
+
+    public void goAnswer(View view) {
+        Intent intent = new Intent(this, AnswerActivity.class);
+        startActivity(intent);
     }
 }

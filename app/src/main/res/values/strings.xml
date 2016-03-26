@@ -3,6 +3,20 @@
     <string name="title_activity_maps">Map</string>
     <string name="camera_button">Camera</string>
     <string name="answer_button">Answer</string>
-    <string name="title_activity_camera">CameraActivity</string>
-    <string name="title_activity_answer">AnswerActivity</string>
+    <string name="title_activity_camera">Camera</string>
+    <string name="title_activity_answer">Submit Answer</string>
+    <string name="label_answer">Location Name:</string>
+    <string name="submit_button">SUBMIT</string>
+    <string-array name="locations">
+        <item>GKU Barat</item>
+        <item>GKU Timur</item>
+        <item>Intel</item>
+        <item>CC Barat</item>
+        <item>CC Timur</item>
+        <item>DPR</item>
+        <item>Sunken</item>
+        <item>Perpustakaan</item>
+        <item>PAU</item>
+        <item>Kubus</item>
+    </string-array>
 </resources>

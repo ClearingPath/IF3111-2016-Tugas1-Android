@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -26,14 +26,16 @@
             android:id="@+id/camera_button"
             android:text="@string/camera_button"
             android:src="@drawable/camera_button"
-            android:adjustViewBounds="false" />
+            android:adjustViewBounds="false"
+            android:onClick="goCamera"/>
         <ImageButton
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/answer_button"
             android:text="@string/answer_button"
-            android:src="@drawable/answer_button" />
+            android:src="@drawable/answer_button"
+            android:onClick="goAnswer"/>
 
     </LinearLayout>
 </LinearLayout>

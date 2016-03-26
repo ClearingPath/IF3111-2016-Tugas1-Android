@@ -40,11 +40,11 @@
         <activity
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.AppBarOverlay" />
         <activity
             android:name=".AnswerActivity"
             android:label="@string/title_activity_answer"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.AppBarOverlay"></activity>
     </application>
 
 </manifest>
