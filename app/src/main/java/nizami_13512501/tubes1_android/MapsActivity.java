@@ -1,10 +1,16 @@
 package nizami_13512501.tubes1_android;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -23,7 +30,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+    private LocationSource.OnLocationChangedListener mapLocationListener = null;
+    private LocationManager locMgr = null;
 
     private GoogleMap mMap;
 
@@ -37,8 +46,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private ServerAsistenClient serverAsistenClient;
 
-    private String SERVERASISTEN_IP ;
-    private int SERVERASISTEN_PORT ;
+    private String SERVERASISTEN_IP;
+    private int SERVERASISTEN_PORT;
     private String SERVERASISTEN_NIM;
 
     @Override
@@ -54,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SERVERASISTEN_PORT = getResources().getInteger(R.integer.serverasisten_port);
         SERVERASISTEN_NIM = getString(R.string.serverasisten_nim);
 
-        serverAsistenClient = new ServerAsistenClient(SERVERASISTEN_IP,SERVERASISTEN_PORT,this);
+        serverAsistenClient = new ServerAsistenClient(SERVERASISTEN_IP, SERVERASISTEN_PORT, this);
     }
 
 
@@ -70,7 +79,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        targetLatLng = new LatLng(0,0);
         serverAsistenClient.doFirstRequest(SERVERASISTEN_NIM);
+
+        locMgr = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
     }
 
     @Override
@@ -87,21 +112,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void updateTargetLatLng(LatLng latLng){
         targetLatLng = latLng;
         updateMarkers();
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(targetLatLng));
     }
 
     public void updateMarkers(){
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(targetLatLng).title("target"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(targetLatLng));
-        if (currentLatLng!=null)
+        if (currentLatLng!=null) {
             mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(300)).position(currentLatLng).title("your location"));
+
+            //untuk arah panah
+            double r = Math.atan2(targetLatLng.latitude - currentLatLng.latitude,
+                    targetLatLng.longitude - currentLatLng.longitude);
+            //TODO
+        }
     }
 
+    Toast toast;
     public void notifyUser(String response, int duration){
         Context context = getApplicationContext();
         CharSequence text = response;
 
-        Toast toast = Toast.makeText(context, text,duration);
+        if (toast!=null)toast.cancel();
+        toast = Toast.makeText(context, text,duration);
         toast.show();
     }
 
@@ -184,5 +217,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         return mediaFile;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.v("LOC", "IN ON LOCATION CHANGE, lat=" + location.getLatitude()+ ", lon=" + location.getLongitude());
+        currentLatLng = new LatLng(location.getLatitude(),
+                location.getLongitude());
+        updateMarkers();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        //TODO
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        notifyUser("location provider enabled",Toast.LENGTH_SHORT);
+        //TODO
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        notifyUser("location provider disabled. please enable GPS or other location providers",Toast.LENGTH_SHORT);
+        //TODO
     }
 }

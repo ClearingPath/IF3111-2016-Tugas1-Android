@@ -68,11 +68,10 @@ public class ServerAsistenClientAsyncTask extends AsyncTask<Void, Void, Void> {
                 byteArrayOutputStream.write(buffer, 0, bytesRead);
                 response += byteArrayOutputStream.toString("UTF-8");
                 try{
-                    System.out.println("response: "+response);
-                    responseJSONObject = new JSONObject(response);
+                    String responsePlusNewline = response + "\n\n";
+                    responseJSONObject = new JSONObject(responsePlusNewline);
                     continueReading = false;
                 } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
 
