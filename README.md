@@ -1,5 +1,6 @@
 # Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
 # 1351307 - Calvin Aditya Jonathan
+
 ## Spesifikasi Aplikasi
 
 Spesifikasi dari aplikasi yang dibangun sebagai berikut
@@ -16,7 +17,6 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 * Hasil reply dari server harus ditampilkan dalam bentuk *toast* atau *alert dialog* (pilih satu).
 * Ketika anda menggunakan activity yang memanggil sensor, sensor tersebut harus dilepas ketika anda berpindah activity agar tidak boros baterai.
 
-```
 ## Spesifikasi Tampilan
 **Tampilan peta**
 ![alt text](/Screenshots/mapPortrait.png)
