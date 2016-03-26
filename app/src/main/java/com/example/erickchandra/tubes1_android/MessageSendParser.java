@@ -9,6 +9,16 @@ import org.json.JSONObject;
 public class MessageSendParser {
     JSONObject jsonObject;
 
+    MessageSendParser(int init, String _nim) {
+        jsonObject = new JSONObject();
+        try {
+            jsonObject.put("com", "req_loc");
+            jsonObject.put("nim", _nim);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     MessageSendParser(String _com, String _nim, String _answer, String _lat, String _lng, String _token) {
         jsonObject = new JSONObject();
         try {
@@ -23,7 +33,7 @@ public class MessageSendParser {
         }
     }
 
-    public String getJSONObject() {
+    public String getJSONObjectStr() {
         return jsonObject.toString();
     }
 }

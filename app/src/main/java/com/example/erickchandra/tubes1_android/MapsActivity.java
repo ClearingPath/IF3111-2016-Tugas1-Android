@@ -1,5 +1,6 @@
 package com.example.erickchandra.tubes1_android;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.GradientDrawable;
@@ -19,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +38,13 @@ import java.util.Date;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
 
     private GoogleMap mMap;
+
+    // For Intent Information Passing
+    Intent myIntent;
+    String intentMsg;
+    String cStatus, cNIM, cLat, cLng, cToken;
+    double cLatDouble, cLngDouble;
+    MessageRecvParser cMRP;
 
     // For Compass
     private ImageView mPointer;
@@ -83,6 +92,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mPointer = (ImageView) findViewById(R.id.pointer);
+
+        // For Intent Information Passing
+        myIntent = getIntent();
+        intentMsg = myIntent.getStringExtra("Message");
+        cMRP = new MessageRecvParser(intentMsg);
     }
 
     protected void onResume() {
@@ -186,9 +200,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
+        // Passing Intent LatLng
+        if (cMRP.getStatus() == "ok") {
+            cLng = cMRP.getLat();
+            cLngDouble = Double.parseDouble(cLng);
+            cLat = cMRP.getLng();
+            cLatDouble = Double.parseDouble(cLat);
+        }
+
         // Set up Google Maps initial position
-        LatLng default_itb = new LatLng(-6.891438, 107.610606);
-        mMap.addMarker(new MarkerOptions().position(default_itb).title("Bandung Institute of Technology"));
+        LatLng default_itb = new LatLng(cLatDouble, cLngDouble);
+        mMap.addMarker(new MarkerOptions().position(default_itb).title("Guess Place"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(default_itb, 16.0f));
     }
 
@@ -236,6 +258,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void launchMsgSubmit() {
         Intent msgSubmitIntent = new Intent(this, SubmitActivity.class);
-        startActivity(msgSubmitIntent);
+        msgSubmitIntent.putExtra("Message", intentMsg);
+        startActivityForResult(msgSubmitIntent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                cMRP = new MessageRecvParser(data.getStringExtra("SubmitReplyMessage"));
+                Toast.makeText(this, data.getStringExtra("SubmitReplyMessage"), Toast.LENGTH_LONG);
+
+                // Passing Intent LatLng
+                if (cMRP.getStatus() == "ok") {
+                    cLng = cMRP.getLat();
+                    cLngDouble = Double.parseDouble(cLng);
+                    cLat = cMRP.getLng();
+                    cLatDouble = Double.parseDouble(cLat);
+                }
+
+                // Set up Google Maps initial position
+                LatLng default_itb = new LatLng(cLatDouble, cLngDouble);
+                mMap.addMarker(new MarkerOptions().position(default_itb).title("Guess Place"));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(default_itb, 16.0f));
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                // If there is no result
+            }
+        }
     }
 }

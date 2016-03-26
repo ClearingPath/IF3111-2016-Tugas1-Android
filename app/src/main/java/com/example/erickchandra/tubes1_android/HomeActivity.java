@@ -20,7 +20,9 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements AsyncResponse {
+    ClientSync cs;
+    String msgRecv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
         button_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchMap();
+                launchComm();
             }
         });
 
@@ -74,11 +76,26 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(linearLayout_whole);
     }
 
+    public void launchComm() {
+        MessageSendParser msp = new MessageSendParser(0, "13512999");
+        cs = new ClientSync(this, msp.getJSONObjectStr());
+//        cs.SendAndThenRecvMessage();
+        cs.delegate = this;
+        cs.execute();
+    }
+
     public void launchMap() {
-        String receivedMessage = "";
-        Client newComm = new Client("api.nitho.me", 8080, receivedMessage, "{\"com\":\"req_loc\",\"nim\":\"13512999\"}\n");
-        newComm.execute();
+//        Client newComm = new Client("api.nitho.me", 8080, receivedMessage, "{\"com\":\"req_loc\",\"nim\":\"13512999\"}\n");
+//        newComm.execute();
+
         Intent mapIntent = new Intent(this, MapsActivity.class);
+        mapIntent.putExtra("Message", msgRecv);
         startActivity(mapIntent);
+    }
+
+    @Override
+    public void processFinish(String output) {
+        msgRecv = output;
+        launchMap();
     }
 }
