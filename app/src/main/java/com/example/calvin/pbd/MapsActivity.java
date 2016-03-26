@@ -58,9 +58,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static final int WRONG = 5;
     public static ArrayList<String> commLog = new ArrayList<>();
     public static String serverIP = "167.205.34.132";
+
+    private boolean firstRequest = true;
     private GoogleMap mMap;
     private Uri fileUri;
-    private boolean firstRequest = true;
     private boolean logVisible = false;
     private ImageView image;
     private double currentDegree = 0f;
@@ -218,14 +219,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Toast.makeText(MapsActivity.this, response, Toast.LENGTH_LONG).show();
                 JSONObject responseJSON = new JSONObject(response);
 
+                double latitude = responseJSON.getDouble("longitude"); //Jangan lupa balik
+                double longitude = responseJSON.getDouble("latitude");
+
                 SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
-
                 editor.putString("token", responseJSON.getString("token"));
                 editor.commit();
 
+                setLocation(latitude, longitude);
                 firstRequest = false;
-                setLocation(responseJSON.getDouble("longitude"), responseJSON.getDouble("latitude")); //Jangan lupa dibalik sebelum merge
             }
             catch (JSONException e) {
                 Log.d("MyApp", e.toString());
