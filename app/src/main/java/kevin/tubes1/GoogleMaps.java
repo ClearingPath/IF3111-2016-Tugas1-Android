@@ -74,7 +74,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         OrientationEventListener mOrientationEventListener =
                 new OrientationEventListener(this, SensorManager.SENSOR_DELAY_GAME) {
                     @Override
-                    public void onOrientationChanged(int orientation) {
+                    public void onOrientationChanged(int orientation){
                         mDeviceOrientation = orientation;
                     }
                 };
@@ -88,12 +88,12 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_camera);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+/*                Intent i = new Intent(MainActivity.this, CameraActivity.class);
+                startActivity(i);*/
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -114,6 +114,11 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
                 }
             }
         });
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+
+        mapFragment.getMapAsync(this);
 
     }
 
