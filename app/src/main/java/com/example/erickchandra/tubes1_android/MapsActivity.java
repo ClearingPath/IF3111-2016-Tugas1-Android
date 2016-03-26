@@ -20,6 +20,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -184,6 +185,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        // Set up Google Maps initial position
+        LatLng default_itb = new LatLng(-6.891438, 107.610606);
+        mMap.addMarker(new MarkerOptions().position(default_itb).title("Bandung Institute of Technology"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(default_itb, 16.0f));
     }
 
     String mCurrentPhotoPath;

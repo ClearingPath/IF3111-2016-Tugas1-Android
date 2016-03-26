@@ -75,6 +75,9 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void launchMap() {
+        String receivedMessage = "";
+        Client newComm = new Client("api.nitho.me", 8080, receivedMessage, "{\"com\":\"req_loc\",\"nim\":\"13512999\"}\n");
+        newComm.execute();
         Intent mapIntent = new Intent(this, MapsActivity.class);
         startActivity(mapIntent);
     }
