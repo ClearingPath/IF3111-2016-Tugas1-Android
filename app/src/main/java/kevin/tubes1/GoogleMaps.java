@@ -7,6 +7,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -17,7 +19,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.OrientationEventListener;
@@ -92,15 +93,28 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*                Intent i = new Intent(MainActivity.this, CameraActivity.class);
-                startActivity(i);*/
+
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             }
         });
-        
+
+        FloatingActionButton fab_answer = (FloatingActionButton) findViewById(R.id.fab_answer);
+        fab_answer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( msg.getStarted() ) {
+                    Intent i = new Intent(GoogleMaps.this, AnswerAct.class);
+                    startActivity(i);
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Not yet started", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -146,7 +160,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
 
                 /* Get the first Lat Long */
                 msg.setLatLng(receivedProblem.optDouble("latitude"), receivedProblem.optDouble("longitude"));
-                LatLng detectedLocation = new LatLng((msg.getLat()),(msg.getLng()));
+                LatLng detectedLocation = new LatLng((msg.getLat()), (msg.getLng()));
 
                 /* Add Market to Maps */
                 googleMap.clear();
@@ -155,11 +169,22 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
                         .title("Detected Location"));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(detectedLocation, 18.0f));
 
-                String toToast = "Directed to Lat(" + detectedLocation.latitude + ") Long(" + detectedLocation.longitude + ")";
-                msg.setLatLng(receivedProblem.optDouble("longitude"), receivedProblem.optDouble("latitude"));
-                Toast toast = Toast.makeText(getApplicationContext(), toToast, Toast.LENGTH_SHORT);
-                toast.show();
-                return true;
+
+                AlertDialog alertDialog = new AlertDialog.Builder(GoogleMaps.this).create();
+                        alertDialog.setTitle("GeoLocation");
+                        alertDialog.setMessage("Directed to Lat(" + detectedLocation.latitude + ") Long(" + detectedLocation.longitude + ")");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+
+
+
+
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
