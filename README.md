@@ -31,4 +31,11 @@ Aplikasi ini adalah aplikasi yang dapat menampilkan peta, mengirim dan menerima 
 ### Kamera
 ![alt text](http://i.imgur.com/Ap64NR5.png)
 
+## File Location
+bin
+\app\build\outputs\apk
+src
+\app\src\main\java\in\feryand\locationfinder
+res
+\app\src\main\res
 
