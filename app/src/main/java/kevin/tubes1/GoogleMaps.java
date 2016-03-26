@@ -56,8 +56,6 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
             Animation.RELATIVE_TO_SELF,
             0.5f);
 
-    private GoogleMap mMap;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTitle("GoogleMap");
@@ -109,7 +107,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
                     Intent i = new Intent(GoogleMaps.this, AnswerAct.class);
                     startActivity(i);
                 } else {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Not yet started", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), "not yet started", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
@@ -129,6 +127,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         return true;
     }
 
+    @Override
     public void onMapReady(GoogleMap map) {
         googleMap = map;
         setUpMap();
@@ -177,7 +176,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
 
                 AlertDialog alertDialog = new AlertDialog.Builder(GoogleMaps.this).create();
                         alertDialog.setTitle("GeoLocation");
-                        alertDialog.setMessage("Directed to Lat(" + detectedLocation.latitude + ") Long(" + detectedLocation.longitude + ")");
+                        alertDialog.setMessage("Go to lat(" + detectedLocation.latitude + ") Long(" + detectedLocation.longitude + ")");
                         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -221,7 +220,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         }
     }
 
-
+    @Override
     public void onSensorChanged(SensorEvent event) {
         float degree = Math.round(event.values[0]);
         float orientation = (90*Math.round(mDeviceOrientation/90))%360;
