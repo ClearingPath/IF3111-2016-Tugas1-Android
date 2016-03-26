@@ -27,12 +27,12 @@ public class MessageRecvParser {
         return jsonObject.optString("nim");
     }
 
-    public double getLat() {
-        return jsonObject.optDouble("latitude");
+    public String getLat() {
+        return jsonObject.optString("latitude");
     }
 
-    public double getLng() {
-        return jsonObject.optDouble("longitude");
+    public String getLng() {
+        return jsonObject.optString("longitude");
     }
 
     public String getToken() {
