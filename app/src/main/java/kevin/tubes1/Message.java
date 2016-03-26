@@ -13,7 +13,7 @@ public class Message extends Application {
         private SocketHandler sock;
 
         private String token;
-        private String nim = "13513042";
+        private String nim = "13513036";
         private double lat;
         private double lng;
         private boolean started = false;
