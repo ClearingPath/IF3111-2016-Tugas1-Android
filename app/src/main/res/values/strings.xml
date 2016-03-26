@@ -18,4 +18,5 @@
         <item>kubus</item>
     </string-array>
     <string name="label_submit">SUBMIT</string>
+    <string name="label_target">target</string>
 </resources>

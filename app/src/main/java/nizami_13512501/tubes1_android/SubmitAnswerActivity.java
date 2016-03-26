@@ -1,5 +1,7 @@
 package nizami_13512501.tubes1_android;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +26,14 @@ public class SubmitAnswerActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+    }
+
+    public void buttonSubmitOnClick(View view){
+        Intent returnIntent = new Intent();
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        returnIntent.putExtra("result",spinner.getSelectedItem().toString());
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
     }
 
 }

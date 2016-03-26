@@ -1,5 +1,6 @@
 package nizami_13512501.tubes1_android;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -25,9 +27,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
 
+    private LatLng targetLatLng;
+    private LatLng currentLatLng;
+
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int SUBMIT_ACTIVITY_REQUEST_CODE = 101;
     private Uri fileUri;
     public static final int MEDIA_TYPE_IMAGE = 1;
+
+    private ServerAsistenClient serverAsistenClient;
+
+    private String SERVERASISTEN_IP ;
+    private int SERVERASISTEN_PORT ;
+    private String SERVERASISTEN_NIM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +49,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        SERVERASISTEN_IP = getString(R.string.serverasisten_ip);
+        SERVERASISTEN_PORT = getResources().getInteger(R.integer.serverasisten_port);
+        SERVERASISTEN_NIM = getString(R.string.serverasisten_nim);
+
+        serverAsistenClient = new ServerAsistenClient(SERVERASISTEN_IP,SERVERASISTEN_PORT,this);
     }
 
 
@@ -52,17 +70,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        serverAsistenClient.doFirstRequest(SERVERASISTEN_NIM);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-
     }
 
     @Override
@@ -71,9 +84,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    public void updateTargetLatLng(LatLng latLng){
+        targetLatLng = latLng;
+        updateMarkers();
+    }
+
+    public void updateMarkers(){
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(targetLatLng).title("target"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(targetLatLng));
+        if (currentLatLng!=null)
+            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(300)).position(currentLatLng).title("your location"));
+    }
+
+    public void notifyUser(String response, int duration){
+        Context context = getApplicationContext();
+        CharSequence text = response;
+
+        Toast toast = Toast.makeText(context, text,duration);
+        toast.show();
+    }
+
     public void submitAnswer(View view){
         Intent intent = new Intent(this,SubmitAnswerActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,SUBMIT_ACTIVITY_REQUEST_CODE);
     }
 
     public void camera(View view){
@@ -98,6 +132,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         "Photo saved!", Toast.LENGTH_SHORT)
                         .show();
             } else {
+
+            }
+        }
+        if (requestCode == SUBMIT_ACTIVITY_REQUEST_CODE){
+            if (resultCode == RESULT_OK){
+                String answer = data.getStringExtra("result");
+                serverAsistenClient.submitAnswer(SERVERASISTEN_NIM,answer,targetLatLng);
+            }else{
 
             }
         }
