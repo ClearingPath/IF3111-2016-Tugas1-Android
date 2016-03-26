@@ -1,28 +1,6 @@
 <resources>
     <string name="app_name">Busiri_Map</string>
     <string name="title_activity_maps">Busiri_Map</string>
-    <string-array name="location">
-       <!-- <item>GKU Barat</item>
-        <item>GKU Timur</item>
-        <item>Intel</item>
-        <item>CC Barat</item>
-        <item>CC Timur</item>
-        <item>DPR</item>
-        <item>Sunken</item>
-        <item>Perpustakaan</item>
-        <item>PAU</item>
-        <item>Kubus</item>-->
-        <item>gku_barat</item>
-        <item>gku_timur</item>
-        <item>intel</item>
-        <item>cc_barat</item>
-        <item>cc_timur</item>
-        <item>dpr</item>
-        <item>sunken</item>
-        <item>perpustakaan</item>
-        <item>pau</item>
-        <item>kubus</item>
-    </string-array>
 </resources>
 
 

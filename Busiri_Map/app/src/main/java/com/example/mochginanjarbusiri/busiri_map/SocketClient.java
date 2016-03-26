@@ -12,6 +12,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
@@ -34,6 +37,9 @@ public class SocketClient extends AsyncTask<String, String, String> {
     String message;
     private boolean success;
     GoogleMap mMap;
+    String token, nim, status;
+    double latitude, longitude;
+
 
     SocketClient(String message, GoogleMap mMap)
     {
@@ -41,13 +47,6 @@ public class SocketClient extends AsyncTask<String, String, String> {
         this.mMap = mMap;
     }
 
-  /*  public double getJSONLat() throws JSONException {
-        return this.json.getDouble("latitude");
-    }
-
-    public double getJSONLong() throws JSONException {
-        return this.json.getDouble("longitude");
-    }*/
 
     protected String doInBackground(String... params) {
         Socket socket = null;
@@ -72,7 +71,7 @@ public class SocketClient extends AsyncTask<String, String, String> {
             {
                 response += (char) c;
             }
-            Log.d("RESPONSE", response);
+            Log.d("Response dari server", response);
 
             if (response != null){
                 publishProgress(response);
@@ -133,7 +132,40 @@ public class SocketClient extends AsyncTask<String, String, String> {
         }
     }
 
+    public String getResponse()
+    {
+        return this.response;
+    }
 
+    public double getLat() throws JSONException {
+        JSONObject json = new JSONObject(this.response);
+        this.latitude = json.getDouble("latitude");
+        return this.latitude;
+    }
+
+    public double getLong() throws JSONException {
+        JSONObject json = new JSONObject(this.response);
+        this.longitude = json.getDouble("longitude");
+        return this.longitude;
+    }
+
+    public String getToken() throws JSONException {
+        JSONObject json = new JSONObject(this.response);
+        this.token = json.getString("token");
+        return this.token;
+    }
+
+    public String getNim() throws JSONException {
+        JSONObject json = new JSONObject(this.response);
+        this.nim = json.getString("token");
+        return this.nim;
+    }
+
+    public String getstatus() throws JSONException {
+        JSONObject json = new JSONObject(this.response);
+        this.status = json.getString("status");
+        return this.status;
+    }
    /* public void receiveResponse(JSONObject json)
     {
         try {

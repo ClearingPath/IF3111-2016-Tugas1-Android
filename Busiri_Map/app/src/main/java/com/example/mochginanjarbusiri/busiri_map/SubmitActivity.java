@@ -4,56 +4,104 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 public class SubmitActivity extends AppCompatActivity {
     private String[] states;
     private Spinner spinner;
-
-
+    private GoogleMap mMap;
+    private double latitude, longitude;
+    private String token;
+    private String response = "";
+    private final String nim = "13513111";
+    private String location;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
 
-        states = getResources().getStringArray(R.array.location);
         spinner = (Spinner) findViewById(R.id.location_spinner);
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, states);
+        List<String> locations = new ArrayList<String>();
+        locations.add("gku_barat");
+        locations.add("gku_timur");
+        locations.add("intel");
+        locations.add("cc_barat");
+        locations.add("cc_timur");
+        locations.add("dpr");
+        locations.add("sunken");
+        locations.add("perpustakaan");
+        locations.add("pau");
+        locations.add("kubus");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locations);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
-    }
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = spinner.getSelectedItem().toString();
+                Toast.makeText(SubmitActivity.this, selected, Toast.LENGTH_SHORT).show();
+                location = selected;
+            }
 
-    public void Submit(View view)
-    {
-        sendAnswer();
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        Button button_submit = (Button)findViewById(R.id.button_submit);
+        button_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendAnswer();
+            }
+        });
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null)
+        {
+            this.latitude = bundle.getDouble("latitude");
+            this.longitude = bundle.getDouble("longitude");
+            this.token = bundle.getString("token");
+        }
     }
 
     public void sendAnswer()
     {
-        /*JSONObject json = new JSONObject();
-        SocketClient socket = new SocketClient();
-
-        try
-        {
-            json.put("com", "answer");
-            json.put("nim", "13513111");
-            json.put("answer", spinner.getOnItemSelectedListener());
-            json.put("longitude",socket.json.optDouble("longitude"));
-            json.put("latitude", socket.json.optDouble("latitude"));
-            json.put("token", socket.json.optString("token"));
-            SocketClient socketP = new SocketClient(json.toString());
-            socketP.execute();
+        JSONObject answer = new JSONObject();
+        try {
+            answer.put("com", "answer");
+            answer.put("nim", this.nim);
+            answer.put("answer", this.location);
+            answer.put("longitude", this.longitude);
+            answer.put("latitude", this.latitude);
+            answer.put("token", this.token);
+            this.response = new SocketClient(answer.toString(), mMap).execute().get();
+            Toast.makeText(getApplicationContext(), "RESPONSE: " + response, Toast.LENGTH_LONG).show();
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

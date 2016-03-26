@@ -22,23 +22,54 @@ import org.json.JSONObject;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.concurrent.ExecutionException;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int MARKER = 200;
-    String response = "";
-    double latitude, longitude;
+    private static final int SUBMIT_REQUEST_CODE = 200;
+    private double longitude;
+    private double latitude;
+    private String token;
+    private String status;
+    private String response = "";
+    private final String nim = "13513111";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        ImageButton button_camera = (ImageButton)findViewById(R.id.button_camera);
+        button_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                // start the image capture Intent
+                startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+            }
+        });
+
+        ImageButton button_submit = (ImageButton)findViewById(R.id.button_submit);
+        button_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SubmitActivity.class);
+                startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putDouble("longitude", longitude);
+                bundle.putDouble("latitude", latitude);
+                bundle.putString("token", token);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, SUBMIT_REQUEST_CODE);
+            }
+        });
     }
 
 
@@ -58,18 +89,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         sendRequest();
     }
 
-    public void openSubmit(View view)
-    {
-        Intent intent = new Intent(this, SubmitActivity.class);
-        startActivity(intent);
-    }
 
-    public void captureImage(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // start the image capture Intent
-        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-    }
 
     /**
      * Receiving activity result method will be called after closing the camera
@@ -82,28 +102,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //DO Nothing
             } else if (resultCode == RESULT_CANCELED) {
                 // user cancelled Image capture
-                Toast.makeText(getApplicationContext(),
-                        "User cancelled image capture", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getApplicationContext(), "User cancelled image capture", Toast.LENGTH_SHORT).show();
             } else {
                 // failed to capture image
-                Toast.makeText(getApplicationContext(),
-                        "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getApplicationContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
             }
-        /*} else if (requestCode == MARKER) {
-            if (resultCode == RESULT_OK) {
-                *//*lat = json.getDouble("latitude");
-                longit = json.getDouble("longitude");
-                Log.d("Laatitude", lat.toString());
-                Log.d("Longitude", longit.toString());*//*
-                LatLng itb = new LatLng(-6.890356, 107.610359);
-                mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(itb, 20.0f));
-                Intent intent = new Intent(this, MapsActivity.class);
-                startActivityForResult(intent, MARKER);
-            }*/
+        }
+        else if (requestCode == SUBMIT_REQUEST_CODE)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                Intent intent = data;
+                Bundle bundle = intent.getExtras();
+                if (bundle != null)
+                {
+                    token = bundle.getString("token");
+                    latitude = bundle.getDouble("latitude");
+                    longitude = bundle.getDouble("longitude");
+                }
+            }
         }
     }
 
@@ -113,13 +130,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         try {
             json.put("com", "req_loc");
-            json.put("nim", "13513111");
-            SocketClient socket = new SocketClient(json.toString(), mMap);
-            socket.execute();
+            json.put("nim", this.nim);
+            this.response = new SocketClient(json.toString(), mMap).execute().get();
+            Toast.makeText(getApplicationContext(), "RESPONSE: " + response, Toast.LENGTH_LONG).show();
+            JSONObject responseResult = new JSONObject(this.response);
+            this.latitude = responseResult.getDouble("latitude");
+            this.longitude = responseResult.getDouble("longitude");
+            this.token = responseResult.getString("token");
+            this.status = responseResult.getString("status");
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
+
 
 
 }
