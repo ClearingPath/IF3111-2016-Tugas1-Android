@@ -3,10 +3,9 @@ package com.example.user.gps;
 public class Container {
     private static String answer;
     private static String token;
-    private static double ltd;
-    private static double lng;
+    private static double ltd = 0f;
+    private static double lng = 0f;
     private static String status = "no_status";
-    private static boolean isFirst = true;
     private static int check = 0;
     private static String serverIP = "167.205.34.132";
     private static int port = 3111;
@@ -28,9 +27,6 @@ public class Container {
     }
     public static int getCheck(){
         return check;
-    }
-    public static boolean getisFirst(){
-        return isFirst;
     }
     public static String getServerIP(){
         return serverIP;
@@ -55,9 +51,6 @@ public class Container {
     }
     public static void setCheck(int newVal){
         check = newVal;
-    }
-    public static void setisFirst(boolean newVal){
-        isFirst = newVal;
     }
     public static void setServerIP(String newVal){
         serverIP = newVal;

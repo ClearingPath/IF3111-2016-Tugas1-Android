@@ -74,10 +74,11 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     private DateFormat df;
     public static ArrayList<String> actLog = new ArrayList<>();
     private boolean logVisible = false;
-
+    private boolean isFirst = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("response :", "create");
         setContentView(R.layout.activity_google_maps);
         mPointer = (ImageView) findViewById(R.id.pointer);
         initializeMap();
@@ -118,13 +119,14 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 logVisible = !logVisible;
             }
         });
-        if(Container.getisFirst()) {
+
+        if(isFirst) {
             new requestService().execute();
-            Container.setisFirst(false);
             Toast.makeText(GoogleMapsActivity.this,
-                    "Requesting first location.",
+                    "Requesting location.",
                     Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @Override
@@ -172,6 +174,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("response :", "resume");
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_GAME);
     }
@@ -179,6 +182,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     protected void onPause() {
         super.onPause();
+        Log.i("response :", "pause");
         mSensorManager.unregisterListener(this, mAccelerometer);
         mSensorManager.unregisterListener(this, mMagnetometer);
     }
@@ -189,10 +193,8 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     }
 
     private void initializeMap() {
-        if (mMap == null) {
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-        }
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     private void setMarker(double ltd, double lng){
@@ -207,6 +209,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
+
     }
 
     @Override
@@ -280,6 +283,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                     Container.setLng(jsonResponse.getDouble("longitude"));
                     Container.setToken(jsonResponse.getString("token"));
                     setMarker(Container.getLtd(), Container.getLng());          //telah dibalik
+                    isFirst =false;
                 }
                 else{
                     Toast.makeText(GoogleMapsActivity.this, "Failed to receive response", Toast.LENGTH_SHORT).show();

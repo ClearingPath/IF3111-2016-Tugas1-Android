@@ -70,6 +70,68 @@ public class SubmitMessage extends AppCompatActivity {
 
         });
     }
+    private class requestService extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+
+            Socket socket = null;
+            String response = "";
+            JSONObject jsonRequest = new JSONObject();
+            try {
+                jsonRequest.put("com", "req_loc");
+                jsonRequest.put("nim", "13513003");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                socket = new Socket(Container.getServerIP(), Container.getPort());
+                InputStream inputStream = socket.getInputStream();
+                OutputStream outputStream = socket.getOutputStream();
+                PrintWriter writer = new PrintWriter(outputStream);
+                writer.println(jsonRequest.toString());
+                writer.flush();
+                String date = df.format(Calendar.getInstance().getTime());
+                GoogleMapsActivity.actLog.add(jsonRequest.toString() + " ,time: " + date.toString());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                response = reader.readLine();
+                socket.close();
+                date = df.format(Calendar.getInstance().getTime());
+                GoogleMapsActivity.actLog.add(response + " ,time: " + date.toString());
+                return response;
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(result != null) {
+                String date = df.format(Calendar.getInstance().getTime());
+                Log.i("response : ", result + " ,time: " + date.toString());
+                Toast.makeText(SubmitMessage.this, "response : " + result + " ,time: " + date.toString(), Toast.LENGTH_SHORT).show();
+            }
+            try {
+                if(result != null) {
+                    JSONObject jsonResponse = new JSONObject(result);
+                    Container.setLtd(jsonResponse.getDouble("latitude"));
+                    Container.setLng(jsonResponse.getDouble("longitude"));
+                    Container.setToken(jsonResponse.getString("token"));
+                    finish();
+                }
+                else{
+                    Toast.makeText(SubmitMessage.this, "Failed to receive response", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SubmitMessage.this, "Sending another request", Toast.LENGTH_SHORT).show();
+                    new requestService().execute();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private class sendAnswer extends AsyncTask<Void, Void, String> {
         @Override
@@ -156,16 +218,17 @@ public class SubmitMessage extends AppCompatActivity {
                         Container.setLng(jsonResponse.getDouble("longitude"));
                     }
                     Container.setToken(jsonResponse.getString("token"));
+                    finish();
                 }
                 else{
                     Toast.makeText(SubmitMessage.this, "Failed to receive response", Toast.LENGTH_SHORT).show();
                     Toast.makeText(SubmitMessage.this, "Sending another request", Toast.LENGTH_SHORT).show();
-                    new sendAnswer().execute();
+                    new requestService().execute();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            finish();
+
         }
     }
 }
