@@ -50,6 +50,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -66,6 +67,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Uri fileUri;
     private boolean logVisible = false;
     private ImageView image;
+    private ListView lv;
     private double currentDegree = 0f;
     private SensorManager sensorManager;
     private Sensor sensorAccelerometer;
@@ -98,10 +100,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         ((Button) findViewById(R.id.logButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MapsActivity.this, android.R.layout.simple_list_item_1, commLog);
-                ListView lv = (ListView)findViewById(R.id.logList);
+                ArrayAdapter<String> logAdapter = new ArrayAdapter<String>(MapsActivity.this, android.R.layout.simple_list_item_1, commLog);
+                lv = (ListView)findViewById(R.id.logList);
                 lv.setBackgroundColor(Color.WHITE);
-                lv.setAdapter(arrayAdapter);
+                lv.setAdapter(logAdapter);
                 if (!logVisible)
                     lv.setVisibility(View.VISIBLE);
                 else
@@ -114,6 +116,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new ImageButton.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        logVisible = false;
+                        lv.setVisibility(View.INVISIBLE);
                         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
@@ -127,6 +131,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             new ImageButton.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    logVisible = false;
+                    lv.setVisibility(View.INVISIBLE);
                     Intent intent = new Intent(MapsActivity.this, AnswerActivity.class);
                     startActivityForResult(intent, ANSWER_CODE);
                 }
