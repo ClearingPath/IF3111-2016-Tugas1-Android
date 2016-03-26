@@ -31,10 +31,11 @@ public class Opening extends AppCompatActivity implements AsyncResponse {
 
     private void sendCredential() {
         JSONObject message = new JSONObject();
-        message.put("com", "req_loc");
         message.put("nim", "13513024");
+        message.put("com", "req_loc");
 
         Log.d(TAG, "berhasil buat json object");
+        Log.d(TAG, "JSONObject to send: " + message.toString());
 
         SocketHub socketHub = new SocketHub(this, message);
         socketHub.execute();
@@ -44,8 +45,8 @@ public class Opening extends AppCompatActivity implements AsyncResponse {
     public void processFinish(JSONObject response){
         String status = (String) response.get("status");
         Log.d(TAG, "status " + status);
-        double longitude = Double.parseDouble((String) response.get("longitude"));
-        double latitude = Double.parseDouble((String) response.get("latitude"));
+        double longitude = (double) response.get("longitude");
+        double latitude = (double) response.get("latitude");
         String token = (String) response.get("token");
 
         Intent intent = new Intent(this, MapsActivity.class);

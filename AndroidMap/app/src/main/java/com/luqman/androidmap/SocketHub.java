@@ -12,6 +12,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import org.json.simple.parser.JSONParser;
@@ -36,28 +41,22 @@ public class SocketHub extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... arg0) {
         Socket socket = null;
+        PrintWriter out = null;
+        BufferedReader in = null;
 
         try {
             socket = new Socket(host, port);
-            OutputStream os = socket.getOutputStream();
-            PrintStream ps = new PrintStream(os);
-            ps.print(message.toString());
 
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            Log.d(TAG, "SENT JSON OBJECT: " + message.toString());
+            out.println(message.toString());
+            out.flush();
             Log.d(TAG, "UDAH KEKIRIM LHOOO");
+            responseLine = in.readLine();
+            Log.d(TAG, "berhasil menerima pesan " + responseLine);
 
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
-            byte[] buffer = new byte[1024];
-
-            int bytesRead;
-            InputStream inputStream = socket.getInputStream();
-
-            Log.d(TAG, "BERHASIL AMBIL INPUTSTREAM");
-
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, bytesRead);
-                responseLine += byteArrayOutputStream.toString("UTF-8");
-                Log.d(TAG, "RECEIVING FROM SERVER "+ bytesRead + " BYTES");
-            }
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

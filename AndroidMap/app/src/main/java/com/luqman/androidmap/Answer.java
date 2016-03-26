@@ -25,8 +25,8 @@ public class Answer extends AppCompatActivity implements AsyncResponse {
 
         // get information from intent
         Bundle bundle = getIntent().getExtras();
-        longitude = Double.parseDouble(bundle.getString("longitude"));
-        latitude = Double.parseDouble(bundle.getString("latitude"));
+        longitude = (double) bundle.get("longitude");
+        latitude = (double) bundle.get("latitude");
         token = (String) bundle.getString("token");
 
         Spinner spinner = (Spinner) findViewById(R.id.locations_spinner);
@@ -66,57 +66,55 @@ public class Answer extends AppCompatActivity implements AsyncResponse {
         Log.d(TAG, "STATUS " + status);
         if(status.equals("ok")) {
 
+            double longitude = (double) response.get("longitude");
+            double latitude = (double) response.get("latitude");
+            String token = (String) response.get("token");
+
+            final Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra("longitude", longitude);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("token", token);
             new AlertDialog.Builder(Answer.this)
                     .setTitle("Accepted!")
                     .setMessage("You're answer is correct")
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // continue with delete
+                            startActivity(intent);
                         }
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // do nothing
+                            startActivity(intent);
                         }
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-            double longitude = Double.parseDouble((String) response.get("longitude"));
-            double latitude = Double.parseDouble((String) response.get("latitude"));
-            String token = (String) response.get("token");
-
-            Intent intent = new Intent(this, MapsActivity.class);
-            intent.putExtra("longitude", longitude);
-            intent.putExtra("latitude", latitude);
-            intent.putExtra("token", token);
-            startActivity(intent);
 
         } else if (status.equals("wrong_answer")) {
 
+            final Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra("longitude", longitude);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("token", token);
             new AlertDialog.Builder(Answer.this)
                     .setTitle("Wrong Answer :(")
                     .setMessage("Unfortunately, your answer is wrong.")
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // continue with delete
+                            startActivity(intent);
                         }
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // do nothing
+                            startActivity(intent);
                         }
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
-            double longitude = Double.parseDouble((String) response.get("longitude"));
-            double latitude = Double.parseDouble((String) response.get("latitude"));
-            String token = (String) response.get("token");
-
-            Intent intent = new Intent(this, Answer.class);
-            intent.putExtra("longitude", longitude);
-            intent.putExtra("latitude", latitude);
-            intent.putExtra("token", token);
-            startActivity(intent);
 
         } else if(status.equals("finish")) {
 

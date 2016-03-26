@@ -8,6 +8,15 @@
     tools:context="com.luqman.androidmap.MapsActivity"
     tools:showIn="@layout/activity_maps">
 
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="20dp"
+        android:layout_gravity="top|end"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/ic_arrow"/>
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -31,5 +40,7 @@
             android:layout_weight="1"
             android:text="@string/button_answer"
             android:onClick="answer" />
+
     </LinearLayout>
+
 </RelativeLayout>
