@@ -64,12 +64,11 @@ public class ServerAsistenClientAsyncTask extends AsyncTask<Void, Void, Void> {
           * notice: inputStream.read() will block if no data return
           */
             boolean continueReading = true;
-            while ((bytesRead = inputStream.read(buffer)) != -1 && continueReading) {
+            while (continueReading && (bytesRead = inputStream.read(buffer)) != -1) {
                 byteArrayOutputStream.write(buffer, 0, bytesRead);
                 response += byteArrayOutputStream.toString("UTF-8");
                 try{
-                    String responsePlusNewline = response + "\n\n";
-                    responseJSONObject = new JSONObject(responsePlusNewline);
+                    responseJSONObject = new JSONObject(response);
                     continueReading = false;
                 } catch (JSONException e) {
                 }
@@ -90,9 +89,9 @@ public class ServerAsistenClientAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
         serverAsistenClientAsyncTaskCallbackTarget.onCallback(response);
         serverAsistenClientAsyncTaskSocketStore.setSocket(socket);
-        super.onPostExecute(result);
     }
 
 }

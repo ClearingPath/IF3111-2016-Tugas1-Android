@@ -52,6 +52,9 @@ public class ServerAsistenClient implements ServerAsistenClientAsyncTaskCallback
 
     public void submitAnswer(String nim, String answer, LatLng latLng){
         last_op = LAST_OP_SUBMIT_ANSWER;
+        last_nim = nim;
+        last_answer = answer;
+        last_latLng = latLng;
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("com","answer");
@@ -74,9 +77,20 @@ public class ServerAsistenClient implements ServerAsistenClientAsyncTaskCallback
     final static int LAST_OP_SUBMIT_ANSWER = 2;
     int last_op;
     String last_nim;
+    String last_answer;
+    LatLng last_latLng;
 
     @Override
     public void onCallback(String response) {
+
+        if (response.isEmpty()){ //TRY AGAIN
+            socket = null;
+            if (last_op==LAST_OP_FIRST_REQUEST)
+                doFirstRequest(last_nim);
+            else
+                submitAnswer(last_nim,last_answer,last_latLng);
+            return;
+        }
 
         if (response.contains("IOException")){
             mapsActivity.notifyUser("error connectiong. retrying... if you were trying to submit, please try submitting again", Toast.LENGTH_SHORT);
