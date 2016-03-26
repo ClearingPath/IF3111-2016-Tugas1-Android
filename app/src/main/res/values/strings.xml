@@ -4,4 +4,16 @@
   <string name="title_activity_maps">Map</string>
   <string name="title_activity_record">Challenge Record</string>
   <string name="title_activity_answer">Submit Answer</string>
+  <string-array name="location_list">
+    <item>GKU Barat</item>
+    <item>GKU Timur</item>
+    <item>Intel</item>
+    <item>CC Barat</item>
+    <item>CC Timur</item>
+    <item>DPR</item>
+    <item>Sunken</item>
+    <item>Perpustakaan</item>
+    <item>PAU</item>
+    <item>Kubus</item>
+  </string-array>
 </resources>

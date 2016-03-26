@@ -10,4 +10,35 @@
   android:paddingTop="@dimen/activity_vertical_margin"
   tools:context="org.informatika.gitlab.icalf.itblocator.AnswerActivity">
 
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="Location Name :"
+    android:id="@+id/textView"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"/>
+
+  <Spinner
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/spinner_location"
+    android:spinnerMode="dropdown"
+    android:layout_below="@+id/textView"
+    android:layout_marginTop="10dp"
+    android:dropDownWidth="match_parent"
+    android:drawSelectorOnTop="true"
+    android:entries="@array/location_list"
+    android:layout_centerHorizontal="true"/>
+
+  <Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Submit"
+    android:id="@+id/submit_location"
+    android:layout_marginTop="10dp"
+    android:layout_below="@+id/spinner_location"
+    android:layout_centerHorizontal="true"
+    android:onClick="submitLocation"/>
 </RelativeLayout>
