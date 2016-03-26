@@ -19,12 +19,12 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 ```
 ## Spesifikasi Tampilan
 **Tampilan peta**
-![alt text](http://i.imgur.com/XSJSI7B.png)
-![alt text](http://i.imgur.com/sbcWFTt.png)
+![alt text](/Screenshots/mapPortrait.png)
+![alt text](/Screenshots/mapLandscape.png)
 
 **Tampilan *submit* jawaban**
-![alt text](http://i.imgur.com/SzmoyXN.png)
-![alt text](http://i.imgur.com/LFhfbXw.png)
+![alt text](/Screenshots/answerPortrait.png)
+![alt text](/Screenshots/answerLandscape.png)
 
 **Tampilan log komunikasi**
-![alt text](http://i.imgur.com/Z8ZFTaO.png)
+![alt text](/Screenshots/logPortrait.png)
