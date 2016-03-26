@@ -19,7 +19,6 @@ public class SocketClient extends AsyncTask<Void, Void, String> {
     private String address;
     int port;
     private String serverResponse = "";
-    private String response;
     private JSONObject json;
 
     SocketClient(String addr, int port,JSONObject msg) {

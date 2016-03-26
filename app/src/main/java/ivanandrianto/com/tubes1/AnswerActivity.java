@@ -105,13 +105,16 @@ public class AnswerActivity extends AppCompatActivity {
                     if(status.equals("ok")){
                         latitude = jsonObject.optString("longitude").toString();
                         longitude = jsonObject.optString("latitude").toString();
-                        extras.putString("latitude", latitude);
-                        extras.putString("longitude", longitude);
                     } else if(status.equals("wrong_answer")){
-
+                        //do-nothing
                     } else if(status.equals("finish")){
+                        Toast.makeText(getApplicationContext(), "Finish" , Toast.LENGTH_LONG).show();
                         check = 1;
+                    } else if(status.equals("finish")){
+                        Toast.makeText(getApplicationContext(), "Error" , Toast.LENGTH_LONG).show();
                     }
+                    extras.putString("latitude", latitude);
+                    extras.putString("longitude", longitude);
                     resultIntent.putExtras(extras);
                     setResult(Activity.RESULT_OK, resultIntent);
                 } catch (JSONException e){
