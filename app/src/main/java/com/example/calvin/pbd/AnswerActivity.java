@@ -1,7 +1,9 @@
 package com.example.calvin.pbd;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
@@ -116,12 +118,15 @@ public class AnswerActivity extends AppCompatActivity {
             }
             catch (UnknownHostException e) {
                 Log.d("MyApp", e.toString());
+                cancel(true);
             }
             catch (IOException e) {
                 Log.d("MyApp", e.toString());
+                cancel(true);
             }
             catch (JSONException e) {
                 Log.d("MyApp", e.toString());
+                cancel(true);
             }
             return null;
         }
@@ -158,6 +163,21 @@ public class AnswerActivity extends AppCompatActivity {
             catch (JSONException e) {
                 Log.d("PostExecute", e.toString());
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            new AlertDialog.Builder(AnswerActivity.this)
+                    .setTitle("Error")
+                    .setMessage("Something went wrong, restarting the app...")
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            recreate();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
     }
 }

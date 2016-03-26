@@ -1,6 +1,8 @@
 package com.example.calvin.pbd;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -23,7 +25,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -203,12 +204,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             catch (UnknownHostException e) {
                 Log.d("MyApp", e.toString());
+                cancel(true);
             }
             catch (IOException e) {
                 Log.d("MyApp", e.toString());
+                cancel(true);
             }
             catch (JSONException e) {
                 Log.d("MyApp", e.toString());
+                cancel(true);
             }
             return null;
         }
@@ -219,8 +223,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Toast.makeText(MapsActivity.this, response, Toast.LENGTH_LONG).show();
                 JSONObject responseJSON = new JSONObject(response);
 
-                double latitude = responseJSON.getDouble("longitude"); //Jangan lupa balik
-                double longitude = responseJSON.getDouble("latitude");
+                double latitude = responseJSON.getDouble("latitude");
+                double longitude = responseJSON.getDouble("longitude");
 
                 SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
@@ -233,6 +237,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             catch (JSONException e) {
                 Log.d("MyApp", e.toString());
             }
+        }
+
+        @Override
+        protected void onCancelled() {
+            new AlertDialog.Builder(MapsActivity.this)
+                    .setTitle("Error")
+                    .setMessage("Something went wrong, restarting the app...")
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            recreate();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
     }
 
