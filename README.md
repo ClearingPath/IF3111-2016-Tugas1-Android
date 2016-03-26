@@ -32,10 +32,10 @@ Aplikasi ini adalah aplikasi yang dapat menampilkan peta, mengirim dan menerima 
 ![alt text](http://i.imgur.com/Ap64NR5.png)
 
 ## File Location
-###bin
+### bin
 \app\build\outputs\apk
-###src
+### src
 \app\src\main\java\in\feryand\locationfinder
-###res
+### res
 \app\src\main\res
 
