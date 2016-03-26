@@ -50,26 +50,32 @@ Jika jawaban Anda **benar dan sudah berada dilokasi terakhir**, maka:
 ```
 
 ## Spesifikasi Tampilan
-**Tampilan horizontal**
+### Tampilan horizontal
 
 ![horizontal](/screenshot/Screenshot_horizontal.jpeg "horizontal")
-**Tampilan vertikal**
+
+
+### Tampilan vertikal
 
 ![vertikal](/screenshot/Screenshot_vertikal.jpeg "vertikal")
-**Tampilan *submit* jawaban**
+
+
+### Tampilan *submit* jawaban
 
 ![answer](/screenshot/Screenshot_answer.jpeg "answer")
 
+
 ## Source code and binaries
 **bin**
-```sh
+
 [Tubes1-Android\GPS\app\build\outputs\apk](GPS/app/build/outputs/apk "bin")
-```
+
+
 **src**
-```sh
+
 [Tubes1-Android\GPS\app\src\main\java\com\example\user\gps](GPS/app/src/main/java/com/example/user/gps "source")
-```
+
+
 **layout xml**
-```sh
+
 [Tubes1-Android\GPS\app\src\main\res\layout](GPS/app/src/main/res/layout "layout")
-```
