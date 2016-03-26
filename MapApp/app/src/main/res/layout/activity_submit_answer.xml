@@ -1,22 +1,25 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/SubmitAnswerButton"
-        android:id="@+id/button"
-        android:layout_below="@+id/locationSpinner"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:text="Location Name:"
+        android:layout_marginTop="52dp"
+        android:padding="8dp"/>
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/locationSpinner"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="52dp" />
-</RelativeLayout>
+        android:id="@+id/locationSpinner" />
+
+    <Button
+        android:id="@+id/submitAnswerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/SubmitAnswerButton" />
+
+</LinearLayout>
 
