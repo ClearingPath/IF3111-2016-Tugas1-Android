@@ -49,7 +49,7 @@ public class ClientSync {
 
         System.out.println("Received message: " + msgRecv);
     }
-    
+
     String getRecvMsg() {
         return msgRecv;
     }
