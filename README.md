@@ -1,5 +1,5 @@
 # Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
-## 1351307 - Calvin Aditya Jonathan 
+# 1351307 - Calvin Aditya Jonathan
 ## Spesifikasi Aplikasi
 
 Spesifikasi dari aplikasi yang dibangun sebagai berikut
@@ -19,10 +19,12 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 ```
 ## Spesifikasi Tampilan
 **Tampilan peta**
-![alt text](http://i.imgur.com/JuGODs8.png)
+![alt text](http://i.imgur.com/XSJSI7B.png)
 ![alt text](http://i.imgur.com/sbcWFTt.png)
+
 **Tampilan *submit* jawaban**
 ![alt text](http://i.imgur.com/SzmoyXN.png)
 ![alt text](http://i.imgur.com/LFhfbXw.png)
+
 **Tampilan log komunikasi**
 ![alt text](http://i.imgur.com/Z8ZFTaO.png)
