@@ -1,5 +1,6 @@
 package com.example.husni.mapapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,26 +12,26 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class SubmitAnswerActivity extends AppCompatActivity implements OnItemSelectedListener {
 
+    private Spinner locationSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_answer);
 
-        Spinner locationSpinner = (Spinner) findViewById(R.id.locationSpinner);
+        locationSpinner = (Spinner) findViewById(R.id.locationSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.location_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(adapter);
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view,
-                               int pos, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-
     }
 
     @Override
@@ -38,6 +39,14 @@ public class SubmitAnswerActivity extends AppCompatActivity implements OnItemSel
         // Another interface callback
     }
 
+    public void submitAnswerButton(View view) {
+        Context context = getApplicationContext();
+        String spinnerText = locationSpinner.getSelectedItem().toString();
+        int duration = Toast.LENGTH_LONG;
+
+        Toast toast = Toast.makeText(context, spinnerText, duration);
+        toast.show();
+    }
 
 
 }

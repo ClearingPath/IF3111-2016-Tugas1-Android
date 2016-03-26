@@ -35,21 +35,21 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/submitButton"
+            android:id="@+id/cameraButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_camera_alt_24dp"
+            android:onClick="cameraButton"
             android:text="@string/cameraButtonString" />
 
         <Button
-            android:id="@+id/cameraButton"
+            android:id="@+id/submitButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableStart="@drawable/ic_forum_24dp"
             android:onClick="submitAnswer"
-            android:singleLine="true"
             android:text="@string/submitButtonString" />
     </LinearLayout>
 </LinearLayout>
