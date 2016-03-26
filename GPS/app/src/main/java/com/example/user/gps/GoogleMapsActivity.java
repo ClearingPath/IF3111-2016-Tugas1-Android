@@ -155,7 +155,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                 Toast.makeText(GoogleMapsActivity.this,
                         "Correct Answer, Please proceed to next location.",
                         Toast.LENGTH_SHORT).show();
-                setMarker(Container.getLng(), Container.getLtd());           //telah dibalik
+                setMarker(Container.getLtd(), Container.getLng());           //telah dibalik
             }else if(Container.getStatus().equals("wrong_answer") && !(Container.getCheck() == 1)){
                 Toast.makeText(GoogleMapsActivity.this,
                         "Wrong Answer, Please try again.",
@@ -279,7 +279,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
                     Container.setLtd(jsonResponse.getDouble("latitude"));
                     Container.setLng(jsonResponse.getDouble("longitude"));
                     Container.setToken(jsonResponse.getString("token"));
-                    setMarker(Container.getLng(), Container.getLtd());          //telah dibalik
+                    setMarker(Container.getLtd(), Container.getLng());          //telah dibalik
                 }
                 else{
                     Toast.makeText(GoogleMapsActivity.this, "Failed to receive response", Toast.LENGTH_SHORT).show();
