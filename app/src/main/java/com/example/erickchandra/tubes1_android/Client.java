@@ -139,8 +139,7 @@ public class Client extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-
-
+        messageIn = response;
     }
 
 }
