@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 
 public class AnswerActivity extends AppCompatActivity {
     @Override
@@ -112,8 +113,11 @@ public class AnswerActivity extends AppCompatActivity {
                 String response = in.readLine();
                 socket.close();
 
-                MapsActivity.commLog.add(request.toString());
-                MapsActivity.commLog.add(response);
+                Calendar c = Calendar.getInstance();
+                c.getTime().toString();
+
+                MapsActivity.commLog.add(c.getTime().toString() + " " + request.toString());
+                MapsActivity.commLog.add(c.getTime().toString() + " " + response);
                 return response;
             }
             catch (UnknownHostException e) {

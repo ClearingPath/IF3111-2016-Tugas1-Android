@@ -17,7 +17,7 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 * Ketika anda menggunakan activity yang memanggil sensor, sensor tersebut harus dilepas ketika anda berpindah activity agar tidak boros baterai.
 
 ## Lokasi Source Code: \app\src\main
-## Lokasi Binary: 
+## Lokasi Binary: \APK
 
 
 ## Spesifikasi Tampilan

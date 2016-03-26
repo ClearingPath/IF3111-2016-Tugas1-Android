@@ -48,6 +48,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
@@ -198,8 +199,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String response = in.readLine();
                 socket.close();
 
-                commLog.add(request.toString());
-                commLog.add(response);
+                Calendar c = Calendar.getInstance();
+                c.getTime().toString();
+
+                commLog.add(c.getTime().toString() + " " + request.toString());
+                commLog.add(c.getTime().toString() + " " + response);
                 return response;
             }
             catch (UnknownHostException e) {
