@@ -69,24 +69,31 @@ These are the client and server communication via JSON string passed by socket c
 ##Screenshots
 
 **App Launcher**
+
 ![App Launcher](screenshots/01-Launcher.png)
 
 **Home Activity**
+
 ![Home Activity](screenshots/02-Home.png)
 
 **Map Activity**
+
 ![Map Activity](screenshots/03-Map.png)
 
 **Calling Camera Intent**
+
 ![Camera Intent](screenshots/04-Intent.png)
 
 **Submission Activity**
+
 ![Submission Activity](screenshots/05-Submit.png)
 
 **Submission Spinner Drop Down**
+
 ![Submission Spinner Drop Down](screenshots/06-SubmitSpinner)
 
 **Message Toast**
+
 ![Message Toast](screenshots/07-ReceivedMsgToast.png)
 
 ##Source Code Folder Path
