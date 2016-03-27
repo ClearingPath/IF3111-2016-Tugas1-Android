@@ -1,19 +1,14 @@
 package com.davidkwan.tubes1android;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -42,8 +37,6 @@ import java.net.Socket;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
     private GoogleMap mMap;
-    private double latitude;
-    private double longitude;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     // For compass
@@ -60,6 +53,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private float currentDegree = 0f;
 
     // For request location
+    public static double latitude;
+    public static double longitude;
+    public static String token;
     public static String ip = "167.205.34.132";
     public static int port = 3111;
 
@@ -219,10 +215,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 jsonResult = new JSONObject(result);
                 String status = jsonResult.getString("status");
                 if(status.equals("ok")) {
-                    double latitude = jsonResult.getDouble("latitude");
-                    double longitude = jsonResult.getDouble("longitude");
+                    latitude = jsonResult.getDouble("latitude");
+                    longitude = jsonResult.getDouble("longitude");
+                    token = jsonResult.getString("token");
 
-                    LatLng nextLocation = new LatLng(latitude, longitude);
+                    // LatLng nextLocation = new LatLng(latitude, longitude);
+                    LatLng nextLocation = new LatLng(longitude, latitude);
                     mMap.addMarker(new MarkerOptions().position(nextLocation).title("Next Location"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nextLocation, 18.0f));
                 }
