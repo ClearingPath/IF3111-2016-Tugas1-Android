@@ -14,11 +14,11 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 * Hasil reply pertama server akan ditampilkan dalam bentuk *alert dialog* dan yang berikutnya dalam bentuk *toast*.
 
 # Screenshot
-(/Screenshot/SubmitAnswer.png)
+[[/Screenshot/SubmitAnswer.png]]
 
-(/Screenshot/MapPortrait.png)
+[[/Screenshot/MapPortrait.png]]
 
-(/Screenshot/MapLandscape.png) 
+[[/Screenshot/MapLandscape.png]] 
 
 
 
