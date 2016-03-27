@@ -1,8 +1,10 @@
 package com.example.erickchandra.tubes1_android;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,6 +15,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Surface;
@@ -234,6 +237,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         cLatLng = new LatLng(cLatDouble, cLngDouble);
         mMap.addMarker(new MarkerOptions().position(cLatLng).title("Guess Place!"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cLatLng, 16.0f));
+
+        // For Map
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            // Show rationale and request permission.
+        }
     }
 
     String mCurrentPhotoPath;
