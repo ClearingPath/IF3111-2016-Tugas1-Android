@@ -19,9 +19,6 @@ Daftar kemungkinan jawaban lokasi adalah
 * pau
 * kubus
 
-Sever uji coba akan disediakan pada 167.205.24.132 akan dapat diuji coba mulai tanggal 21 Maret 2016 Pukul 07.00.
-Prosedur uji coba akan dibertahukan lebih lanjut.
-
 ## Spesifikasi Aplikasi
 
 Spesifikasi dari aplikasi yang dibangun sebagai berikut
@@ -75,27 +72,15 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 ```sh
 {“status”:”finish”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
 ```
-## Spesifikasi Tampilan
+## Tampilan Aplikasi
 **Tampilan horizontal**
-![alt text](http://i.imgur.com/Q1ZhAvb.png)
+![alt text](img/map_activity.jpg)
 **Tampilan vertikal**
-![alt text](http://i.imgur.com/L7RnXCm.png)
+![alt text](img/map_activity-land.jpg)
 **Tampilan *submit* jawaban**
-![alt text](http://i.imgur.com/TlaiEs9.png)
+![alt text](img/submit_activity.jpg)
 ## Deliverables
 
-Silahkan ikuti langkah pengumpulan berikut :
 
-- Lakukan **fork** terhadap repository ini.
-- Edit file readme ini semenarik mungkin (gunakan panduan [Markdown] langguage), diperbolehkan untuk merubah struktur dari readme ini. (Soal tidak perlu dipertahankan).
-- Pada Readme terdapat tampilan aplikasi.
-- Cantumkan lokasi *source code* dan *binary* dari aplikasi pada Readme.
-
-## Deadline
-Deadline pull request terakhir (termasuk commit) adalah 27 Maret 2016 pukul 23.55. 
-
-
-## Keterangan Tambahan
-Bila ada pertanyaan, mengenai tugas ini silahkan lakukan melalui milis IF3111.
 
 [Markdown]: <http://dillinger.io/>
