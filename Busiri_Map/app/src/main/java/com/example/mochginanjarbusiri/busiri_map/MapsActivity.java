@@ -1,13 +1,20 @@
 package com.example.mochginanjarbusiri.busiri_map;
 
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,7 +31,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.concurrent.ExecutionException;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements SensorEventListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
@@ -35,7 +42,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String status;
     private String response = "";
     private final String nim = "13513111";
-
+    private ImageView icon_compass;
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private Sensor mMagnetometer;
+    private float[] mLastAccelerometer = new float[3];
+    private float[] mLastMagnetometer = new float[3];
+    private boolean mLastAccelerometerSet = false;
+    private boolean mLastMagnetometerSet = false;
+    private float[] mR = new float[9];
+    private float[] mOrientation = new float[3];
+    private float mCurrentDegree = 0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +89,55 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivityForResult(intent, SUBMIT_REQUEST_CODE);
             }
         });
+
+        icon_compass = (ImageView)findViewById(R.id.icon_compass);
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener((SensorEventListener) this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener((SensorEventListener) this, mMagnetometer, SensorManager.SENSOR_DELAY_GAME);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener((SensorEventListener) this, mAccelerometer);
+        mSensorManager.unregisterListener((SensorEventListener) this, mMagnetometer);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event)
+    {
+        if (event.sensor == mAccelerometer) {
+            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
+            mLastAccelerometerSet = true;
+        } else if (event.sensor == mMagnetometer) {
+            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
+            mLastMagnetometerSet = true;
+        }
+        if (mLastAccelerometerSet && mLastMagnetometerSet) {
+            SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
+            SensorManager.getOrientation(mR, mOrientation);
+            float azimuthInRadians = mOrientation[0];
+            float azimuthInDegress = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
+            RotateAnimation ra = new RotateAnimation(mCurrentDegree, -azimuthInDegress, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            ra.setDuration(250);
+            ra.setFillAfter(true);
+            icon_compass.startAnimation(ra);
+            mCurrentDegree = -azimuthInDegress;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // TODO Auto-generated method stub
+
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.

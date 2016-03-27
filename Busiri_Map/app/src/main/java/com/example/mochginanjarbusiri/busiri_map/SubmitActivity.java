@@ -30,7 +30,6 @@ public class SubmitActivity extends AppCompatActivity {
     private String response = "";
     private final String nim = "13513111";
     private String location;
-    private static final int ANSWER = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
