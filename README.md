@@ -74,11 +74,11 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 ```
 ## Tampilan Aplikasi
 **Tampilan horizontal**
-![alt text](img/map_activity.jpg)
+![alt text](img/map_activity.jpg "Tampilan horizontal")
 **Tampilan vertikal**
-![alt text](img/map_activity-land.jpg)
+![alt text](img/map_activity-land.jpg "Tampilan vertikal")
 **Tampilan *submit* jawaban**
-![alt text](img/submit_activity.jpg)
+![alt text](img/submit_activity.jpg "Tampilan submit jawaban")
 ## Deliverables
 
 
