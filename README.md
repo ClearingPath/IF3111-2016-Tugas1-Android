@@ -97,11 +97,13 @@ These are the client and server communication via JSON string passed by socket c
 ![Message Toast](screenshots/07-ReceivedMsgToast.png)
 
 ##Source Code Folder Path
+
 ```sh
 ~/Tubes1-Android/app/src/main/
 ```
 
 ##Binary Built APK Folder Path
+
 ```sh
 ~/Tubes1-Android/apk/
 ```
