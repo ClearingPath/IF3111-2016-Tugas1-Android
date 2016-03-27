@@ -77,7 +77,7 @@ public class HomeActivity extends AppCompatActivity implements AsyncResponse {
     }
 
     public void launchComm() {
-        MessageSendParser msp = new MessageSendParser(0, "13512999");
+        MessageSendParser msp = new MessageSendParser(0, "13513021");
         cs = new ClientSync(this, msp.getJSONObjectStr());
 //        cs.SendAndThenRecvMessage();
         cs.delegate = this;
@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity implements AsyncResponse {
     }
 
     public void launchMap() {
-//        Client newComm = new Client("api.nitho.me", 8080, receivedMessage, "{\"com\":\"req_loc\",\"nim\":\"13512999\"}\n");
+//        Client newComm = new Client("api.nitho.me", 8080, receivedMessage, "{\"com\":\"req_loc\",\"nim\":\"13513021\"}\n");
 //        newComm.execute();
 
         Intent mapIntent = new Intent(this, MapsActivity.class);
