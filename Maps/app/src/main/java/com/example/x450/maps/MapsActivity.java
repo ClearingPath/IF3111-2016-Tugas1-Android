@@ -240,8 +240,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         Toast t = Toast.makeText(this,result.toString(), Toast.LENGTH_LONG);
         t.show();
-        double longi = Double.parseDouble(latitude);
-        double lat = Double.parseDouble(longitude);
+        double lat = Double.parseDouble(latitude);
+        double longi = Double.parseDouble(longitude);
         LatLng latlongi = new LatLng(lat,longi);
         mark = mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 
@@ -271,8 +271,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //Write your code if there's no result
             }
             if (status.equals("ok")){
-                double lat = Double.parseDouble(nextLong);
-                double longi = Double.parseDouble(nextLat);
+                double longi = Double.parseDouble(nextLong);
+                double lat= Double.parseDouble(nextLat);
                 LatLng latlongi = new LatLng(lat,longi);
                 Log.d("its", "ok");
                 mark.remove();
