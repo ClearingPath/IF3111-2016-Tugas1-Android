@@ -17,9 +17,4 @@ public class MainActivity extends AppCompatActivity {
     Intent intent = new Intent(this, MapsActivity.class);
     startActivity(intent);
   }
-
-  public void seeRecord(View view) {
-    Intent intent = new Intent(this, AnswerActivity.class);
-    startActivity(intent);
-  }
 }
