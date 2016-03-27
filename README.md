@@ -66,7 +66,7 @@ These are the client and server communication via JSON string passed by socket c
 * Server replies must be shown with Toast or Alert Dialogue.
 * Whenever the app uses the sensor, it must release all sensors by the time the user leaves the activity to reduce unnecessary battery consumption and to avoid some performance issues.
 
-##Screenshots
+## Screenshots
 
 **App Launcher**
 
@@ -96,13 +96,13 @@ These are the client and server communication via JSON string passed by socket c
 
 ![Message Toast](screenshots/07-ReceivedMsgToast.png)
 
-##Source Code Folder Path
+## Source Code Folder Path
 
 ```sh
 ~/Tubes1-Android/app/src/main/
 ```
 
-##Binary Built APK Folder Path
+## Binary Built APK Folder Path
 
 ```sh
 ~/Tubes1-Android/apk/
