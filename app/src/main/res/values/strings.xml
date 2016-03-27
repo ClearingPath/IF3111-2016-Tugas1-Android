@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AndroidMap</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="location_prompt">Location Name : </string>
+
+    <string-array name="location_arrays">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>oktagon</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
+    </string-array>
+    <string name="title_activity_submit_answer">SubmitAnswer</string>
+</resources>
