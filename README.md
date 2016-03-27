@@ -66,3 +66,4 @@ Terdapat tombol log untuk melihat sejarah percakapan.
 * Jika terjadi permasalahan koneksi, ditangani dengan membuka app kembali untuk mendapatkan lokasi terakhir.
 
 [Markdown]: <http://dillinger.io/>
+
