@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "C:\\Users\\user\\StudioProjects\\Tubes1-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout-land\\activity_main.xml",
+        "source": "C:\\Users\\user\\StudioProjects\\Tubes1-Android\\app\\src\\main\\res\\layout-land\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\StudioProjects\\Tubes1-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout-land\\activity_maps.xml",
+        "source": "C:\\Users\\user\\StudioProjects\\Tubes1-Android\\app\\src\\main\\res\\layout-land\\activity_maps.xml"
+    }
+]
