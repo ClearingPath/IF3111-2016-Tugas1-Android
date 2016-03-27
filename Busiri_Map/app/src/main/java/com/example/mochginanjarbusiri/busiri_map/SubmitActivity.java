@@ -1,5 +1,6 @@
 package com.example.mochginanjarbusiri.busiri_map;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ public class SubmitActivity extends AppCompatActivity {
     private String response = "";
     private final String nim = "13513111";
     private String location;
+    private static final int ANSWER = 300;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +73,7 @@ public class SubmitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendAnswer();
+                finish();
             }
         });
         Intent intent = getIntent();
@@ -94,6 +98,28 @@ public class SubmitActivity extends AppCompatActivity {
             answer.put("token", this.token);
             this.response = new SocketClient(answer.toString(), mMap).execute().get();
             Toast.makeText(getApplicationContext(), "RESPONSE: " + response, Toast.LENGTH_LONG).show();
+            JSONObject json = new JSONObject(response);
+
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putString("token", json.getString("token"));
+
+            if (json.getString("status").equals("ok"))
+            {
+                bundle.putDouble("latitude", json.getDouble("latitude"));
+                bundle.putDouble("longitude", json.getDouble("longitude"));
+                Toast.makeText(getApplicationContext(), "Correct", Toast.LENGTH_LONG).show();
+            }
+            else if (json.getString("status").equals("wrong_answer"))
+            {
+                Toast.makeText(getApplicationContext(), "Wrong Answer", Toast.LENGTH_LONG).show();
+            }
+            else if (json.getString("status").equals("finish")) {
+                Toast.makeText(getApplicationContext(), "Finish", Toast.LENGTH_LONG).show();
+            }
+            intent.putExtras(bundle);
+            setResult(Activity.RESULT_OK, intent);
+            this.finish();
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -101,7 +127,5 @@ public class SubmitActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-
     }
 }
