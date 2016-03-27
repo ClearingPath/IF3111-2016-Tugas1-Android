@@ -39,6 +39,7 @@ import org.json.JSONObject;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener,SensorEventListener,ResponseHandlerInterface {
 
     private GoogleMap mMap;
+    private RW rw;
     private ImageView mPointer;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -62,8 +63,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
             Log.d("in","on create");
-//        mark.remove();
-//        mark = mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+        rw = new RW();
         req_loc = new JSONObject();
         try {
             req_loc.put("com","req_loc");
@@ -82,6 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mPointer = (ImageView) findViewById(R.id.compass);
+        rw.generateNoteOnSD(this,"Client: "+req_loc.toString());
         new AsyncAction(this,this).execute(req_loc.toString());
 
     }
@@ -240,6 +241,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         Toast t = Toast.makeText(this,result.toString(), Toast.LENGTH_LONG);
         t.show();
+        rw.generateNoteOnSD(this,"Server: " + result.toString());
         double lat = Double.parseDouble(latitude);
         double longi = Double.parseDouble(longitude);
         LatLng latlongi = new LatLng(lat,longi);

@@ -27,8 +27,10 @@ public class Submit extends AppCompatActivity implements AdapterView.OnItemSelec
     private String latitude;
     private String longitude;
     private String token;
+    private RW rw;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        rw = new RW();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit);
         addItemsOnLocSpinner();
@@ -90,9 +92,11 @@ public class Submit extends AppCompatActivity implements AdapterView.OnItemSelec
         final Context curContext = this;
         Log.d("tempStat",status);
         if (status.equals("wrong_answer")){
+            rw.generateNoteOnSD(this,"Server: "+result.toString());
             Toast t = Toast.makeText(curContext,tempStat, Toast.LENGTH_LONG);
             t.show();
         }else {
+            rw.generateNoteOnSD(this, "Server: " + result.toString());
             Toast t = Toast.makeText(curContext,result.toString(), Toast.LENGTH_LONG);
             t.show();
             Intent intent = new Intent(this, MapsActivity.class);
@@ -120,6 +124,7 @@ public class Submit extends AppCompatActivity implements AdapterView.OnItemSelec
         tempJson.put("latitude", latitude);
         tempJson.put("token", token);
         Log.d("tempJson", tempJson.toString());
+        rw.generateNoteOnSD(this,"Client: " + tempJson.toString());
 
         new AsyncAction(this,this).execute(tempJson.toString());
     }
