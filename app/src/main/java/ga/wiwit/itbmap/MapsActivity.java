@@ -27,7 +27,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class MapsActivity extends AppCompatActivity
+        implements OnMapReadyCallback, SensorEventListener, callerAsync {
 
     private GoogleMap mMap;
     private SensorManager sensorManager;
@@ -39,7 +43,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean issetMagnetometer = false;
     private float currentDegree = 0f;
     private ImageView compass;
-    private Communicator comm ;
 
 
     @Override
@@ -56,15 +59,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         compass = (ImageView)findViewById(R.id.compass_arrow);
-        comm = Communicator.getInstance();
-        comm.req_loc();
     }
     @Override
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
-        comm.setContext(getApplicationContext());
     }
 
     @Override
@@ -159,10 +159,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng itb = new LatLng(-6.891323, 107.610445);
-        mMap.addMarker(new MarkerOptions().position(itb).title("Marker in ITB"));
+        LatLng itb = new LatLng(Communicator.getLatitude(), Communicator.getLatitude());
+        mMap.addMarker(new MarkerOptions().position(itb).title("Find this location!"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(itb, 17));
-        comm.setMap(mMap);
     }
 
     public void goCamera(View view) {
@@ -176,5 +175,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent intent = new Intent(this, AnswerActivity.class);
         if(intent.resolveActivity(getPackageManager()) != null)
             startActivity(intent);
+    }
+
+    @Override
+    public void processJSON(JSONObject obj) throws JSONException {
+        double lat = (double)obj.get("latitude");
+        double lng = (double)obj.get("longitude");
+        LatLng pos = new LatLng(lat, lng);
+        mMap.addMarker(new MarkerOptions().position(pos).title("Find this location!"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 17));
     }
 }

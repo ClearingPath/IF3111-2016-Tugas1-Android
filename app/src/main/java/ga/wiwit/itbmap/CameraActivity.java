@@ -5,9 +5,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-public class CameraActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class CameraActivity extends AppCompatActivity
+    implements callerAsync {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,4 +36,7 @@ public class CameraActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void processJSON(JSONObject obj) {
+    }
 }

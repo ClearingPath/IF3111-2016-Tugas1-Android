@@ -26,52 +26,41 @@ import java.net.UnknownHostException;
 /**
  * Created by Wiwit Rifa'i on 27/03/2016.
  */
-public class Communicator extends AsyncTask<Void, Void, Void> {
+public class Communicator extends AsyncTask<JSONObject, JSONObject, JSONObject> {
     final String TAG = Communicator.class.getSimpleName();
-    private static Communicator instance = null;
-    private String dstAddress;
-    private int dstPort;
-    private JSONObject response = null;
+    private static String dstAddress = "167.205.34.132";
+    private static int dstPort = 3111;
     private JSONObject message = null;
-    private double latitude = -6.891323;
-    private double longitude = 107.610445;
-    private String status = "not_start";
-    private int nim = 13513073;
-    private String token = "";
-    private GoogleMap map = null;
-    private Context context = null;
+    private static double latitude = -6.891323;
+    private static double longitude = 107.610445;
+    private static String status = "not_start";
+    private static int nim = 13513073;
+    private static String token = "";
+    private callerAsync caller = null;
 
-    private Communicator(String add, int port, int tnim) {
-        dstAddress = add;
-        dstPort = port;
-        nim = tnim;
+    public Communicator(callerAsync call) {
+        caller = call;
     }
-    public static Communicator getInstance() {
-        if(instance == null)
-            instance = new Communicator("167.205.34.132", 3111, 13513073);
-        return instance;
+
+    public static String getToken() {
+        return token;
     }
+
     public String getStat() {
         return status;
     }
-    public double getLatitude() {
+    public static double getLatitude() {
         return latitude;
     }
-    public double getLongitude() {
+    public static double getLongitude() {
         return longitude;
     }
-    public void setMap(GoogleMap mmap) {
-        map = mmap;
-    }
-    public void setContext(Context con) {
-        context = con;
-    }
     public void req_loc() {
-        Log.d(TAG, "req_loc: ");
         message = new JSONObject();
         try {
             message.put("com", "req_loc");
             message.put("nim", String.valueOf(nim));
+            Log.d(TAG, "req_loc: "+message);
             this.execute();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -87,6 +76,7 @@ public class Communicator extends AsyncTask<Void, Void, Void> {
             message.put("longitude", longitude);
             message.put("latitude", latitude);
             message.put("token", token);
+            Log.d(TAG, "doinba ex : ");
             this.execute();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -108,22 +98,30 @@ public class Communicator extends AsyncTask<Void, Void, Void> {
      * @see #publishProgress
      */
     @Override
-    protected Void doInBackground(Void... params) {
+    protected JSONObject doInBackground(JSONObject... params) {
+        JSONObject response = null;
         Log.d(TAG, "doInBackground: ");
         Socket sock = null;
         PrintWriter out = null;
         BufferedReader in = null;
-
+        Log.d(TAG, "doInBac 1: "+message.toString());
         try {
             sock = new Socket(dstAddress, dstPort);
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sock.getOutputStream())), true);
             in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+            Log.d(TAG, "doInBac flush:" + message.toString());
             if(message == null)
                 message = new JSONObject();
             out.println(message.toString());
             out.flush();
-
-            response = new JSONObject(in.readLine());
+            Log.d(TAG, "doInBac flush:" + message.toString());
+            int c;
+            StringBuilder sb = new StringBuilder();
+            while((c = in.read()) != -1)
+                sb.append((char)c);
+//            String resLine = in.readLine();
+            Log.d(TAG, "doInBackground:"+sb.toString());
+            response = new JSONObject(sb.toString());
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -138,29 +136,33 @@ public class Communicator extends AsyncTask<Void, Void, Void> {
                     e.printStackTrace();
                 }
         }
-        return null;
+        if(response == null)
+            Log.d(TAG, "doInBackground: null");
+        return response;
     }
 
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(JSONObject result) {
+
         Log.d(TAG, "onPostExecute: ");
         try {
-            if(context != null)
-                Toast.makeText(context, response.toString(), Toast.LENGTH_LONG);
-            status = (String)response.get("status");
-            token = (String) response.get("token");
+            String status = (String)result.get("status");
+            String token = (String) result.get("token");
             if(status.equals("ok")) {
-                longitude = (double) response.get("longitude");
-                latitude = (double) response.get("latitude");
-                if(map != null) {
-                    map.clear();
-                    LatLng pos = new LatLng(latitude, longitude);
-                    map.addMarker(new MarkerOptions().position(pos).title("Find this location!"));
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 17));
-                }
+                longitude = (double) result.get("longitude");
+                latitude = (double) result.get("latitude");
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                caller.processJSON(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            finally {
+                super.onPostExecute(result);
+            }
         }
     }
 }
