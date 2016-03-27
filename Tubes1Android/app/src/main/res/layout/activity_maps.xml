@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4052b5"
+        android:gravity="left|center"
+
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Maps"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#cbcbcb"
+        android:gravity="center"
+        android:screenOrientation="portrait"
+        android:layout_alignParentBottom="true"
+        >
+
+        <ImageButton
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:padding="0dp"
+            android:id="@+id/imageButton"
+            android:layout_weight="1"
+            android:src="@drawable/camera_icon"
+            android:gravity="center"/>
+
+
+        <ImageButton
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:id="@+id/imageButton2"
+            android:layout_weight="1"
+            android:src="@drawable/chat_icon"
+            android:gravity="center"/>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/footer"
+        android:layout_below="@id/header"
+        android:gravity="center">
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.example.yoga.tubes1android.MapsActivity"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewCompass"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@drawable/compass"
+            android:layout_margin="20dp"
+            android:layout_alignParentRight="true"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="log"
+            android:id="@+id/log"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

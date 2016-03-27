@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Tubes1Android</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_submit_answer">Submit Answer</string>
+
+    <string name="location_prompt">Pilih lokasi</string>
+    <string-array name="location_arrays">
+        <item>GKU Barat</item>
+        <item>GKU Timur</item>
+        <item>Intel</item>
+        <item>CC Barat</item>
+        <item>CC Timur</item>
+        <item>DPR</item>
+        <item>Sunken</item>
+        <item>Perpustakaan</item>
+        <item>PAU</item>
+        <item>Kubus</item>
+    </string-array>
+</resources>
