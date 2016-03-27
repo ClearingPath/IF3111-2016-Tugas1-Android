@@ -1,5 +1,4 @@
 <resources>
-<<<<<<< HEAD
     <string name="app_name">mainDiITB</string>
     <string name="title_activity_maps">Peta</string>
     <string name="send">SEND</string>
@@ -7,23 +6,4 @@
     <string name="kompas">kompas</string>
     <string name="action_settings">Settings</string>
 
-    <string-array name="planets_array">
-        <item>gku_barat</item>
-        <item>gku_timur</item>
-        <item>intel</item>
-        <item>cc_barat</item>
-        <item>cc_timur</item>
-        <item>dpr</item>
-        <item>oktagon</item>
-        <item>perpustakaan</item>
-        <item>pau</item>
-        <item>kubus</item>
-
-    </string-array>
-=======
-    <string name="app_name">MainYukITB</string>
-    <string name="action_settings">Settings</string>
-    <string name="get">GET!</string>
-    <string name="title_activity_display_message">New Message</string>
->>>>>>> 77ed88f572b97509641e7d78d656a8451206bc1a
 </resources>

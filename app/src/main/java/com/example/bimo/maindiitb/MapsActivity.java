@@ -20,6 +20,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -76,13 +77,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         // Cek orientasi layar dan bertindak seperlunya
         Intent intent = getIntent();
-        Log.d(LOGLOG, "NIMNIMNIM : " + intent.getStringExtra("EXTRA_NIM"));
+//        Log.d(LOGLOG, "NIMNIMNIM : " + intent.getStringExtra("EXTRA_NIM"));
 
         Bundle b = intent.getBundleExtra("EXTRA_BUNDEL");
-//        nim = b.getString("EXTRA_NIM");
+        nim = b.getString("EXTRA_NIM");
         Lat = Double.parseDouble(b.getString("EXTRA_LAT"));
         Lon = Double.parseDouble(b.getString("EXTRA_LON"));
         token = b.getString("EXTRA_TOKEN");
+
+        Toast.makeText(getApplicationContext(), "Token : " + token + " , NIM : " + nim + ", Latitude : " + Lat + ", Longitude : " + Lon, Toast.LENGTH_LONG).show();
+
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -198,7 +202,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Add a marker in Sydney and move the camera
 
-        LatLng tempat = new LatLng(Lon, Lat);
+        LatLng tempat = new LatLng(Lat, Lon);
         mMap.addMarker(new MarkerOptions().position(tempat).title("Marker in ITB"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(tempat));
 

@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AnswerActivity extends AppCompatActivity {
-    private String selected;
+    private String selected = "intel";
 
     private JSONObject json;
     static final String Address = "167.205.34.132";
@@ -25,15 +25,13 @@ public class AnswerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-
+        final Spinner spin = (Spinner) findViewById((R.id.spinner));
+        final String selected = String.valueOf(spin.getSelectedItem());
 // Create an ArrayAdapter using the string array and a default spinner layout
 
 //// Specify the layout to use when the list of choices appears
 //        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
-
-        selected = String.valueOf(spinner.getSelectedItem());
     }
 
     public void sendJawab(View view){
@@ -63,24 +61,27 @@ public class AnswerActivity extends AppCompatActivity {
             json = new JSONObject(myClient);
             //membuat objek json(baru) dari string yang didapat
 
-            Toast.makeText(getApplicationContext(), json.toString(), Toast.LENGTH_LONG).show();
-//            if(json.getString("check").equals("1")){
-//                Intent intent2 = new Intent(this, MainActivity.class);
-//
-//                startActivity(intent2);
-//            }else{
-//                Intent intent2 = new Intent(this, MapsActivity.class);
-//
-//                Bundle bun = new Bundle();
-//
-//                bun.putString("EXTRA_TOKEN", json.getString("token"));
-//                bun.putString("NEXT_STATUS", json.getString("status"));
-//                bun.putString("EXTRA_NIM", json.getString("nim"));
-//                bun.putString("EXTRA_LAT", json.getString("latitude"));
-//                bun.putString("EXTRA_LON", json.getString("longitude"));
-//                intent2.putExtra("EXTRA_BUNDEL", bun);
-//                startActivity(intent2);
-//            }
+            if(json.getString("check").equals("1")){
+                Toast.makeText(getApplicationContext(), "Status: " + json.getString("status") + " , Token : " + json.getString("token") + " , NIM : " + json.getString("nim"), Toast.LENGTH_LONG).show();
+                Intent intent2 = new Intent(this, MainActivity.class);
+
+                startActivity(intent2);
+            }else{
+                Toast.makeText(getApplicationContext(), "Status: " + json.getString("status") + " , Token : " + json.getString("token") + " , NIM : " + json.getString("nim"), Toast.LENGTH_LONG).show();
+
+                Toast.makeText(getApplicationContext(), json.toString(), Toast.LENGTH_LONG).show();
+                Intent intent2 = new Intent(this, MapsActivity.class);
+
+                Bundle bun = new Bundle();
+
+                bun.putString("EXTRA_TOKEN", json.getString("token"));
+                bun.putString("NEXT_STATUS", json.getString("status"));
+                bun.putString("EXTRA_NIM", json.getString("nim"));
+                bun.putString("EXTRA_LAT", json.getString("latitude"));
+                bun.putString("EXTRA_LON", json.getString("longitude"));
+                intent2.putExtra("EXTRA_BUNDEL", bun);
+                startActivity(intent2);
+            }
 
         }catch(Exception e){
             e.printStackTrace();

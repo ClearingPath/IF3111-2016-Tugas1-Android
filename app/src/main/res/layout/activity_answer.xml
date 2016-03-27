@@ -15,30 +15,33 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Jawablah~"
         android:id="@+id/textView2"
+        android:layout_marginTop="52dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="72dp" />
+        android:textSize="30dp" />
 
     <Spinner
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:id="@+id/spinner"
+        android:entries="@array/answer_array"
+        android:layout_marginTop="50dp"
         android:layout_below="@+id/textView2"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:entries="@array/answer_array"/>
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="JAWAB!"
         android:id="@+id/button3"
-        android:layout_below="@+id/spinner"
-        android:layout_alignRight="@+id/spinner"
-        android:layout_alignEnd="@+id/spinner"
+        android:onClick="sendJawab"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="sendJawab"/>
+        android:layout_alignRight="@+id/spinner"
+        android:layout_alignEnd="@+id/spinner"
+        android:textSize="20dp" />
 
 </RelativeLayout>
