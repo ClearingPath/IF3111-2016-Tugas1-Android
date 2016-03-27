@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,7 +40,7 @@ public class SocketClient extends AsyncTask<String, String, String> {
     GoogleMap mMap;
     String token, nim, status;
     double latitude, longitude;
-
+    String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
     SocketClient(String message, GoogleMap mMap)
     {
@@ -71,7 +72,7 @@ public class SocketClient extends AsyncTask<String, String, String> {
             {
                 response += (char) c;
             }
-            Log.d("Response dari server", response);
+            Log.d("Response dari server", response + " " + mydate);
 
             if (response != null){
                 publishProgress(response);

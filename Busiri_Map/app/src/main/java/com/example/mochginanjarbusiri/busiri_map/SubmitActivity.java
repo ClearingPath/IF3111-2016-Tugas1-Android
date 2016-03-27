@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -30,6 +32,7 @@ public class SubmitActivity extends AppCompatActivity {
     private String response = "";
     private final String nim = "13513111";
     private String location;
+    String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,8 @@ public class SubmitActivity extends AppCompatActivity {
             answer.put("longitude", this.longitude);
             answer.put("latitude", this.latitude);
             answer.put("token", this.token);
+            Log.d("Mengirim ke Server", answer.toString() + " " + mydate);
+
             this.response = new SocketClient(answer.toString(), mMap).execute().get();
             Toast.makeText(getApplicationContext(), "RESPONSE: " + response, Toast.LENGTH_LONG).show();
             JSONObject json = new JSONObject(response);
@@ -118,7 +123,6 @@ public class SubmitActivity extends AppCompatActivity {
             }
             intent.putExtras(bundle);
             setResult(Activity.RESULT_OK, intent);
-            this.finish();
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

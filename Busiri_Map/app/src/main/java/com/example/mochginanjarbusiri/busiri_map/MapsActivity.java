@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
 
 public class MapsActivity extends AppCompatActivity implements SensorEventListener, OnMapReadyCallback {
@@ -53,6 +54,7 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
     private float[] mR = new float[9];
     private float[] mOrientation = new float[3];
     private float mCurrentDegree = 0f;
+    String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +198,7 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
         try {
             json.put("com", "req_loc");
             json.put("nim", this.nim);
+            Log.d("Mengirim ke Server", json.toString() + " " + mydate);
             this.response = new SocketClient(json.toString(), mMap).execute().get();
             Toast.makeText(getApplicationContext(), "RESPONSE: " + response, Toast.LENGTH_LONG).show();
             JSONObject responseResult = new JSONObject(this.response);
@@ -203,6 +206,7 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
             this.longitude = responseResult.getDouble("longitude");
             this.token = responseResult.getString("token");
             this.status = responseResult.getString("status");
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
