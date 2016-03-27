@@ -77,25 +77,12 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 ```
 ## Spesifikasi Tampilan
 **Tampilan horizontal**
-![alt text](http://i.imgur.com/Q1ZhAvb.png)
+![alt text](http://gitlab.informatika.org/brpu/Tubes1-Android/tree/master/app/Screenshot_2016-03-27-23-33-03.jpeg)
 **Tampilan vertikal**
-![alt text](http://i.imgur.com/L7RnXCm.png)
+![alt text](http://gitlab.informatika.org/brpu/Tubes1-Android/tree/master/app/Screenshot_2016-03-28-00-06-37.jpeg)
 **Tampilan *submit* jawaban**
-![alt text](http://i.imgur.com/TlaiEs9.png)
-## Deliverables
-
-Silahkan ikuti langkah pengumpulan berikut :
-
-- Lakukan **fork** terhadap repository ini.
-- Edit file readme ini semenarik mungkin (gunakan panduan [Markdown] langguage), diperbolehkan untuk merubah struktur dari readme ini. (Soal tidak perlu dipertahankan).
-- Pada Readme terdapat tampilan aplikasi.
-- Cantumkan lokasi *source code* dan *binary* dari aplikasi pada Readme.
-
-## Deadline
-Deadline pull request terakhir (termasuk commit) adalah 27 Maret 2016 pukul 23.55. 
-
-
-## Keterangan Tambahan
-Bila ada pertanyaan, mengenai tugas ini silahkan lakukan melalui milis IF3111.
-
-[Markdown]: <http://dillinger.io/>
+![alt text](http://gitlab.informatika.org/brpu/Tubes1-Android/tree/master/app/Screenshot_2016-03-27-23-33-15.jpeg)
+## Source Code
+Source code terletak di app\src\main
+## Binary
+Binary terletak di app\bin
