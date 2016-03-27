@@ -42,7 +42,7 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
     private String token;
     private String status;
     private String response = "";
-    private String nim = "13513111";
+    private String nim = "13513041";
     private ImageView icon_compass;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -259,7 +259,7 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
     {
             double lat = result.getDouble("latitude");
             double longit = result.getDouble("longitude");
-            LatLng itb = new LatLng(longit, lat);
+            LatLng itb = new LatLng(lat, longit);
             mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(itb, 20.0f));

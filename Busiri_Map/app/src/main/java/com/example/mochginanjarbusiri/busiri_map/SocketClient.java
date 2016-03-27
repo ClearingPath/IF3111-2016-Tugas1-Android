@@ -32,8 +32,8 @@ import org.json.JSONObject;
  * Created by Moch Ginanjar Busiri on 3/24/2016.
  */
 public class SocketClient extends AsyncTask<String, String, String> {
-    String address = "api.nitho.me";
-    int port = 8080;
+    String address = "167.205.34.132";
+    int port = 3111;
     String response = "";
     String message;
     private boolean success;

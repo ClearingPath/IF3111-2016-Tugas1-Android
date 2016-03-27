@@ -31,7 +31,7 @@ public class SubmitActivity extends AppCompatActivity {
     private double latitude, longitude;
     private String token;
     private String response = "";
-    private final String nim = "13513111";
+    private final String nim = "13513041";
     private String location;
     String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
