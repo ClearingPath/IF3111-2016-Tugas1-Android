@@ -21,12 +21,12 @@ Halaman ini akan terbuka ketika ingin mengirim jawaban pada server setelah lewat
 #### Halaman Peta
 Halaman ini berisi peta dan 2 tombol untuk memanggil kamera serta menampilkan halaman jawaban
 
-![Peta](screenshot/Answer.png "Laman Peta")
+![Peta](screenshot/Peta.png "Laman Peta")
 
 
 #### Toast!
 Akan muncul sebuah toast ketika server mengembalikan berbagai nilai
-![Toast](screenshot/Answer.png "Laman Utama dengan Toast")
+![Toast](screenshot/Toast.png "Laman Utama dengan Toast")
 
 ### Fitur
 
