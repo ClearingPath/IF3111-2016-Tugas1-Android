@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="serverasisten_ip">167.205.34.132</string> <!--untuk testing manual pakai netcat, gunakan IP server netcat-->
+    <integer name="serverasisten_port">3111</integer>
+    <string name="serverasisten_nim">13512501</string>
+</resources>
