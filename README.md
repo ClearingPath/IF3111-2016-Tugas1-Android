@@ -60,14 +60,17 @@ Jika jawaban **salah**, maka:
 ```sh
 {“status”:”wrong_answer”,”nim”:”13513024”,”token”:”124fewfm32r32ifmwder42”}
 ```
-Jika jawaban **benar dan sudah berada dilokasi ketiga**, maka:
+Jika jawaban **benar dan sudah berada di lokasi ketiga**, maka:
 ```sh
 {“status”:”finish”,”nim”:”13513024”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
 ```
 ## Spesifikasi Tampilan
 **Tampilan peta**
+
 ![alt text](http://i.imgur.com/igpBp8P.jpg)
+
 **Tampilan *submit* jawaban**
+
 ![alt text](http://i.imgur.com/KwgM7cd.jpg)
 
 ## Lokasi Source Code
