@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
@@ -121,7 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void updateTargetLatLng(LatLng latLng){
         targetLatLng = latLng;
         updateMarkers();
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(targetLatLng));
+        updateCamera();
     }
 
     //http://stackoverflow.com/questions/3932502/calcute-angle-between-two-latitude-longitude-points
@@ -157,6 +159,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             arrowImageView.invalidate();
             //TODO
         }
+    }
+
+    public void updateCamera(){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(targetLatLng);
+        if (currentLatLng!=null)
+            builder.include(currentLatLng);
+        LatLngBounds bounds = builder.build();
+
+        int padding=12;
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(cu);
     }
 
     Toast toast;
@@ -216,12 +230,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     /** Create a file Uri for saving an image or video */
-    private static Uri getOutputMediaFileUri(int type){
+    private Uri getOutputMediaFileUri(int type){
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
     /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
+    private File getOutputMediaFile(int type){
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
@@ -242,7 +256,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE){
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
+                    "IMG_"+ timeStamp + "_"+serverasistenNim+"_"+targetLatLng.latitude+"_"+targetLatLng.longitude+".jpg");
         } else {
             return null;
         }
@@ -256,6 +270,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentLatLng = new LatLng(location.getLatitude(),
                 location.getLongitude());
         updateMarkers();
+        updateCamera();
     }
 
     @Override
@@ -265,13 +280,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onProviderEnabled(String provider) {
-        notifyUser("location provider enabled",Toast.LENGTH_SHORT);
+        notifyUser("location provider enabled", Toast.LENGTH_SHORT);
         //TODO
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        notifyUser("location provider disabled. please enable GPS or other location providers",Toast.LENGTH_SHORT);
+        notifyUser("location provider disabled. please enable GPS or other location providers", Toast.LENGTH_SHORT);
         //TODO
     }
 }
