@@ -21,9 +21,6 @@ Aplikasi ini adalah aplikasi yang dapat menampilkan peta, mengirim dan menerima 
 #### Jika Selesai
 ![alt text](http://i.imgur.com/qFnnVBg.jpg)
 
-### Kamera
-![alt text](http://i.imgur.com/Ap64NR5.png)
-
 ## File Location
 ### bin
 \app\build\outputs\apk
