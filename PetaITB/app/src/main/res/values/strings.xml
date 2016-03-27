@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Peta ITB</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="submit_answer">Submit Answer</string>
+    <string name="submit">SUBMIT</string>
+    <string name="location">Location Name :</string>
+    <string-array name="location_array">
+        <item>GKU Barat</item>
+        <item>GKU Timur</item>
+        <item>Intel</item>
+        <item>CC Barat</item>
+        <item>CC Timur</item>
+        <item>DPR</item>
+        <item>Oktagon</item>
+        <item>Perpustakaan</item>
+        <item>PAU</item>
+        <item>Kubus</item>
+    </string-array>
+    <string name="log">Log</string>
+
+
+</resources>
