@@ -2,6 +2,8 @@ package rp.bayu.dimana;
 
 /**
  * Created by User on 3/26/2016.
+ * from http://www.ymc.ch/en/smooth-true-north-compass-values
+ * by Nils Kübler
  */
 public class AverageAngle
 {

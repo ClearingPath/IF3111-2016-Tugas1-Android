@@ -2,6 +2,7 @@ package rp.bayu.dimana;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -9,7 +10,9 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -35,16 +38,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     static final int REQUEST_TAKE_PHOTO = 1;
     private String mCurrentPhotoPath;
     private float lastAngle = 0;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        int[] img_coordinates = new int[2];
+        sharedPref = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        if(!sharedPref.getString("status","").equals("")) {
+            new AlertDialog.Builder(this)
+                    .setTitle(sharedPref.getString("status", "Error"))
+                    .setMessage("")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+        new AlertDialog.Builder(this)
+                .setTitle("Location")
+                .setMessage("Marked " + sharedPref.getFloat("latitude", 0) + " " + sharedPref.getFloat("longitude", 0))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
         compass = (ImageView) findViewById(R.id.arrow);
-        compass.getLocationOnScreen(img_coordinates);
-        compass.setPivotX(img_coordinates[0] + compass.getWidth());
-        compass.setPivotY(img_coordinates[1] + compass.getHeight());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync((OnMapReadyCallback) this);
@@ -57,9 +80,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         // Add a marker in Sydney, Australia, and move the camera.
-        LatLng itb = new LatLng(-6.8915, 107.6107);
-        mMap.addMarker(new MarkerOptions().position(itb).title("ITB"));
+        LatLng itb = new LatLng(sharedPref.getFloat("latitude", (float) -6.8915), sharedPref.getFloat("longitude", (float) 107.6107));
+        mMap.addMarker(new MarkerOptions().position(itb).title("Destination"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
     }
 
 /*
@@ -146,7 +170,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .setMessage("File creation failed.")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // continue with delete
+
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -157,6 +181,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                galleryAddPic();
             }
         }
 
@@ -172,16 +197,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_" + ".jpg";
+        String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = new File(storageDir,  imageFileName);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
     }
 
-    public void submitAnswer(View view) {
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
 
+    public void submitAnswer(View view) {
+        Intent intent = new Intent(this, SubmitAnswer.class);
+        startActivity(intent);
     }
 
     @Override
@@ -201,9 +239,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onBearingChanged(double bearing)
     {
+        Display display = getWindowManager().getDefaultDisplay();
+        int deviceRot = display.getRotation();
+
+        float current = (float)-bearing;
+        float last = lastAngle;
+
+        switch (deviceRot) {
+            case Surface.ROTATION_90: current -= 90; last -= 90; break;
+            case Surface.ROTATION_270: current -= 270; last -= 270; break;
+            default: break;
+        }
         RotateAnimation ra = new RotateAnimation(
-                lastAngle,
-                (float)-bearing,
+                last,
+                current,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f);

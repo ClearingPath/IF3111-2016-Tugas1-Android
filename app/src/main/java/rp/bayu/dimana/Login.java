@@ -1,7 +1,9 @@
 package rp.bayu.dimana;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,12 +15,19 @@ public class Login extends AppCompatActivity {
 
     private SharedPreferences myPrefs;
     private SharedPreferences.Editor prefEditor;
+    private EditText tNIM, tAddr, tPort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         myPrefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        tNIM = (EditText) findViewById(R.id.nim);
+        tNIM.setText("13513046");
+        tAddr = (EditText) findViewById(R.id.address);
+        tAddr.setText("167.205.24.132");
+        tPort = (EditText) findViewById(R.id.port);
+        tPort.setText("8080");
     }
 
     @Override
@@ -45,11 +54,17 @@ public class Login extends AppCompatActivity {
 
     public void saveNIM(View view) {
         Intent intent = new Intent(this, MapsActivity.class);
-        EditText editText = (EditText) findViewById(R.id.nim);
-        String nim = editText.getText().toString();
+        String nim = tNIM.getText().toString();
+        String response = null;
+        String address = tAddr.getText().toString();
+        int port = Integer.parseInt(tPort.getText().toString());
         prefEditor = myPrefs.edit();
-        prefEditor.putString("NIM",nim);
+        prefEditor.putString("nim", nim);
+        prefEditor.putString("address", address);
+        prefEditor.putInt("port", port);
         prefEditor.apply();
+        Communicator comm = new Communicator(response, "first", this);
+        comm.execute();
         startActivity(intent);
     }
 }
