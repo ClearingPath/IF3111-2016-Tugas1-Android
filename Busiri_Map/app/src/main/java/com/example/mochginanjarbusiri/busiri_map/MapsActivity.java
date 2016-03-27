@@ -68,15 +68,18 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
 
         if (savedInstanceState != null)
         {
-            token = savedInstanceState.getString("token", token);
-            latitude = savedInstanceState.getDouble("latitude", latitude);
-            longitude = savedInstanceState.getDouble("longitude", longitude);
-            status = savedInstanceState.getString("status", status);
+            token = savedInstanceState.getString("token");
+            latitude = savedInstanceState.getDouble("latitude");
+            longitude = savedInstanceState.getDouble("longitude");
+            status = savedInstanceState.getString("status");
             harusSend = false;
             data = savedInstanceState;
         }
         else
+        {
             harusSend = true;
+        }
+
 
 
 
@@ -96,7 +99,6 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SubmitActivity.class);
-                startActivity(intent);
                 Bundle bundle = new Bundle();
                 bundle.putDouble("longitude", longitude);
                 bundle.putDouble("latitude", latitude);
@@ -230,8 +232,12 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
             this.response = new SocketClient(json.toString(), mMap).execute().get();
             Toast.makeText(getApplicationContext(), "RESPONSE: " + response, Toast.LENGTH_LONG).show();
             JSONObject responseResult = new JSONObject(this.response);
-            this.latitude = responseResult.getDouble("latitude");
-            this.longitude = responseResult.getDouble("longitude");
+            if (responseResult.has("latitude"))
+                this.latitude = responseResult.getDouble("latitude");
+
+            if (responseResult.has("longitude"))
+                this.longitude = responseResult.getDouble("longitude");
+
             this.token = responseResult.getString("token");
             this.status = responseResult.getString("status");
 
@@ -246,8 +252,8 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
 
     public void Marker(Bundle result)
     {
-            double lat = result.getDouble("latitude", latitude);
-            double longit = result.getDouble("longitude", longitude);
+            double lat = result.getDouble("latitude");
+            double longit = result.getDouble("longitude");
             LatLng itb = new LatLng(longit, lat);
             mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));

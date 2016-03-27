@@ -78,7 +78,7 @@ public class SubmitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendAnswer();
-                finish();
+                //finish();
             }
         });
         Intent intent = getIntent();
@@ -126,6 +126,7 @@ public class SubmitActivity extends AppCompatActivity {
             }
             intent.putExtras(bundle);
             setResult(Activity.RESULT_OK, intent);
+            finish();
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
