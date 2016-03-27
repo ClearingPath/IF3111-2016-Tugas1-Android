@@ -5,8 +5,8 @@
   <string name="title_activity_record">Challenge Record</string>
   <string name="title_activity_answer">Submit Answer</string>
   <string name="location_permission_denied"><![CDATA[>This sample requires location permission to enable the \\\'my location\\\' layer. Please try again and grant access to use the location.\\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \\\'Google Maps API Demos\\\'.]]></string>
-  <string name="permission_required_toast">Location permission is required for this demo.</string>
-  <string name="permission_rationale_location">Access to the location service is required to demonstrate the \\\'my location\\\' feature, which shows your current location on the map.</string>
+  <string name="permission_required_toast">Location permission is required</string>
+  <string name="permission_rationale_location">Access to the location service is required to shows your current location on the map.</string>
   <string-array name="location_list">
     <item>GKU Barat</item>
     <item>GKU Timur</item>
@@ -14,7 +14,7 @@
     <item>CC Barat</item>
     <item>CC Timur</item>
     <item>DPR</item>
-    <item>Sunken</item>
+    <item>Oktagon</item>
     <item>Perpustakaan</item>
     <item>PAU</item>
     <item>Kubus</item>

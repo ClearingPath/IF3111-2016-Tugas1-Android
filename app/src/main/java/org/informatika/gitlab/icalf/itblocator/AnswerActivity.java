@@ -40,7 +40,7 @@ public class AnswerActivity extends AppCompatActivity {
 
   public void submitLocation(View view) {
     String[] locationList =
-            {"gku_barat", "gku_timur", "intel", "cc_barat", "cc_timur", "dpr", "sunken", "perpustakaan", "pau", "kubus"};
+            {"gku_barat", "gku_timur", "intel", "cc_barat", "cc_timur", "dpr", "oktagon", "perpustakaan", "pau", "kubus"};
     Spinner spinnerLocation = (Spinner) findViewById(R.id.spinner_location);
     String choice = locationList[spinnerLocation.getSelectedItemPosition()];
     String responseJSON = "";
