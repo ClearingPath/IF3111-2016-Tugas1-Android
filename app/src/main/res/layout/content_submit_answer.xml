@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/label_location_name"
@@ -33,7 +33,7 @@
             android:id="@+id/spinner" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_submit"
             android:id="@+id/buttonSubmit"
