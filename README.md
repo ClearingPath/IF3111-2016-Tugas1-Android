@@ -1,101 +1,67 @@
-# Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
+# ITB Locator
 
-## Latar Belakang
+ITB Locator adalah game mobile yang mudah, ringan, dan menyenangkan. Dengan game ini kalian dapat mengetes pengetahuan kalian tentang tempat-tempat di ITB.
 
-Dalam tugas ini, peserta diminta untuk menemukan beberapa tempat di lingkungan ITB dengan bantuan tools yang dibangun di atas platform Android. Aplikasi tersebut dapat memandu peserta dengan menampilkan peta (Google Maps) dan arah tujuannya. Peserta diminta menemukan 3 lokasi (akan diberikan dari server). Pada setiap lokasi peserta akan diminta untuk foto-diri di lokasinya dan mengirimkan nama lokasi tempat peserta berada. 
+Ada beberapa fitur yang akan kalian dapatkan di game ini :
+  - Pertanyaan berupa lokasi dalam Google Maps
+  - Ada juga kompas yang memudahkan kalian mencari mata angin jika belum kenal tempat-tempat di ITB
+  - GPS sensor yang menunjukkan lokasi kalian
+  - Fitur **capture** untuk mengambil gambar dari tempat yang ditanyakan agar selalu ingat
+  - Hasil jawaban yang dapat ditampilkan seketika dengan notifikasi **toast**
 
-Daftar kemungkinan jawaban lokasi diberikan oleh asisten. Pastikan anda tidak typo saat mengirimkan jawaban ke server. 
+Untuk saat ini game hanya dapat dimainkan di smartphone Android. Untuk versi iOS dan Windows Phone akan segera menyusul.
 
-Daftar kemungkinan jawaban lokasi adalah
+![PlayStore](https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png)
 
-* gku_barat
-* gku_timur
-* intel
-* cc_barat
-* cc_timur
-* dpr
-* sunken
-* perpustakaan
-* pau
-* kubus
+### Tampilan
+![GitHub Logo](/images/main.png)
+Tampilan saat portrait
+![GitHub Logo](/images/main_land.png)
+Tampilan saat landscape
+![GitHub Logo](/images/ans.png)
+Laman untuk menjawab
+![GitHub Logo](/images/wrong.png)
+Ups! Jawaban salah
 
-Sever uji coba akan disediakan pada 167.205.24.132 akan dapat diuji coba mulai tanggal 21 Maret 2016 Pukul 07.00.
-Prosedur uji coba akan dibertahukan lebih lanjut.
+### Struktur Direktori
+- *app/src/main/java/org/informatika/gitlab/icalf/itblocator* : kode sumber
+- *app/build* : hasil kompilasi
+- *app/src/main/res* : aset dan layout
 
-## Spesifikasi Aplikasi
+### Log Pertukaran Pesan
+Diakibatkan kurang menahunya pembuat saya sebagai pembuat aplikasi atas ketiga tempat yang sama, maka hanya ada log respon pertanyaan kedua dan ketiga.
 
-Spesifikasi dari aplikasi yang dibangun sebagai berikut
-
-* Aplikasi mampu menerima pesan dari server dengan format JSON berisi lokasi dan token.
-* Aplikasi mampu mengolah data berupa location point (longitude, latitude) dan menampilkan indicator pada peta lokasi yang dimaksud. Peta lokasi menggunakan Google Map API. (Tampilan silahkan lihat Spesifikasi Tampilan).
-* Terdapat sebuah panah navigasi yang berada diatas peta (letak bebas), yang menunjukan arah utara. Anda diminta menggunakan sensor yang ada pada android API (Tampilan silahkan lihat Spesifikasi Tampilan).
-* Aplikasi mampu mengirim intent kamera.
-* Aplikasi mampu mengambil gambar melalui kamera. Gambar tidak perlu diunggah ke server (silakan lihat spesifikasi tanya jawab asisten)
-* Aplikasi mampu mengirimkan pesan ke sever dengan format JSON berisi lokasi (longitude, latitude), nim serta token.
-* Pastikan SDK anda mendukung pengerjaan tugas ini.
-* Perhatikan tata letak tombol. Ketika orientasi layar portrait, tombol berada pada bawah layar. Ketika landscape, tombol berada pada samping kanan layar (lihat contoh tampilan seperti pada mock-up spesifikasi tampilan). Anda dapat menggunakan fragment untuk masalah ini.
-* Tampilan warna, font, style tidak dinilai. Namun tata letak tombol akan dinilai.
-* Hasil reply dari server harus ditampilkan dalam bentuk *toast* atau *alert dialog* (pilih satu).
-* Ketika anda menggunakan activity yang memanggil sensor, sensor tersebut harus dilepas ketika anda berpindah activity agar tidak boros baterai.
-
-## Spesifikasi Tanya-Jawab oleh Asisten
-Pada akhir eksplorasi lokasi oleh peserta, akan ada tanya-jawab dengan asisten. Anda juga diminta memberikan hasil foto yang anda dapat (tidak perlu lewat aplikasi yang dibuat pada tugas ini, dapat melalui gallery bawaan android anda). Asisten akan melakukan cross-check dengan data yang anda kirimkan.
-
-
-## Spesifikasi Pertukaran Pesan
-Keterangan : *Client* pada dokumen ini adalah aplikasi Anda dan *Server* merupakan server milik asisten.
-### Request Location
-Permintaan lokasi (pertama).
-
-**Client Request**
-```sh
-{“com”:”req_loc”,”nim”:”13512999”}
+Request awal
+```json
+{"com":"req_loc","nim":"13513004"}
 ```
-**Server Response** 
-```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
+
+Respon pertanyaan kedua
+```json
+{"nim":"13513004","latitude":107.610359,"status":"ok","longitude":-6.890356,"token":"0b50d5f1d422dfb6d44d754cba947acf"}
 ```
-### Send Answer
-Mengirimkan jawaban dan menerima lokasi berikutnya
 
-**Client Request**
-```sh
-{“com”:”answer”,”nim”:”13512999”,”answer”:”labtek_v”, ”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
+Jawaban untuk pertanyaan ketiga
+```json
+{"com":"answer","nim":"13513004","latitude":107.610359,"answer":"intel","longitude":-6.890356,"token":"0b50d5f1d422dfb6d44d754cba947acf"}
 ```
-**Server Response**
-Jika jawaban Anda **benar**, maka:
-```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:”8.13215123214”,”latitude”:”9.1234123412”,”token”:”124fewfm32r32ifmwder42”}
+
+Respon pertanyaan ketiga
+```json
+{"nim":"13513004","check":1,"status":"finish","token":"d8df89f8a7116da09d8195a24c4e20c5"}
 ```
-Jika jawaban Anda **salah**, maka:
-```sh
-{“status”:”wrong_answer”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”}
-```
-Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
-```sh
-{“status”:”finish”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
-```
-## Spesifikasi Tampilan
-**Tampilan horizontal**
-![alt text](http://i.imgur.com/Q1ZhAvb.png)
-**Tampilan vertikal**
-![alt text](http://i.imgur.com/L7RnXCm.png)
-**Tampilan *submit* jawaban**
-![alt text](http://i.imgur.com/TlaiEs9.png)
-## Deliverables
 
-Silahkan ikuti langkah pengumpulan berikut :
+### Third-party
+Beberapa kode disadur dari [tutorial Google Maps API](https://github.com/googlemaps/android-samples/tree/master/ApiDemos/) yang disediakan di repo milik Google.
 
-- Lakukan **fork** terhadap repository ini.
-- Edit file readme ini semenarik mungkin (gunakan panduan [Markdown] langguage), diperbolehkan untuk merubah struktur dari readme ini. (Soal tidak perlu dipertahankan).
-- Pada Readme terdapat tampilan aplikasi.
-- Cantumkan lokasi *source code* dan *binary* dari aplikasi pada Readme.
+### Todos
+ - Mengubah operasi komunikasi dengan server dalam *Async Task*
+ - Menambahkan detil peta dalam aplikasi seperti *street view* dan lainnya
 
-## Deadline
-Deadline pull request terakhir (termasuk commit) adalah 27 Maret 2016 pukul 23.55. 
+License
+----
 
+2016 ISC license
+@icalF
 
-## Keterangan Tambahan
-Bila ada pertanyaan, mengenai tugas ini silahkan lakukan melalui milis IF3111.
-
-[Markdown]: <http://dillinger.io/>
+**Fully open source**
