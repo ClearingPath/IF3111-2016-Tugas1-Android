@@ -144,7 +144,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             //untuk arah panah
             float r = - (float) angleFromCoordinate(currentLatLng.latitude,currentLatLng.longitude,targetLatLng.latitude,targetLatLng.longitude);
-            System.out.println(">>>>>>>>>>>>>>ROTATE "+r+"<<<<<<<<<<<<<<");
             ImageView arrowImageView = (ImageView) findViewById(R.id.arrow);
             arrowImageView.setRotation(r);
             arrowImageView.invalidate();

@@ -45,7 +45,7 @@ public class ServerAsistenClient implements ServerAsistenClientAsyncTaskCallback
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ServerAsistenClientAsyncTask serverAsistenClientAsyncTask = new ServerAsistenClientAsyncTask(dstAddress,dstPort,jsonObject.toString(),
+        ServerAsistenClientAsyncTask serverAsistenClientAsyncTask = new ServerAsistenClientAsyncTask(dstAddress,dstPort,jsonObject.toString()+"\n\r",
                 this,this);
         serverAsistenClientAsyncTask.execute();
     }
@@ -67,7 +67,7 @@ public class ServerAsistenClient implements ServerAsistenClientAsyncTaskCallback
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ServerAsistenClientAsyncTask serverAsistenClientAsyncTask = new ServerAsistenClientAsyncTask(dstAddress,dstPort,jsonObject.toString(),this,this);
+        ServerAsistenClientAsyncTask serverAsistenClientAsyncTask = new ServerAsistenClientAsyncTask(dstAddress,dstPort,jsonObject.toString()+"\n\r",this,this);
         serverAsistenClientAsyncTask.execute();
     }
 
@@ -85,10 +85,10 @@ public class ServerAsistenClient implements ServerAsistenClientAsyncTaskCallback
 
         if (response.isEmpty()){ //TRY AGAIN
             socket = null;
-            if (last_op==LAST_OP_FIRST_REQUEST)
-                doFirstRequest(last_nim);
-            else
+            doFirstRequest(last_nim);
+            if (last_op != LAST_OP_FIRST_REQUEST) {
                 submitAnswer(last_nim,last_answer,last_latLng);
+            }
             return;
         }
 

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -44,29 +45,29 @@ public class ServerAsistenClientAsyncTask extends AsyncTask<Void, Void, Void> {
 
         try {
             socket = serverAsistenClientAsyncTaskSocketStore.getSocket();
-            if (socket==null) socket = new Socket(dstAddress, dstPort);
-            else if (socket.isClosed() || !socket.isConnected())
+            if (socket==null) {
                 socket = new Socket(dstAddress, dstPort);
+            }else if (socket.isClosed() || !socket.isConnected()) {
+                socket = new Socket(dstAddress, dstPort);
+            }
 
             OutputStream socketOutputStream = socket.getOutputStream();
             PrintStream socketPrintStream = new PrintStream(socketOutputStream);
+            System.out.flush();
             socketPrintStream.print(request);
             socketPrintStream.flush();
 
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(
-                    1024);
-            byte[] buffer = new byte[1024];
-
-            int bytesRead;
             InputStream inputStream = socket.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+
+            int buffer;
 
          /*
           * notice: inputStream.read() will block if no data return
           */
             boolean continueReading = true;
-            while (continueReading && (bytesRead = inputStream.read(buffer)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, bytesRead);
-                response += byteArrayOutputStream.toString("UTF-8");
+            while (continueReading && (buffer = inputStreamReader.read()) != -1) {
+                response += (char) buffer;
                 try{
                     responseJSONObject = new JSONObject(response);
                     continueReading = false;
