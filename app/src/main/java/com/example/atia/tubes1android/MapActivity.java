@@ -14,6 +14,8 @@ import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
@@ -58,8 +60,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static GoogleMap mMap;
     private boolean first = true;
     public static final int SERVERPORT = 3111;
-//    private static final String ServerIP = "167.205.34.132";
-    public static final String ServerIP = "192.168.1.9";
+    private static final String ServerIP = "167.205.34.132";
+//    public static final String ServerIP = "192.168.1.9";
     private static String token;
     private static double lat;
     private static double lng;
@@ -185,13 +187,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onSensorChanged(SensorEvent event) {
         float degree = Math.round(event.values[0]);
-
-        RotateAnimation ra = new RotateAnimation(curDegree, -degree, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        ra.setDuration(210);
-        ra.setFillAfter(true);
-        compassImage.startAnimation(ra);
         curDegree = -degree;
-
+        compassImage.setRotation(curDegree);
     }
 
     @Override
@@ -270,7 +267,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 DataInputStream in = new DataInputStream(is);
                 response = in.readUTF();
 
-                
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(MapActivity.this, response, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
                 socket.close();
 

@@ -3,10 +3,13 @@ package com.example.atia.tubes1android;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -24,12 +27,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class SubmitActivity extends AppCompatActivity {
+public class SubmitActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private double lat;
     private double lng;
     private String token;
     private String response;
+    private String answerstr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class SubmitActivity extends AppCompatActivity {
                 R.array.loc_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         final Button submitButton = (Button) findViewById(R.id.submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +66,47 @@ public class SubmitActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                answerstr = "gku_barat";
+                break;
+            case 1:
+                answerstr = "gku_timur";
+                break;
+            case 2:
+                answerstr = "intel";
+                break;
+            case 3:
+                answerstr = "cc_barat";
+                break;
+            case 4:
+                answerstr = "cc_timur";
+                break;
+            case 5:
+                answerstr = "dpr";
+                break;
+            case 6:
+                answerstr = "oktagon";
+                break;
+            case 7:
+                answerstr = "perpustakaan";
+                break;
+            case 8:
+                answerstr = "pau";
+                break;
+            case 9:
+                answerstr = "kubus";
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     private class SubmitLocation extends AsyncTask<String, Void, String> {
 
         @Override
@@ -69,7 +115,7 @@ public class SubmitActivity extends AppCompatActivity {
                 JSONObject obj = new JSONObject();
                 obj.put("com", "answer");
                 obj.put("nim", "13512017");
-                obj.put("answer", answer[0]);
+                obj.put("answer", answerstr);
                 obj.put("longitude", lng);
                 obj.put("latitude", lat);
                 obj.put("token", token);
@@ -87,6 +133,12 @@ public class SubmitActivity extends AppCompatActivity {
                 response = in.readUTF();
 
                 Log.i("log", "Server Response: " + response);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(SubmitActivity.this, response, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
                 socket.close();
 
