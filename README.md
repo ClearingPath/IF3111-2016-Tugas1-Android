@@ -14,13 +14,16 @@ Untuk saat ini game hanya dapat dimainkan di smartphone Android. Untuk versi iOS
 ![PlayStore](https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png)
 
 ### Tampilan
-![GitHub Logo](/images/main.png)
+![Portrait](/images/main.png)
 Tampilan saat portrait
-![GitHub Logo](/images/main_land.png)
+
+![Landscape](/images/main_land.png)
 Tampilan saat landscape
-![GitHub Logo](/images/ans.png)
+
+![Answer](/images/ans.png)
 Laman untuk menjawab
-![GitHub Logo](/images/wrong.png)
+
+![Wrong](/images/wrong.png)
 Ups! Jawaban salah
 
 ### Struktur Direktori
@@ -61,5 +64,5 @@ Beberapa kode disadur dari [tutorial Google Maps API](https://github.com/googlem
 License
 ----
 
-2016 ISC license
-@icalF
+ISC license
+Copyright (c) 2016, Afrizal Fikri([@icalF](github.com/icalF))
