@@ -63,5 +63,3 @@ License
 
 2016 ISC license
 @icalF
-
-**Fully open source**
