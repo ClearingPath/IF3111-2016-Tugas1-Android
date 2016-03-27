@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -115,6 +116,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(targetLatLng));
     }
 
+    //http://stackoverflow.com/questions/3932502/calcute-angle-between-two-latitude-longitude-points
+    private double angleFromCoordinate(double lat1, double long1, double lat2,
+                                       double long2) {
+
+        double dLon = (long2 - long1);
+
+        double y = Math.sin(dLon) * Math.cos(lat2);
+        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
+                * Math.cos(lat2) * Math.cos(dLon);
+
+        double brng = Math.atan2(y, x);
+
+        brng = Math.toDegrees(brng);
+        brng = (brng + 360) % 360;
+        brng = 360 - brng;
+
+        return brng;
+    }
+
+
     public void updateMarkers(){
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(targetLatLng).title("target"));
@@ -122,8 +143,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(300)).position(currentLatLng).title("your location"));
 
             //untuk arah panah
-            double r = Math.atan2(targetLatLng.latitude - currentLatLng.latitude,
-                    targetLatLng.longitude - currentLatLng.longitude);
+            float r = - (float) angleFromCoordinate(currentLatLng.latitude,currentLatLng.longitude,targetLatLng.latitude,targetLatLng.longitude);
+            System.out.println(">>>>>>>>>>>>>>ROTATE "+r+"<<<<<<<<<<<<<<");
+            ImageView arrowImageView = (ImageView) findViewById(R.id.arrow);
+            arrowImageView.setRotation(r);
+            arrowImageView.invalidate();
             //TODO
         }
     }
@@ -140,7 +164,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void submitAnswer(View view){
         Intent intent = new Intent(this,SubmitAnswerActivity.class);
-        startActivityForResult(intent,SUBMIT_ACTIVITY_REQUEST_CODE);
+        startActivityForResult(intent, SUBMIT_ACTIVITY_REQUEST_CODE);
     }
 
     public void camera(View view){
