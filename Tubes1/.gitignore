@@ -1,5 +1,2 @@
-*.iml
-.gradle
 /.idea/workspace.xml
 /.idea/libraries
-/captures
