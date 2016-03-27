@@ -61,7 +61,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+            Log.d("in","on create");
 //        mark.remove();
 //        mark = mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
         req_loc = new JSONObject();
@@ -168,13 +168,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void toSubmit(View view){
         Intent intent = new Intent(this,Submit.class);
-
         intent.putExtra("longitude", currLong);
         Log.d("currLong", currLong);
         Log.d("currLat",currLat);
         intent.putExtra("latitude", currLat);
         intent.putExtra("token", token);
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
 
     public void toCamera(View view){
@@ -241,8 +240,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         Toast t = Toast.makeText(this,result.toString(), Toast.LENGTH_LONG);
         t.show();
-        double lat = Double.parseDouble(latitude);
-        double longi = Double.parseDouble(longitude);
+        double longi = Double.parseDouble(latitude);
+        double lat = Double.parseDouble(longitude);
         LatLng latlongi = new LatLng(lat,longi);
         mark = mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 
@@ -252,28 +251,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        String status = null;
+        Log.d("after","Submit");
         if (requestCode == 1) {
             String nextLong="";
             String nextLat="";
             if(resultCode == Activity.RESULT_OK){
-
-                nextLong=data.getStringExtra("nextLong");
-                nextLat=data.getStringExtra("nextLat");
+                status = data.getStringExtra("status");
+                if (status.equals("ok")){
+                    nextLong=data.getStringExtra("nextLong");
+                    nextLat=data.getStringExtra("nextLat");
+                    longitude = nextLong;
+                    latitude = nextLat;
+                }
                 String tokenn=data.getStringExtra("token");
-                longitude = nextLong;
-                latitude = nextLat;
                 token = tokenn;
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
             }
+            if (status.equals("ok")){
+                double lat = Double.parseDouble(nextLong);
+                double longi = Double.parseDouble(nextLat);
+                LatLng latlongi = new LatLng(lat,longi);
+                Log.d("its", "ok");
+                mark.remove();
+                mark = mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+            }
+            else{
+                Log.d("its", "finish");
+                mark.remove();
+            }
 
-            double longi = Double.parseDouble(nextLong);
-            double lat = Double.parseDouble(nextLat);
-            LatLng latlongi = new LatLng(lat,longi);
-            mark.remove();
-            mark = mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+
         }
     }//onActivityResult
 

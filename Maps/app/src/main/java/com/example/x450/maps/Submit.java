@@ -73,11 +73,9 @@ public class Submit extends AppCompatActivity implements AdapterView.OnItemSelec
         String token = null;
         this.result = result;
         Log.d("SubmitResResult ",result.toString());
-
-
         try {
             status = result.getString("status");
-            if(status == "finish"){
+            if(status.equals("finish") || status.equals("wrong_answer")){
                 token = result.getString("token");
             }
             else{
@@ -85,7 +83,6 @@ public class Submit extends AppCompatActivity implements AdapterView.OnItemSelec
                 nextLat = result.getString("latitude");
                 token = result.getString("token");
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -100,15 +97,17 @@ public class Submit extends AppCompatActivity implements AdapterView.OnItemSelec
             t.show();
             Intent intent = new Intent(this, MapsActivity.class);
             intent.putExtra("status", status);
-            intent.putExtra("nextLong", nextLong);
-            intent.putExtra("nextLat", nextLat);
+            if (status.equals("ok")){
+                intent.putExtra("nextLong", nextLong);
+                intent.putExtra("nextLat", nextLat);
+            }
             intent.putExtra("token", token);
             setResult(Activity.RESULT_OK, intent);
+            Log.d("move", "to map");
+//            startActivityForResult(intent,1);
             finish();
+
         }
-
-
-
     }
 
     public void onSubmit(View view) throws JSONException {
@@ -123,8 +122,5 @@ public class Submit extends AppCompatActivity implements AdapterView.OnItemSelec
         Log.d("tempJson", tempJson.toString());
 
         new AsyncAction(this,this).execute(tempJson.toString());
-
-
-
     }
 }
