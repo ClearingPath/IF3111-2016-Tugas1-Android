@@ -105,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
 
-        locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this); //TODO adakan nyala/mati saat resume/pause
         locMgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
     }
 
