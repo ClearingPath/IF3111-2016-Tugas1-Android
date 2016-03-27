@@ -8,4 +8,5 @@ import java.net.Socket;
 public interface ServerAsistenClientAsyncTaskSocketStore {
     public Socket getSocket();
     public void setSocket(Socket s);
+    public void setSocketConnectionClosedByServer(boolean b);
 }

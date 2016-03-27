@@ -60,7 +60,7 @@ public class ServerAsistenClientAsyncTask extends AsyncTask<Void, Void, Void> {
             InputStream inputStream = socket.getInputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 
-            int buffer;
+            int buffer = 0;
 
          /*
           * notice: inputStream.read() will block if no data return
@@ -73,6 +73,12 @@ public class ServerAsistenClientAsyncTask extends AsyncTask<Void, Void, Void> {
                     continueReading = false;
                 } catch (JSONException e) {
                 }
+            }
+            if (buffer==-1) {
+                serverAsistenClientAsyncTaskSocketStore.setSocketConnectionClosedByServer(true);
+                socket = null;
+            }else{
+                serverAsistenClientAsyncTaskSocketStore.setSocketConnectionClosedByServer(false);
             }
 
         } catch (UnknownHostException e) {

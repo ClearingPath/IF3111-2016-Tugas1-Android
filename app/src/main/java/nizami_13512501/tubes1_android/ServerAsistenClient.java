@@ -80,17 +80,18 @@ public class ServerAsistenClient implements ServerAsistenClientAsyncTaskCallback
     String last_answer;
     LatLng last_latLng;
 
+    public void tryAgain(){
+        socket = null;
+        doFirstRequest(last_nim);
+        if (last_op != LAST_OP_FIRST_REQUEST) {
+            submitAnswer(last_nim,last_answer,last_latLng);
+        }
+    }
+
+    boolean socket_connectionclosedbyserver;
+
     @Override
     public void onCallback(String response) {
-
-        if (response.isEmpty()){ //TRY AGAIN
-            socket = null;
-            doFirstRequest(last_nim);
-            if (last_op != LAST_OP_FIRST_REQUEST) {
-                submitAnswer(last_nim,last_answer,last_latLng);
-            }
-            return;
-        }
 
         if (response.contains("IOException")){
             mapsActivity.notifyUser("error connectiong. retrying... if you were trying to submit, please try submitting again", Toast.LENGTH_SHORT);
@@ -132,7 +133,10 @@ public class ServerAsistenClient implements ServerAsistenClientAsyncTaskCallback
             }
 
         } catch (JSONException e) {
-            usernotiftext+="error in response format";
+            if (socket_connectionclosedbyserver)
+                tryAgain();
+            else
+                usernotiftext+="error in response format";
             e.printStackTrace();
         } catch(NumberFormatException e){
             usernotiftext+="error in lat/long format";
@@ -148,5 +152,10 @@ public class ServerAsistenClient implements ServerAsistenClientAsyncTaskCallback
     @Override
     public void setSocket(Socket s) {
         socket = s;
+    }
+
+    @Override
+    public void setSocketConnectionClosedByServer(boolean b) {
+        socket_connectionclosedbyserver=b;
     }
 }
