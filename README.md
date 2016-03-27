@@ -38,37 +38,37 @@ Permintaan lokasi (pertama).
 
 **Client Request**
 ```sh
-{“com”:”req_loc”,”nim”:”13512999”}
+{“com”:”req_loc”,”nim”:”13513024”}
 ```
 **Server Response** 
 ```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
+{“status”:”ok”,”nim”:”13513024”,”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
 ```
 ### Send Answer
 Mengirimkan jawaban dan menerima lokasi berikutnya
 
 **Client Request**
 ```sh
-{“com”:”answer”,”nim”:”13512999”,”answer”:”labtek_v”, ”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
+{“com”:”answer”,”nim”:”13513024”,”answer”:”labtek_v”, ”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
 ```
 **Server Response**
-Jika jawaban Anda **benar**, maka:
+Jika jawaban **benar**, maka:
 ```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:”8.13215123214”,”latitude”:”9.1234123412”,”token”:”124fewfm32r32ifmwder42”}
+{“status”:”ok”,”nim”:”13513024”,”longitude”:”8.13215123214”,”latitude”:”9.1234123412”,”token”:”124fewfm32r32ifmwder42”}
 ```
-Jika jawaban Anda **salah**, maka:
+Jika jawaban **salah**, maka:
 ```sh
-{“status”:”wrong_answer”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”}
+{“status”:”wrong_answer”,”nim”:”13513024”,”token”:”124fewfm32r32ifmwder42”}
 ```
-Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
+Jika jawaban **benar dan sudah berada dilokasi ketiga**, maka:
 ```sh
-{“status”:”finish”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
+{“status”:”finish”,”nim”:”13513024”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
 ```
 ## Spesifikasi Tampilan
 **Tampilan peta**
-![alt text](http://imgur.com/igpBp8P)
+![alt text](http://i.imgur.com/igpBp8P.jpg)
 **Tampilan *submit* jawaban**
-![alt text](http://imgur.com/KwgM7cd)
+![alt text](http://i.imgur.com/KwgM7cd.jpg)
 
 ## Lokasi Source Code
 Source code Java terletak pada direktori berikut.
