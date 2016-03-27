@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private EditText nimText = null;
@@ -29,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         nimText = (EditText) findViewById(R.id.nimEditText);
     }
@@ -54,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("nim", nimInput);
             editor.apply();
+
 
             // check the connectivity
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

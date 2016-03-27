@@ -124,8 +124,6 @@ public class Client extends AsyncTask<Void, Void, Void> {
             Intent intent = new Intent(context, MapsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("response", responseString);
-            intent.putExtra("latitude", Double.toHexString(latitude));
-            intent.putExtra("longitude", Double.toHexString(longitude));
             context.startActivity(intent);
         }else if (status.equals("finish")){ //finished
             Intent intent = new Intent(context, ChallengeFinish.class);

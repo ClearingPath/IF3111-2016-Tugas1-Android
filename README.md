@@ -98,4 +98,8 @@ Deadline pull request terakhir (termasuk commit) adalah 27 Maret 2016 pukul 23.5
 ## Keterangan Tambahan
 Bila ada pertanyaan, mengenai tugas ini silahkan lakukan melalui milis IF3111.
 
+## Source Code dan Binary
+Source Code: app/src/main/java/com/ghazwan/tebakitb
+Binary: http://gitlab.informatika.org/Ghazwan/Tubes1-Android/tree/master/app-debug.apk
+
 [Markdown]: <http://dillinger.io/>
