@@ -1,6 +1,7 @@
 package nizami_13512501.tubes1_android;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -14,6 +15,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 
 /**
  * Created by nim_13512501 on 26/03/16.
@@ -57,6 +59,8 @@ public class ServerAsistenClientAsyncTask extends AsyncTask<Void, Void, Void> {
             socketPrintStream.print(request);
             socketPrintStream.flush();
 
+            Log.i("COMMREQUEST", request);
+
             InputStream inputStream = socket.getInputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 
@@ -80,6 +84,7 @@ public class ServerAsistenClientAsyncTask extends AsyncTask<Void, Void, Void> {
             }else{
                 serverAsistenClientAsyncTaskSocketStore.setSocketConnectionClosedByServer(false);
             }
+            Log.i("COMMRESPONSE", response);
 
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
