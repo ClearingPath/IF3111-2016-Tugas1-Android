@@ -183,6 +183,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
                                         dialog.dismiss();
                                     }
                                 });
+                alertDialog.show();
 
 
 

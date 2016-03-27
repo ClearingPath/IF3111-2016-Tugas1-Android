@@ -46,31 +46,23 @@ package kevin.tubes1;
                         JSONObject receivedProblem = new JSONObject(
                                 (msg.getSock()).Send("{\"com\":\"answer\",\"nim\":\"" + msg.getNim() + "\",\"answer\":\"" + answer + "\",\"longitude\":" + msg.getLng() + ",\"latitude\":" + msg.getLat() + ",\"token\":\"" + msg.getToken() + "\"}"));
 
-                        String toAlert = receivedProblem.toString();
+                        String toToast = receivedProblem.toString();
 
                         if ((receivedProblem.optString("status")).equals("wrong_answer")) {
                             msg.setStarted(false);
-                            toAlert = "Wrong Answer, Please Start Over.";
+                            toToast = "Wrong Answer, Please Start Over.";
                         } else if ((receivedProblem.optString("status")).equals("finish")) {
                             msg.setStarted(false);
-                            toAlert = "Congratulations You've Finished All!";
+                            toToast= "Congratulations You've Finished All!";
                         } else if ((receivedProblem.optString("status")).equals("err")) {
                             msg.setStarted(false);
-                            toAlert = "Server says error.";
+                            toToast = "Server says error.";
                         } else if ((receivedProblem.optString("status")).equals("ok")) {
-                            toAlert = "Correct!";
+                            toToast = "Correct!";
                             msg.setLatLng(receivedProblem.optDouble("longitude"), receivedProblem.optDouble("latitude"));
                         }
-                        AlertDialog alertDialog = new AlertDialog.Builder(AnswerAct.this).create();
-                        alertDialog.setTitle("GeoLocation");
-                        alertDialog.setMessage(toAlert);
-                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        alertDialog.show();
+                        Toast toast = Toast.makeText(getApplicationContext(), toToast, Toast.LENGTH_SHORT);
+                        toast.show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -109,7 +101,7 @@ package kevin.tubes1;
                     answer = "dpr";
                     break;
                 case 6:
-                    answer = "sunken";
+                    answer = "oktagon";
                     break;
                 case 7:
                     answer = "perpustakaan";
