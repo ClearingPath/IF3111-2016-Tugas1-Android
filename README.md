@@ -38,86 +38,14 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 * Hasil reply dari server harus ditampilkan dalam bentuk *toast* atau *alert dialog* (pilih satu).
 * Ketika anda menggunakan activity yang memanggil sensor, sensor tersebut harus dilepas ketika anda berpindah activity agar tidak boros baterai.
 
-## Spesifikasi Tanya-Jawab oleh Asisten
-Pada akhir eksplorasi lokasi oleh peserta, akan ada tanya-jawab dengan asisten. Anda juga diminta memberikan hasil foto yang anda dapat (tidak perlu lewat aplikasi yang dibuat pada tugas ini, dapat melalui gallery bawaan android anda). Asisten akan melakukan cross-check dengan data yang anda kirimkan.
+## Lokasi Source Code : \app\src\main
 
+## Lokasi Binary : \APK
 
-## Spesifikasi Pertukaran Pesan
-Keterangan : *Client* pada dokumen ini adalah aplikasi Anda dan *Server* merupakan server milik asisten.
-### Request Location
-Permintaan lokasi (pertama).
-
-**Client Request**
-```sh
-{“com”:”req_loc”,”nim”:”13512999”}
-```
-**Server Response** 
-Before :
-```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
-```
-After :
-Longitude dan Latitude menggunakan tipe Long.
-```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:6.234123132,”latitude”:0.1234123412,”token”:”21nu2f2n3rh23diefef23hr23ew”}
-```
-### Send Answer
-Mengirimkan jawaban dan menerima lokasi berikutnya
-
-**Client Request**
-Before :
-```sh
-{“com”:”answer”,”nim”:”13512999”,”answer”:”labtek_v”, ”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
-```
-After :
-Longitude dan Latitude menggunakan tipe Long.
-```sh
-{“com”:”answer”,”nim”:”13512999”,”answer”:”labtek_v”, ”longitude”:6.234123132,”latitude”:0.1234123412,”token”:”21nu2f2n3rh23diefef23hr23ew”}
-```
-**Server Response**
-Jika jawaban Anda **benar**, maka:
-```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:”8.13215123214”,”latitude”:”9.1234123412”,”token”:”124fewfm32r32ifmwder42”}
-```
-Jika jawaban Anda **salah**, maka:
-```sh
-{“status”:”wrong_answer”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”}
-```
-Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
-```sh
-{“status”:”finish”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
-```
-
-### Extra
-**No NIM**
-```sh
-{“status”:”err”,”nim”:””,”token”:”124fewfm32r32ifmwder42”}
-```
-**No Com command**
-```sh
-{“status”:”err”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”}
-```
 ## Spesifikasi Tampilan
 **Tampilan horizontal**
-![alt text](http://i.imgur.com/Q1ZhAvb.png)
+![alt text](http://imgur.com/zMCx3fy.png)
 **Tampilan vertikal**
-![alt text](http://i.imgur.com/L7RnXCm.png)
+![alt text](http://imgur.com/zd9yqG2.png)
 **Tampilan *submit* jawaban**
-![alt text](http://i.imgur.com/TlaiEs9.png)
-## Deliverables
-
-Silahkan ikuti langkah pengumpulan berikut :
-
-- Lakukan **fork** terhadap repository ini.
-- Edit file readme ini semenarik mungkin (gunakan panduan [Markdown] langguage), diperbolehkan untuk merubah struktur dari readme ini. (Soal tidak perlu dipertahankan).
-- Pada Readme terdapat tampilan aplikasi.
-- Cantumkan lokasi *source code* dan *binary* dari aplikasi pada Readme.
-
-## Deadline
-Deadline pull request terakhir (termasuk commit) adalah 27 Maret 2016 pukul 23.55. 
-
-
-## Keterangan Tambahan
-Bila ada pertanyaan, mengenai tugas ini silahkan lakukan melalui milis IF3111.
-
-[Markdown]: <http://dillinger.io/>
+![alt text](http://imgur.com/GYox6t1.png)

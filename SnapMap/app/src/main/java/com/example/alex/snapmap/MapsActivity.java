@@ -1,10 +1,12 @@
 package com.example.alex.snapmap;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,7 +14,9 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,8 +44,11 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -48,30 +56,40 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutionException;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
-
-    private static Context mContext;
-
-    public static Context getContext() {
-        return mContext;
-    }
-
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
+    private GoogleMap mMap;
     private ImageButton b1, b2;
-    private Spinner spinner;
     private ImageView image;
     private JSONObject json;
+    private JSONObject jsonResponse;
     private float currentDegree = 0f;
     private SensorManager mSensorManager;
+    private double Lat,Lng = 0;
+    private String token = null;
+    private SharedPreferences myprefs;
+    private boolean init = true;
+    public static final int ANSWER_CODE = 2;
+    public static final int OK = 3;
+    public static final int FINISH = 4;
+    public static final int WRONG = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         image = (ImageView) findViewById(R.id.imageViewCompass);
         b1 = (ImageButton) findViewById(R.id.camera);
         b2 = (ImageButton) findViewById(R.id.chat);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,18 +107,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
+        Log.d("TEST", String.valueOf(init));
 
+        if(init)
+            new connectSocket().execute();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
                 SensorManager.SENSOR_DELAY_GAME);
     }
@@ -153,63 +169,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        String jsonParam = "{\"status\":\"ok\", \"nim\":\"13512999\",\"longitude\":\"107.610101\",\"latitude\":\"-6.890535\",\"token\":\"21nu2f2n3rh23diefef23hr23ew\"}";
-        try {
-            json = new JSONObject();
-            json.put("nim", "13513023");
-            json.put("com", "req_loc");
-        } catch (Throwable t) {
-            Log.e("MyApp", "Could not parse malformed JSON: \"" + json.toString() + "\"");
-        }
+        mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
+    }
 
-        new connectSocket().execute();
-           /* socket = new Socket("167.205.34.132", 3111);
-            dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            dataInputStream = new DataInputStream(socket.getInputStream());
-            dataOutputStream.writeUTF(json.toString());
+    private void setLocation() {
+        LatLng marker = new LatLng(Lat, Lng);
+        mMap.addMarker(new MarkerOptions().position(marker).title("Designated Location"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker, 15));
+    }
 
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                    this);
-
-            // set title
-            alertDialogBuilder.setTitle("Response");
-
-            // set dialog message
-            alertDialogBuilder
-                    .setMessage(dataInputStream.readUTF())
-                    .setCancelable(false)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // if this button is clicked, close
-                            // current activity
-                            dialog.cancel();
-                        }
-                    });
-
-            // create alert dialog
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            // show it
-            alertDialog.show();*/
-
-        double Lat = 0;
-        double Lng = 0;
-        try {
-            JSONObject obj = new JSONObject(jsonParam);
-            Lat = obj.getDouble("latitude");
-            Lng = obj.getDouble("longitude");
-        } catch (Throwable t) {
-            Log.e("MyApp", "Could not parse malformed JSON: \"" + jsonParam + "\"");
-        }
-
-
-
-        GoogleMap mMap = googleMap;
-        // Add a marker in Labtek V and move the camera
-        LatLng labtekv = new LatLng(Lat, Lng);
-        Log.d("MyApp", String.valueOf(Lat));
-        Log.d("MyApp", String.valueOf(Lng));
-        mMap.addMarker(new MarkerOptions().position(labtekv).title("Marker in Labtek V"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(labtekv, 15));
+    private void setLocation2() {
+        myprefs = getSharedPreferences("user", Context.MODE_PRIVATE);
+        Lat = Double.valueOf(myprefs.getString("latitude", null));
+        Lng = Double.valueOf(myprefs.getString("longitude", null));
+        Log.d("TEST",String.valueOf(Lat));
+        LatLng marker = new LatLng(Lat, Lng);
+        mMap.addMarker(new MarkerOptions().position(marker).title("Designated Location"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker, 15));
     }
 
     @Override
@@ -219,34 +196,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void submitAnswerActivity(View view) {
         Intent intent = new Intent(this, SubmitActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ANSWER_CODE);
     }
+
+
+
 
     private class connectSocket extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... params) {
             Socket socket = null;
-            DataOutputStream dataOutputStream = null;
-            DataInputStream dataInputStream = null;
-            Log.d("MYAPP", "TEST");
+            OutputStream dataOutputStream = null;
+            InputStream dataInputStream = null;
+
+            try {
+                json = new JSONObject();
+                json.put("nim", "13513023");
+                json.put("com", "req_loc");
+            } catch (Throwable t) {
+                Log.e("MyApp", "Could not parse malformed JSON: \"" + json.toString() + "\"");
+            }
+
+            Log.d("COMMLOG", json);
             try {
                 socket = new Socket("167.205.34.132", 3111);
-                dataOutputStream = new DataOutputStream(socket.getOutputStream());
-                dataInputStream = new DataInputStream(socket.getInputStream());
-                dataOutputStream.writeUTF(json.toString());
-                return dataInputStream.readUTF();
+                dataOutputStream = socket.getOutputStream();
+                dataInputStream = socket.getInputStream();
+                PrintWriter writer = new PrintWriter(dataOutputStream);
+                writer.println(json.toString());
+                writer.flush();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(dataInputStream));
+                String response = reader.readLine();
+
+                return response;
             } catch (UnknownHostException e) {
-                // TODO Auto-generated catch block
+                Log.d("MyApp", e.toString());
+                cancel(true);
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
+                Log.d("MyApp", e.toString());
+                cancel(true);
                 e.printStackTrace();
             } finally {
                 if (socket != null) {
                     try {
                         socket.close();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
+                        Log.d("MyApp", e.toString());
+                        cancel(true);
                         e.printStackTrace();
                     }
                 }
@@ -273,20 +271,53 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         @Override
+        protected void onCancelled() {
+            new AlertDialog.Builder(MapsActivity.this)
+                    .setTitle("Error")
+                    .setMessage("Cannot connect to the server, restarting app now ..")
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            recreate();
+                        }
+                    })
+                    .show();
+        }
+
+        @Override
         protected void onPostExecute(String result) {
+            try {
+                jsonResponse = new JSONObject(result);
+                Lng = jsonResponse.getDouble("longitude");  // TERBALIK
+                Lat = jsonResponse.getDouble("latitude");
+            } catch (Throwable t) {
+                Log.e("MyApp", "Could not parse malformed JSON: \"" + json.toString() + "\"");
+            }
+
+
+            setLocation();
+
+
+            SharedPreferences myprefs= getSharedPreferences("user", Context.MODE_PRIVATE);
+            try {
+                myprefs.edit().putString("token", jsonResponse.getString("token")).commit();
+            } catch (Throwable t) {
+                Log.e("MyApp", "Could not parse \"" + jsonResponse.toString() + "\"");
+            }
+
+            Log.d("COMMLOG", result);
+            init = false;
+
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                     MapsActivity.this);
 
             // set title
             alertDialogBuilder.setTitle("Response");
-            Log.d("MYAPP", result);
-            Log.d("MYAPP", "TEST");
-
             // set dialog message
             alertDialogBuilder
                     .setMessage(result)
                     .setCancelable(false)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // if this button is clicked, close
                             // current activity
@@ -305,5 +336,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         protected void onProgressUpdate(Void... values) {}
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == FINISH) {
+            mMap.clear();
+            Toast.makeText(this, "Finish!", Toast.LENGTH_SHORT).show();
+        }
+        else if (resultCode == WRONG) {
+            Toast.makeText(this, "Wrong answer, try again", Toast.LENGTH_SHORT).show();
+        } else if (resultCode == OK) {
+            mMap.clear();
+            setLocation2();
+            Toast.makeText(this, "Answer correct, move to next location", Toast.LENGTH_SHORT).show();
+        }
     }
 }
