@@ -30,6 +30,7 @@ public class SubmitAnswer extends AppCompatActivity {
 
     final String address = "167.205.34.132";
     final int port = 3111;
+
     JSONObject json;
     JSONObject oldJson;
     String jsonRequest = "";

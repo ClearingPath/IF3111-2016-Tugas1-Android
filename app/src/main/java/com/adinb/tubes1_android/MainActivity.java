@@ -414,8 +414,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             googleMap.setMyLocationEnabled(true);
             UiSettings uiSettings = map.getUiSettings();
             uiSettings.setMyLocationButtonEnabled(false);
-            uiSettings.setCompassEnabled(true);
-            Log.d("COMPASS", String.valueOf(uiSettings.isCompassEnabled()));
+            uiSettings.setCompassEnabled(false);
+//            Log.d("COMPASS", String.valueOf(uiSettings.isCompassEnabled()));
         } else {
             // Ask for permission
             ActivityCompat.requestPermissions(this,
