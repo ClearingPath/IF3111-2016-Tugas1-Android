@@ -40,6 +40,10 @@
         "source": "C:\\Users\\X450\\Documents\\Android\\Tubes1\\Maps\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\drawable\\abc_btn_check_material.xml"
     },
     {
+        "merged": "C:\\Users\\X450\\Documents\\Android\\Tubes1\\Maps\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\pf.png",
+        "source": "C:\\Users\\X450\\Documents\\Android\\Tubes1\\Maps\\app\\src\\main\\res\\drawable\\pf.png"
+    },
+    {
         "merged": "C:\\Users\\X450\\Documents\\Android\\Tubes1\\Maps\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\common_google_signin_btn_text_light.xml",
         "source": "C:\\Users\\X450\\Documents\\Android\\Tubes1\\Maps\\app\\build\\intermediates\\exploded-aar\\com.google.android.gms\\play-services-base\\8.4.0\\res\\drawable\\common_google_signin_btn_text_light.xml"
     },

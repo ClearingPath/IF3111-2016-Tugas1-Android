@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Maps</string>
+    <string name="app_name">Place Finder</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_submit">Submit Answer</string>
     <string-array name="locations">

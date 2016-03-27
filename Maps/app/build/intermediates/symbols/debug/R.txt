@@ -633,11 +633,12 @@ int drawable mr_ic_play_dark 0x7f020098
 int drawable mr_ic_play_light 0x7f020099
 int drawable mr_ic_settings_dark 0x7f02009a
 int drawable mr_ic_settings_light 0x7f02009b
-int drawable notification_template_icon_bg 0x7f0200a0
-int drawable places_ic_clear 0x7f02009c
-int drawable places_ic_search 0x7f02009d
-int drawable powered_by_google_dark 0x7f02009e
-int drawable powered_by_google_light 0x7f02009f
+int drawable notification_template_icon_bg 0x7f0200a1
+int drawable pf 0x7f02009c
+int drawable places_ic_clear 0x7f02009d
+int drawable places_ic_search 0x7f02009e
+int drawable powered_by_google_dark 0x7f02009f
+int drawable powered_by_google_light 0x7f0200a0
 int id action0 0x7f0e008d
 int id action_bar 0x7f0e0068
 int id action_bar_activity_content 0x7f0e0000
