@@ -72,7 +72,7 @@ Jika jawaban **benar dan sudah berada dilokasi ketiga**, maka:
 ![alt text](http://i.imgur.com/iOeYHju.png)
 
 **Tampilan horizontal**
-![alt text](http://i.imgur.com/hHDu4cX.png)
+![alt text](http://i.imgur.com/AaaThyN.png)
 
 **Tampilan vertikal**
 ![alt text](http://i.imgur.com/hHDu4cX.png)
