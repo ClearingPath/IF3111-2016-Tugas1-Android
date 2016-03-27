@@ -11,6 +11,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,19 +27,29 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, BearingToNorthProvider.ChangeEventListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private BearingToNorthProvider mBearingProvider;
+    private ImageView compass;// = (ImageView) findViewById(R.id.imageView);
     static final int REQUEST_TAKE_PHOTO = 1;
-    String mCurrentPhotoPath;
+    private String mCurrentPhotoPath;
+    private float lastAngle = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        int[] img_coordinates = new int[2];
+        compass = (ImageView) findViewById(R.id.arrow);
+        compass.getLocationOnScreen(img_coordinates);
+        compass.setPivotX(img_coordinates[0] + compass.getWidth());
+        compass.setPivotY(img_coordinates[1] + compass.getHeight());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync((OnMapReadyCallback) this);
+        mBearingProvider = new BearingToNorthProvider(this);
+        mBearingProvider.setChangeEventListener(this);
     }
 
     @Override
@@ -169,5 +182,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void submitAnswer(View view) {
 
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mBearingProvider.start();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mBearingProvider.stop();
+    }
+
+    @Override
+    public void onBearingChanged(double bearing)
+    {
+        RotateAnimation ra = new RotateAnimation(
+                lastAngle,
+                (float)-bearing,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+        lastAngle = (float)-bearing;
+        ra.setDuration(250);
+        ra.setFillAfter(true);
+       // compass.setRotation((float)bearing);
+        compass.startAnimation(ra);
     }
 }
