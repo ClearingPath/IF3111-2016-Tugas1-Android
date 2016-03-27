@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_id"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:capitalize="characters"
+        android:text="Location name :"
+        android:textColor="@color/colorAccent"
+        android:layout_marginLeft="50dp"
+        android:layout_centerVertical="true"
+        android:textSize="30dp"/>
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:entries="@array/location_arrays"
+        android:prompt="@string/location_prompt"
+        android:background="@drawable/spinner"
+        android:src="@drawable/arrow_down"/>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:background="#D81B60"
+        android:textColor="@android:color/white"
+        android:text="SUBMIT" />
+
+</LinearLayout>

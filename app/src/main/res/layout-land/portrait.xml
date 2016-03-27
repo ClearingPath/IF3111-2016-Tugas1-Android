@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation ="vertical">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            layout="@layout/activity_maps"></include>
+
+        <LinearLayout
+            android:id="@+id/right_panel"
+            android:orientation="vertical"
+            android:layout_width="600px"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_weight="0.2"
+            android:layout_height="match_parent"
+            android:id="@+id/buttoncamera"
+            android:background="@android:color/white"
+            android:src="@drawable/camera"
+            android:onClick="camera"/>
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_weight="0.2"
+            android:layout_height="match_parent"
+            android:id="@+id/buttonanswer"
+            android:background="@android:color/white"
+            android:src="@drawable/answer"
+            android:onClick="sendAnswer"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageViewCompass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight = "150dip"
+        android:src="@drawable/map_compass" />
+
+</RelativeLayout>
