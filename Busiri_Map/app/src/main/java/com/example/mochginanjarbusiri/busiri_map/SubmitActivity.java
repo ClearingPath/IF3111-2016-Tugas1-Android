@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -69,6 +70,8 @@ public class SubmitActivity extends AppCompatActivity {
 
             }
         });
+
+        TextView tv = (TextView)findViewById(R.id.textview);
 
         Button button_submit = (Button)findViewById(R.id.button_submit);
         button_submit.setOnClickListener(new View.OnClickListener() {

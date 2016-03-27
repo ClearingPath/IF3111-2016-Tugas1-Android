@@ -42,7 +42,7 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
     private String token;
     private String status;
     private String response = "";
-    private final String nim = "13513111";
+    private String nim = "13513111";
     private ImageView icon_compass;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -54,17 +54,31 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
     private float[] mR = new float[9];
     private float[] mOrientation = new float[3];
     private float mCurrentDegree = 0f;
+    private Bundle data = new Bundle();
+    private boolean harusSend;
     String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean isLaunch = true;
-        if (isLaunch)
-           setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        if (savedInstanceState != null)
+        {
+            token = savedInstanceState.getString("token", token);
+            latitude = savedInstanceState.getDouble("latitude", latitude);
+            longitude = savedInstanceState.getDouble("longitude", longitude);
+            status = savedInstanceState.getString("status", status);
+            harusSend = false;
+            data = savedInstanceState;
+        }
+        else
+            harusSend = true;
+
+
 
         ImageButton button_camera = (ImageButton)findViewById(R.id.button_camera);
         button_camera.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +112,18 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+
+        // Save data
+        savedInstanceState.putString("nim", nim);
+        savedInstanceState.putDouble("longitude", longitude);
+        savedInstanceState.putDouble("latitude", latitude);
+        savedInstanceState.putString("token", token);
+        savedInstanceState.putString("status", status);
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -152,8 +178,10 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (harusSend)
+            sendRequest();
 
-        sendRequest();
+        Marker(data);
     }
 
 
@@ -216,6 +244,15 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    public void Marker(Bundle result)
+    {
+            double lat = result.getDouble("latitude", latitude);
+            double longit = result.getDouble("longitude", longitude);
+            LatLng itb = new LatLng(longit, lat);
+            mMap.addMarker(new MarkerOptions().position(itb).title("Institut Teknologi Bandung"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(itb));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(itb, 20.0f));
+    }
 
 
 }
