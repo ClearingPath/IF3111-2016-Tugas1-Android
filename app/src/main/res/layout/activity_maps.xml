@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.asus.locationfinder.MapsActivity"
+        android:layout_above="@+id/cbutton" />
+
+    <ImageView
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:id="@+id/compass"
+    android:src="@drawable/compass"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:id="@+id/cbutton"
+        android:onClick="setCamera"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="Camera" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:id="@+id/abutton"
+        android:onClick="sendAnswer"
+        android:layout_alignTop="@+id/cbutton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="Answer" />
+
+
+</RelativeLayout>
