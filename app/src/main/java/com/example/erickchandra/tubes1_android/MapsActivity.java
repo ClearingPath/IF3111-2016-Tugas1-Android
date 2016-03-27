@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.animation.Animation;
@@ -39,12 +40,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
 
+    // For Map LatLng
+
     // For Intent Information Passing
     Intent myIntent;
     String intentMsg;
     String cStatus, cNIM, cLat, cLng, cToken;
     double cLatDouble, cLngDouble;
     MessageRecvParser cMRP;
+    LatLng cLatLng;
 
     // For Compass
     private ImageView mPointer;
@@ -96,6 +100,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // For Intent Information Passing
         myIntent = getIntent();
         intentMsg = myIntent.getStringExtra("Message");
+        Toast.makeText(getApplicationContext(), "Received Intent Message: " + intentMsg, Toast.LENGTH_SHORT).show();
+        Log.d(this.getClass().toString(), "Received Intent Message: " + intentMsg);
         cMRP = new MessageRecvParser(intentMsg);
     }
 
@@ -196,22 +202,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         // Passing Intent LatLng
-        if (cMRP.getStatus() == "ok") {
-            cLng = cMRP.getLat();
-            cLngDouble = Double.parseDouble(cLng);
-            cLat = cMRP.getLng();
-            cLatDouble = Double.parseDouble(cLat);
-        }
+//        if (cMRP.getStatus() == "ok") {
+//            cLng = cMRP.getLat();
+//            cLngDouble = Double.parseDouble(cLng);
+//            cLat = cMRP.getLng();
+//            cLatDouble = Double.parseDouble(cLat);
+//        }
 
         // Set up Google Maps initial position
-        LatLng default_itb = new LatLng(cLatDouble, cLngDouble);
-        mMap.addMarker(new MarkerOptions().position(default_itb).title("Guess Place"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(default_itb, 16.0f));
+//        LatLng default_itb = new LatLng(cLatDouble, cLngDouble);
+//        mMap.addMarker(new MarkerOptions().position(default_itb).title("Guess Place"));
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(default_itb, 16.0f));
+        cMRP = new MessageRecvParser(intentMsg);
+        Toast.makeText(this.getApplicationContext(), "On Create, Intent Message", Toast.LENGTH_LONG).show();
+        Log.d(this.getClass().toString(), "On Create, Intent Message");
+
+        // Passing Intent LatLng
+        cLng = cMRP.getLat(); // SWAP HERE!!!
+        cLngDouble = Double.parseDouble(cLng);
+        cLat = cMRP.getLng(); // SWAP HERE!!!
+        cLatDouble = Double.parseDouble(cLat);
+
+        Toast.makeText(getApplicationContext(), "Current LatDouble: " + cLatDouble + "\nCurrent LngDouble: " + cLngDouble, Toast.LENGTH_SHORT).show();
+        Log.d(this.getClass().toString(), "Current LatDouble: " + cLatDouble + "\nCurrent LngDouble" + cLngDouble);
+
+        cLatLng = new LatLng(cLatDouble, cLngDouble);
+        mMap.addMarker(new MarkerOptions().position(cLatLng).title("Guess Place!"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cLatLng, 16.0f));
     }
 
     String mCurrentPhotoPath;
@@ -265,22 +287,48 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK && data != null && data.getStringExtra("SubmitReplyMessage") != null) {
                 cMRP = new MessageRecvParser(data.getStringExtra("SubmitReplyMessage"));
-                Toast.makeText(this, data.getStringExtra("SubmitReplyMessage"), Toast.LENGTH_LONG);
+                Toast.makeText(this.getApplicationContext(), data.getStringExtra("SubmitReplyMessage"), Toast.LENGTH_LONG).show();
+                Log.d(this.getClass().toString(), "SUBMIT REPLY MESSAGE: " + data.getStringExtra("SubmitReplyMessage"));
 
                 // Passing Intent LatLng
-                if (cMRP.getStatus() == "ok") {
-                    cLng = cMRP.getLat();
+                if (cMRP.getStatus().equals("ok")) {
+                    cLng = cMRP.getLat(); // SWAP HERE!!!
                     cLngDouble = Double.parseDouble(cLng);
-                    cLat = cMRP.getLng();
+                    cLat = cMRP.getLng(); // SWAP HERE!!!
                     cLatDouble = Double.parseDouble(cLat);
+
+                    // Set up Google Maps initial position
+                    cLatLng = new LatLng(cLngDouble, cLatDouble);
+                    mMap.addMarker(new MarkerOptions().position(cLatLng).title("Guess Place!"));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cLatLng, 16.0f));
                 }
 
-                // Set up Google Maps initial position
-                LatLng default_itb = new LatLng(cLatDouble, cLngDouble);
-                mMap.addMarker(new MarkerOptions().position(default_itb).title("Guess Place"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(default_itb, 16.0f));
+                Toast.makeText(getApplicationContext(), "Current LatDouble: " + cLatDouble + "\nCurrent LngDouble: " + cLngDouble, Toast.LENGTH_SHORT).show();
+                Log.d(this.getClass().toString(), "Current LatDouble: " + cLatDouble + "\nCurrent LngDouble" + cLngDouble);
+
+
+                // Log for Status Check
+                Log.d(this.getClass().toString(), "STATUS: OK == " + cMRP.getStatus().equals("ok"));
+                Log.d(this.getClass().toString(), "STATUS: WRONG ANSWER == " + cMRP.getStatus().equals("wrong_answer"));
+                Log.d(this.getClass().toString(), "STATUS: FINISH == " + cMRP.getStatus().equals("finish"));
+
+                // Check status
+                if (cMRP.getStatus().equals("ok")) {
+                    Toast.makeText(getApplicationContext(), "You submitted correct answer.", Toast.LENGTH_SHORT).show();
+                    Log.d(this.getClass().toString(), "REPLY STATUS: CORRECT ANSWER.");
+                }
+                else if (cMRP.getStatus().equals("wrong_answer")) {
+                    Toast.makeText(getApplicationContext(), "You submitted correct answer.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please retry.", Toast.LENGTH_SHORT).show();
+                    Log.d(this.getClass().toString(), "REPLY STATUS: WRONG ANSWER.");
+                }
+                else if (cMRP.getStatus().equals("finish")) {
+                    Toast.makeText(getApplicationContext(), "Congratulation! You have finished!", Toast.LENGTH_SHORT).show();
+                    finish();
+                    Log.d(this.getClass().toString(), "REPLY STATUS: FINISH.");
+                }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 // If there is no result

@@ -71,6 +71,7 @@ public class ClientSync extends AsyncTask <Void, Void, Void> {
     protected void onPreExecute() {
         this.progressDialog.setMessage("Connecting Server");
         this.progressDialog.show();
+        Log.d(this.getClass().toString(), "Progress Dialog shown.");
     }
 
     @Override
@@ -82,6 +83,10 @@ public class ClientSync extends AsyncTask <Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
+        if (this.progressDialog.isShowing()) {
+            this.progressDialog.dismiss();
+            Log.d(this.getClass().toString(), "Progress Dialog dismissed.");
+        }
         Log.d(this.getClass().toString(), "Received Message (ClientSync): " + msgRecv);
         delegate.processFinish(msgRecv);
     }

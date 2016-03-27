@@ -104,7 +104,7 @@ public class SubmitActivity extends AppCompatActivity implements AdapterView.OnI
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("SubmitReplyMessage", msgRecv);
-        Log.d(this.getClass().toString(), "SUBMIT ACTIVITY csRecvMsg" + msgRecv);
+        Log.d(this.getClass().toString(), "SUBMIT ACTIVITY: msgRecv: " + msgRecv);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
