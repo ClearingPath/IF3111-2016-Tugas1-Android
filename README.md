@@ -72,15 +72,15 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 ```
 ## Tampilan Aplikasi
 
-###Tampilan horizontal
+**Tampilan horizontal**
 
 ![alt text](img/map_activity.jpg "Tampilan horizontal")
 
-###Tampilan vertikal
+**Tampilan vertikal**
 
 ![alt text](img/map_activity-land.jpg "Tampilan vertikal")
 
-###Tampilan *submit* jawaban
+**Tampilan *submit* jawaban**
 
 ![alt text](img/submit_answer_activity.jpg "Tampilan submit jawaban")
 
