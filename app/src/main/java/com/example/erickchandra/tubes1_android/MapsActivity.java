@@ -226,9 +226,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d(this.getClass().toString(), "On Create, Intent Message");
 
         // Passing Intent LatLng
-        cLng = cMRP.getLat(); // SWAP HERE!!!
+        cLng = cMRP.getLng(); //getLat(); // SWAP HERE!!!
         cLngDouble = Double.parseDouble(cLng);
-        cLat = cMRP.getLng(); // SWAP HERE!!!
+        cLat = cMRP.getLat(); //getLng(); // SWAP HERE!!!
         cLatDouble = Double.parseDouble(cLat);
 
         Toast.makeText(getApplicationContext(), "Current LatDouble: " + cLatDouble + "\nCurrent LngDouble: " + cLngDouble, Toast.LENGTH_SHORT).show();
@@ -305,9 +305,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 // Passing Intent LatLng
                 if (cMRP.getStatus().equals("ok")) {
-                    cLng = cMRP.getLat(); // SWAP HERE!!!
+                    cLng = cMRP.getLng(); //getLat(); // SWAP HERE!!!
                     cLngDouble = Double.parseDouble(cLng);
-                    cLat = cMRP.getLng(); // SWAP HERE!!!
+                    cLat = cMRP.getLat(); //getLng(); // SWAP HERE!!!
                     cLatDouble = Double.parseDouble(cLat);
 
                     // Set up Google Maps initial position
@@ -331,7 +331,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.d(this.getClass().toString(), "REPLY STATUS: CORRECT ANSWER.");
                 }
                 else if (cMRP.getStatus().equals("wrong_answer")) {
-                    Toast.makeText(getApplicationContext(), "You submitted correct answer.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You submitted wrong answer.", Toast.LENGTH_SHORT).show();
                     Toast.makeText(getApplicationContext(), "Please retry.", Toast.LENGTH_SHORT).show();
                     Log.d(this.getClass().toString(), "REPLY STATUS: WRONG ANSWER.");
                 }
