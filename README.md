@@ -1,101 +1,34 @@
 # Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
 
-## Latar Belakang
+## Asumsi
+* Apabila user tidak memiliki koneksi Internet pada saat aplikasi dijalanka atau pada saat mensubmit answer, akan ditampilkan pesan
 
-Dalam tugas ini, peserta diminta untuk menemukan beberapa tempat di lingkungan ITB dengan bantuan tools yang dibangun di atas platform Android. Aplikasi tersebut dapat memandu peserta dengan menampilkan peta (Google Maps) dan arah tujuannya. Peserta diminta menemukan 3 lokasi (akan diberikan dari server). Pada setiap lokasi peserta akan diminta untuk foto-diri di lokasinya dan mengirimkan nama lokasi tempat peserta berada. 
+## Source Code
+    http://gitlab.informatika.org/ivanandrianto/Tubes1-Android/tree/master/app/src/main/java/ivanandrianto/com/tubes1
 
-Daftar kemungkinan jawaban lokasi diberikan oleh asisten. Pastikan anda tidak typo saat mengirimkan jawaban ke server. 
-
-Daftar kemungkinan jawaban lokasi adalah
-
-* gku_barat
-* gku_timur
-* intel
-* cc_barat
-* cc_timur
-* dpr
-* sunken
-* perpustakaan
-* pau
-* kubus
-
-Sever uji coba akan disediakan pada 167.205.24.132 akan dapat diuji coba mulai tanggal 21 Maret 2016 Pukul 07.00.
-Prosedur uji coba akan dibertahukan lebih lanjut.
-
-## Spesifikasi Aplikasi
-
-Spesifikasi dari aplikasi yang dibangun sebagai berikut
-
-* Aplikasi mampu menerima pesan dari server dengan format JSON berisi lokasi dan token.
-* Aplikasi mampu mengolah data berupa location point (longitude, latitude) dan menampilkan indicator pada peta lokasi yang dimaksud. Peta lokasi menggunakan Google Map API. (Tampilan silahkan lihat Spesifikasi Tampilan).
-* Terdapat sebuah panah navigasi yang berada diatas peta (letak bebas), yang menunjukan arah utara. Anda diminta menggunakan sensor yang ada pada android API (Tampilan silahkan lihat Spesifikasi Tampilan).
-* Aplikasi mampu mengirim intent kamera.
-* Aplikasi mampu mengambil gambar melalui kamera. Gambar tidak perlu diunggah ke server (silakan lihat spesifikasi tanya jawab asisten)
-* Aplikasi mampu mengirimkan pesan ke sever dengan format JSON berisi lokasi (longitude, latitude), nim serta token.
-* Pastikan SDK anda mendukung pengerjaan tugas ini.
-* Perhatikan tata letak tombol. Ketika orientasi layar portrait, tombol berada pada bawah layar. Ketika landscape, tombol berada pada samping kanan layar (lihat contoh tampilan seperti pada mock-up spesifikasi tampilan). Anda dapat menggunakan fragment untuk masalah ini.
-* Tampilan warna, font, style tidak dinilai. Namun tata letak tombol akan dinilai.
-* Hasil reply dari server harus ditampilkan dalam bentuk *toast* atau *alert dialog* (pilih satu).
-* Ketika anda menggunakan activity yang memanggil sensor, sensor tersebut harus dilepas ketika anda berpindah activity agar tidak boros baterai.
-
-## Spesifikasi Tanya-Jawab oleh Asisten
-Pada akhir eksplorasi lokasi oleh peserta, akan ada tanya-jawab dengan asisten. Anda juga diminta memberikan hasil foto yang anda dapat (tidak perlu lewat aplikasi yang dibuat pada tugas ini, dapat melalui gallery bawaan android anda). Asisten akan melakukan cross-check dengan data yang anda kirimkan.
-
-
-## Spesifikasi Pertukaran Pesan
-Keterangan : *Client* pada dokumen ini adalah aplikasi Anda dan *Server* merupakan server milik asisten.
-### Request Location
-Permintaan lokasi (pertama).
-
-**Client Request**
-```sh
-{“com”:”req_loc”,”nim”:”13512999”}
-```
-**Server Response** 
-```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
-```
-### Send Answer
-Mengirimkan jawaban dan menerima lokasi berikutnya
-
-**Client Request**
-```sh
-{“com”:”answer”,”nim”:”13512999”,”answer”:”labtek_v”, ”longitude”:”6.234123132”,”latitude”:”0.1234123412”,”token”:”21nu2f2n3rh23diefef23hr23ew”}
-```
-**Server Response**
-Jika jawaban Anda **benar**, maka:
-```sh
-{“status”:”ok”,”nim”:”13512999”,”longitude”:”8.13215123214”,”latitude”:”9.1234123412”,”token”:”124fewfm32r32ifmwder42”}
-```
-Jika jawaban Anda **salah**, maka:
-```sh
-{“status”:”wrong_answer”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”}
-```
-Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
-```sh
-{“status”:”finish”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
-```
-## Spesifikasi Tampilan
+## Layout ada di folder
+    http://gitlab.informatika.org/ivanandrianto/Tubes1-Android/tree/master/app/src/main/res/layout dan
+    http://gitlab.informatika.org/ivanandrianto/Tubes1-Android/tree/master/app/src/main/res/layout-land
+	
+## APK
+	File APK dihasilkan pada folder app/build/outputs/apk (Tidak ada di git karena terkena gitignore)
+	
+## Penggunaan
+* Jalankan aplikasi
+* Untuk menggunakan kamera, tekan tombol kamera
+* Untuk menjawab (mengirim pesan ke server), tekan tombol message
+	  Kemudian, pilih lokasi dan tekan submit. Server akan memberikan jawaban apakah response benar atau salah
+	  
+## Screenshots
 **Tampilan horizontal**
-![alt text](http://i.imgur.com/Q1ZhAvb.png)
+![alt text](https://lh3.googleusercontent.com/-KSsxkYP8Ekk/VvfNgI3Bp5I/AAAAAAAAJVQ/2P2H6B8mT8UF6vsaXkTVxR-IjKypZ2fJwCCo/s800-Ic42/Landscape%255B1%255D.png)
 **Tampilan vertikal**
-![alt text](http://i.imgur.com/L7RnXCm.png)
+![alt text](https://lh3.googleusercontent.com/-DCJLIxQ0v5A/VvfNawTRrtI/AAAAAAAAJVQ/yJFr3ovDX_0AHJ31NeE__x5lpWE7H4ycwCCo/s512-Ic42/Start%255B1%255D.png)
 **Tampilan *submit* jawaban**
-![alt text](http://i.imgur.com/TlaiEs9.png)
-## Deliverables
-
-Silahkan ikuti langkah pengumpulan berikut :
-
-- Lakukan **fork** terhadap repository ini.
-- Edit file readme ini semenarik mungkin (gunakan panduan [Markdown] langguage), diperbolehkan untuk merubah struktur dari readme ini. (Soal tidak perlu dipertahankan).
-- Pada Readme terdapat tampilan aplikasi.
-- Cantumkan lokasi *source code* dan *binary* dari aplikasi pada Readme.
-
-## Deadline
-Deadline pull request terakhir (termasuk commit) adalah 27 Maret 2016 pukul 23.55. 
-
-
-## Keterangan Tambahan
-Bila ada pertanyaan, mengenai tugas ini silahkan lakukan melalui milis IF3111.
-
-[Markdown]: <http://dillinger.io/>
+![alt text](https://lh3.googleusercontent.com/--riZegZoRas/VvfNh7tfyoI/AAAAAAAAJVQ/FyqlFEEKNQUqfZIt_j3ukRB7qMxJgZz-wCCo/s512-Ic42/Answer%255B1%255D.png)
+**Tampilan camera**
+![alt text](https://lh3.googleusercontent.com/-QTyHsm5NeQ4/VvfNS9zBMdI/AAAAAAAAJU8/9QL67Z3rwvIcBT9DCayjCo8VM5ndlIn-wCCo/s512-Ic42/Camera%255B1%255D.png)
+**Tampilan response jawaban**
+![alt text](https://lh3.googleusercontent.com/-rUeX9vhrhqs/VvfaPPrENqI/AAAAAAAAJV0/hHnYzVIoUQMcRu3p2ovvddOLBeCfkczyACCo/s512-Ic42/Wrong_Answer%255B1%255D.png)
+**Tampilan finish**
+![alt text](https://lh3.googleusercontent.com/-aT2KflqMEP8/VvfNV58_AzI/AAAAAAAAJVQ/Cee2WxIZiasuSjnrmEfYk6lAy9cyw36fwCCo/s512-Ic42/Finish%255B1%255D.png)

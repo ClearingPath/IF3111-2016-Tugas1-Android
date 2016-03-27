@@ -35,6 +35,5 @@
         android:id="@+id/tv"
         android:layout_below="@+id/button_submit"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="gila"/>
+        android:layout_height="wrap_content" />
 </RelativeLayout>

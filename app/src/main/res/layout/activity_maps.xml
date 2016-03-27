@@ -34,7 +34,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
             android:background="#ffffff"
-            android:onClick="" >
+             >
         </ImageButton>
         <View
             android:layout_width="0dip"
@@ -55,7 +55,8 @@
             android:layout_marginBottom="-5dip"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:background="#ffffff" >
+            android:background="#ffffff"
+            android:onClick="startMessageActivity">
         </ImageButton>
     </LinearLayout>
     <ImageView

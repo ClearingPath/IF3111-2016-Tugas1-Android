@@ -1,5 +1,9 @@
 package ivanandrianto.com.tubes1;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -9,17 +13,30 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+//import com.google.android.gms.location.LocationListener;
+
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
@@ -32,7 +49,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.concurrent.ExecutionException;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,SensorEventListener {
 
@@ -42,12 +61,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /* Server */
     private String serverResponse;
-    final private String address = "167.205.34.132";
-    final private int port = 3111;
+    private String address;
+    private int port;
     private String response = "";
     private String token = "";
     private String status = "";
     final String nim = "13513039";
+    private LocationRequest mLocationRequest;
+    private Location mLastLocation;
+    private LatLng cur_location;
 
     /* Censored */
     private SensorManager sensorManager;
@@ -62,17 +84,74 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private float[] orientation = new float[3];
     private ImageView compass;
 
+    private double currentLatitude, currentLongitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        /* Check Connection */
+        if(!checkInternetConenction()){
+            open();
+            Log.i("Application", "Not Connected");
+        } else {
+            Log.i("Application", "Connected");
+            /* Get initial latitude and longitude from server */
+            address = getResources().getString(R.string.address);
+            port = Integer.parseInt(getResources().getString(R.string.port));
+            JSONObject json = new JSONObject();
+            try{
+                if(savedInstanceState == null){
+                    String mydate;
+                    json.put("com", "req_loc");
+                    json.put("nim", "13513039");
+                    mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                    Log.i("Activity", "Client: " + json.toString() + " " + "date : " + mydate);
+                    String response = new SocketClient(address,port,json).execute().get();
+                    Toast.makeText(getApplicationContext(), "Response: " + response, Toast.LENGTH_LONG).show();
+                    mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                    Log.i("Activity", "Server: " +  response + " " + "date : " + mydate);
+
+                    JSONObject jsonObject = new JSONObject(response);
+                    //sementara dibalik
+                    latitude = Double.parseDouble(jsonObject.optString("longitude").toString());
+                    longitude = Double.parseDouble(jsonObject.optString("latitude").toString());
+                    token = jsonObject.optString("token").toString();
+                    status = jsonObject.optString("status").toString();
+                    if(status.equals("err")){
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                    }
+                    if(token.length()<1){
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                    }
+
+                } else {
+                    latitude = savedInstanceState.getDouble("latitude");
+                    longitude = savedInstanceState.getDouble("longitude");
+                    token = savedInstanceState.getString("token");
+                    status = savedInstanceState.getString("status");
+                }
+            } catch (JSONException e){
+                e.printStackTrace();
+            } catch (ExecutionException e){
+                e.printStackTrace();
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
         /* Button camera */
         ImageButton btnCamera = (ImageButton)findViewById(R.id.button1);
         btnCamera.setImageResource(R.drawable.camera);
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),Camera.class);
+                Intent intent = new Intent(getApplicationContext(), Camera.class);
                 startActivity(intent);
             }
         });
@@ -83,47 +162,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AnswerActivity.class);
-                Bundle extras = new Bundle();
-                extras.putString("latitude", String.valueOf(latitude));
-                extras.putString("longitude", String.valueOf(longitude));
-                extras.putString("token", token);
-                intent.putExtras(extras);
-                startActivityForResult(intent, 1);
+                if(status.equals("finish")) {
+                    Toast.makeText(getApplicationContext(), "Anda sudah finish", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), AnswerActivity.class);
+                    Bundle extras = new Bundle();
+                    extras.putString("latitude", String.valueOf(latitude));
+                    extras.putString("longitude", String.valueOf(longitude));
+                    extras.putString("token", token);
+                    intent.putExtras(extras);
+                    startActivityForResult(intent, 1);
+                }
             }
         });
-
-        /* Get initial latitude and longitude from server */
-        JSONObject json = new JSONObject();
-        try{
-            if(savedInstanceState == null){
-                json.put("com", "req_loc");
-                json.put("nim", "13513039");
-                String response = new SocketClient(address,port,json).execute().get();
-                Toast.makeText(getApplicationContext(), "zzz" + response, Toast.LENGTH_LONG).show();
-                JSONObject jsonObject = new JSONObject(response);
-                /*latitude = -6.8914906;
-                longitude = 107.6084704;*/
-
-                //sementara dibalik
-                latitude = Double.parseDouble(jsonObject.optString("longitude").toString());
-                longitude = Double.parseDouble(jsonObject.optString("latitude").toString());
-                token = jsonObject.optString("token").toString();
-                status = jsonObject.optString("status").toString();
-            } else {
-                latitude = savedInstanceState.getDouble("latitude");
-                longitude = savedInstanceState.getDouble("longitude");
-                token = savedInstanceState.getString("token");
-                status = savedInstanceState.getString("status");
-            }
-
-        } catch (JSONException e){
-            e.printStackTrace();
-        } catch (ExecutionException e){
-            e.printStackTrace();
-        } catch (InterruptedException e){
-            e.printStackTrace();
-        }
 
         /* Sensor */
         compass = (ImageView)findViewById(R.id.compass_pointer);
@@ -139,27 +190,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         supportmapfragment.getMapAsync(this);
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putDouble("longitude", longitude);
-        savedInstanceState.putDouble("latitude",latitude);
+        savedInstanceState.putDouble("latitude", latitude);
         savedInstanceState.putString("token", token);
-        savedInstanceState.putString("status",status);
+        savedInstanceState.putString("status", status);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         map = googleMap;
-        LatLng itb = new LatLng(latitude,longitude);
+        LatLng itb = new LatLng(latitude, longitude);
         map.addMarker(new MarkerOptions().position(itb).title("Marker in ITB"));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(itb).zoom(15).build();
+                .target(itb).zoom(16).build();
         map.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
 
+    }
+
+    protected void onStart(){
+        super.onStart();
+    }
+
+    protected void onStop() {
+        sensorManager.unregisterListener(this);
+        super.onStop();
     }
 
     @Override
@@ -174,6 +236,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onPause();
         sensorManager.unregisterListener(this, accelerometer);
         sensorManager.unregisterListener(this, magnetometer);
+        //stopLocationUpdates();
     }
 
     public String getRotation(Context context){
@@ -241,20 +304,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case (1) : {
+        switch (requestCode) {
+            case (1): {
                 if (resultCode == Activity.RESULT_OK) {
                     Intent intent = data;
                     Bundle bundle = intent.getExtras();
-                    if(bundle!=null) {
+                    if (bundle != null) {
                         token = bundle.getString("token");
                         latitude = Double.parseDouble(bundle.getString("latitude"));
                         longitude = Double.parseDouble(bundle.getString("longitude"));
-                        LatLng itb = new LatLng(latitude,longitude);
+                        status = (bundle.getString("status"));
+                        LatLng itb = new LatLng(latitude, longitude);
                         map.addMarker(new MarkerOptions().position(itb).title("Marker in ITB"));
 
                         CameraPosition cameraPosition = new CameraPosition.Builder()
-                                .target(itb).zoom(15).build();
+                                .target(itb).zoom(16).build();
                         map.animateCamera(CameraUpdateFactory
                                 .newCameraPosition(cameraPosition));
                     }
@@ -262,5 +326,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             }
         }
+    }
+
+    private boolean checkInternetConenction() {
+        // get Connectivity Manager object to check connection
+        ConnectivityManager cm =(ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if(activeNetwork!=null){
+            // Check for network connections
+            if ( activeNetwork.getState() == android.net.NetworkInfo.State.CONNECTED ||
+                    activeNetwork.getState() == android.net.NetworkInfo.State.CONNECTING ) {
+                Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
+                return true;
+            } else if ( activeNetwork.getState() == android.net.NetworkInfo.State.DISCONNECTED ) {
+                Toast.makeText(this, " Not Connected ", Toast.LENGTH_LONG).show();
+                return false;
+            } else {
+                return false;
+            }
+        } else {
+            Toast.makeText(this, " No active network ", Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
+    public void open(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("No connection. Retry?");
+
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }

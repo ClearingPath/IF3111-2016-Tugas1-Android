@@ -1,9 +1,14 @@
 package ivanandrianto.com.tubes1;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -48,8 +54,8 @@ public class AnswerActivity extends AppCompatActivity {
             longitude = bundle.getString("longitude");
             token = bundle.getString("token");
         }
-        TextView tv = (TextView)findViewById(R.id.tv);
-        tv.setText(latitude + " " +  longitude + " " +  token);
+        /*TextView tv = (TextView)findViewById(R.id.tv);
+        tv.setText(latitude + " " +  longitude + " " +  token);*/
 
         spinner = (Spinner) findViewById(R.id.spinner1);
         List<String> locations = new ArrayList<String>();
@@ -71,7 +77,7 @@ public class AnswerActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String item = spinner.getSelectedItem().toString();
-                Toast.makeText(AnswerActivity.this, item, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AnswerActivity.this, item, Toast.LENGTH_SHORT).show();
                 selected = item;
             }
 
@@ -85,50 +91,94 @@ public class AnswerActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject json = new JSONObject();
-                try{
-                    json.put("com", "answer");
-                    json.put("nim", "13513039");
-                    json.put("answer", selected);
-                    json.put("latitude", latitude);
-                    json.put("longitude", longitude);
-                    json.put("token", token);
-                    String response = new SocketClient(address,port,json).execute().get();
-                    Toast.makeText(getApplicationContext(), "zzz" + response, Toast.LENGTH_LONG).show();
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    status = jsonObject.optString("status").toString();
-                    token = jsonObject.optString("token").toString();
-                    Intent resultIntent = new Intent();
-                    Bundle extras = new Bundle();
-                    extras.putString("token", token);
-                    if(status.equals("ok")){
-                        latitude = jsonObject.optString("longitude").toString();
-                        longitude = jsonObject.optString("latitude").toString();
-                    } else if(status.equals("wrong_answer")){
-                        //do-nothing
-                    } else if(status.equals("finish")){
-                        Toast.makeText(getApplicationContext(), "Finish" , Toast.LENGTH_LONG).show();
-                        check = 1;
-                    } else if(status.equals("finish")){
-                        Toast.makeText(getApplicationContext(), "Error" , Toast.LENGTH_LONG).show();
+                if(!checkInternetConenction()){
+                    open();
+                    Log.i("Application", "Not Connected");
+                } else {
+                    Log.i("Application","Connected");
+                    JSONObject json = new JSONObject();
+                    try{
+                        String mydate;
+                        json.put("com", "answer");
+                        json.put("nim", "13513039");
+                        json.put("answer", selected);
+                        json.put("latitude", latitude);
+                        json.put("longitude", longitude);
+                        json.put("token", token);
+                        mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                        Log.i("Activity", "Client: " + json.toString() + " " + "date : " + mydate);
+                        String response = new SocketClient(address,port,json).execute().get();
+                        Toast.makeText(getApplicationContext(), "Response: " + response, Toast.LENGTH_LONG).show();
+                        mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                        Log.i("Activity", "Server: " + response + " " + "date : " + mydate);
+                        JSONObject jsonObject = new JSONObject(response);
+                        status = jsonObject.optString("status").toString();
+                        token = jsonObject.optString("token").toString();
+                        Intent resultIntent = new Intent();
+                        Bundle extras = new Bundle();
+                        extras.putString("status", status);
+                        extras.putString("token", token);
+                        if(status.equals("ok")){
+                            latitude = jsonObject.optString("longitude").toString();
+                            longitude = jsonObject.optString("latitude").toString();
+                        } else if(status.equals("wrong_answer")){
+                            //do-nothing
+                        } else if(status.equals("finish")){
+                            Toast.makeText(getApplicationContext(), "Finish" , Toast.LENGTH_LONG).show();
+                            check = 1;
+                        } else if(status.equals("err")){
+                            Toast.makeText(getApplicationContext(), "Error" , Toast.LENGTH_LONG).show();
+                        }
+                        extras.putString("latitude", latitude);
+                        extras.putString("longitude", longitude);
+                        resultIntent.putExtras(extras);
+                        setResult(Activity.RESULT_OK, resultIntent);
+                    } catch (JSONException e){
+                        e.printStackTrace();
+                    } catch (ExecutionException e){
+                        e.printStackTrace();
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
                     }
-                    extras.putString("latitude", latitude);
-                    extras.putString("longitude", longitude);
-                    resultIntent.putExtras(extras);
-                    setResult(Activity.RESULT_OK, resultIntent);
-                } catch (JSONException e){
-                    e.printStackTrace();
-                } catch (ExecutionException e){
-                    e.printStackTrace();
-                } catch (InterruptedException e){
-                    e.printStackTrace();
+                    finish();
                 }
-                /*Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);*/
-                finish();
             }
         });
+    }
+
+    private boolean checkInternetConenction() {
+        // get Connectivity Manager object to check connection
+        ConnectivityManager cm =(ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if(activeNetwork!=null){
+            // Check for network connections
+            if ( activeNetwork.getState() == android.net.NetworkInfo.State.CONNECTED ||
+                    activeNetwork.getState() == android.net.NetworkInfo.State.CONNECTING ) {
+                Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
+                return true;
+            } else if ( activeNetwork.getState() == android.net.NetworkInfo.State.DISCONNECTED ) {
+                Toast.makeText(this, " Not Connected ", Toast.LENGTH_LONG).show();
+                return false;
+            } else {
+                return false;
+            }
+        } else {
+            Toast.makeText(this, " No active network ", Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
+    public void open(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("No connection. Please check your connection");
+
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
