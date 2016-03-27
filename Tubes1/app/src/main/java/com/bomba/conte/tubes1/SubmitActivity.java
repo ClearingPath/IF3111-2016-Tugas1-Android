@@ -54,7 +54,7 @@ public class SubmitActivity extends AppCompatActivity {
         answers.add("cc_barat");
         answers.add("cc_timur");
         answers.add("dpr");
-        answers.add("sunken");
+        answers.add("oktagon");
         answers.add("perpustakaan");
         answers.add("pau");
         answers.add("kubus");
