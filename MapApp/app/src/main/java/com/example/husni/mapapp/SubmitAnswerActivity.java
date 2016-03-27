@@ -104,6 +104,8 @@ public class SubmitAnswerActivity extends AppCompatActivity implements Response 
         answerJson.put("latitude", longitude);
         answerJson.put("token", token);
 
+        Log.d(TAG, "Answer sent: " + answerJson.toString());
+
         Client client = new Client(this, answerJson);
         client.execute();
     }
@@ -132,18 +134,6 @@ public class SubmitAnswerActivity extends AppCompatActivity implements Response 
             startActivity(intent);
         } else if (status.equals("finish")) {
             Toast.makeText(getApplicationContext(), "Congratulation, You've completed all the quest!", Toast.LENGTH_SHORT).show();
-
-            double latitude = (double) res.get("latitude");
-            double longitude = (double) res.get("longitude");
-
-            Intent intent = new Intent (this, MapsActivity.class);
-            intent.putExtra("status", status);
-            intent.putExtra("latitude", longitude);
-            intent.putExtra("longitude", latitude);
-            intent.putExtra("token", token);
-            startActivity(intent);
         }
-
-
     }
 }
