@@ -1,10 +1,14 @@
 # Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
 
+## Nama : Vincent Theophilus Ciputra
+
+## NIM : 13513005
+
 ## Latar Belakang
 
-Dalam tugas ini, peserta diminta untuk menemukan beberapa tempat di lingkungan ITB dengan bantuan tools yang dibangun di atas platform Android. Aplikasi tersebut dapat memandu peserta dengan menampilkan peta (Google Maps) dan arah tujuannya. Peserta diminta menemukan 3 lokasi (akan diberikan dari server). Pada setiap lokasi peserta akan diminta untuk foto-diri di lokasinya dan mengirimkan nama lokasi tempat peserta berada. 
+Dalam tugas ini, saya diminta untuk menemukan beberapa tempat di lingkungan ITB dengan bantuan tools yang dibangun di atas platform Android. Aplikasi tersebut dapat memandu saya dengan menampilkan peta (Google Maps) dan arah tujuannya. Saya diminta menemukan 3 lokasi (akan diberikan dari server). Pada setiap lokasi peserta akan diminta untuk foto-diri di lokasinya dan mengirimkan nama lokasi tempat peserta berada. 
 
-Daftar kemungkinan jawaban lokasi diberikan oleh asisten. Pastikan anda tidak typo saat mengirimkan jawaban ke server. 
+Daftar kemungkinan jawaban lokasi diberikan oleh asisten. 
 
 Daftar kemungkinan jawaban lokasi adalah
 
@@ -19,9 +23,6 @@ Daftar kemungkinan jawaban lokasi adalah
 * pau
 * kubus
 
-Sever uji coba akan disediakan pada 167.205.24.132 akan dapat diuji coba mulai tanggal 21 Maret 2016 Pukul 07.00.
-Prosedur uji coba akan dibertahukan lebih lanjut.
-
 ## Spesifikasi Aplikasi
 
 Spesifikasi dari aplikasi yang dibangun sebagai berikut
@@ -32,18 +33,12 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 * Aplikasi mampu mengirim intent kamera.
 * Aplikasi mampu mengambil gambar melalui kamera. Gambar tidak perlu diunggah ke server (silakan lihat spesifikasi tanya jawab asisten)
 * Aplikasi mampu mengirimkan pesan ke sever dengan format JSON berisi lokasi (longitude, latitude), nim serta token.
-* Pastikan SDK anda mendukung pengerjaan tugas ini.
-* Perhatikan tata letak tombol. Ketika orientasi layar portrait, tombol berada pada bawah layar. Ketika landscape, tombol berada pada samping kanan layar (lihat contoh tampilan seperti pada mock-up spesifikasi tampilan). Anda dapat menggunakan fragment untuk masalah ini.
-* Tampilan warna, font, style tidak dinilai. Namun tata letak tombol akan dinilai.
-* Hasil reply dari server harus ditampilkan dalam bentuk *toast* atau *alert dialog* (pilih satu).
-* Ketika anda menggunakan activity yang memanggil sensor, sensor tersebut harus dilepas ketika anda berpindah activity agar tidak boros baterai.
-
-## Spesifikasi Tanya-Jawab oleh Asisten
-Pada akhir eksplorasi lokasi oleh peserta, akan ada tanya-jawab dengan asisten. Anda juga diminta memberikan hasil foto yang anda dapat (tidak perlu lewat aplikasi yang dibuat pada tugas ini, dapat melalui gallery bawaan android anda). Asisten akan melakukan cross-check dengan data yang anda kirimkan.
+* Log tersimpan dalam file
 
 
 ## Spesifikasi Pertukaran Pesan
-Keterangan : *Client* pada dokumen ini adalah aplikasi Anda dan *Server* merupakan server milik asisten.
+Keterangan : *Client* pada dokumen ini adalah aplikasi ini dan *Server* merupakan server milik asisten.
+
 ### Request Location
 Permintaan lokasi (pertama).
 
@@ -76,12 +71,24 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 {“status”:”finish”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
 ```
 ## Spesifikasi Tampilan
-**Tampilan horizontal**
-![alt text](http://i.imgur.com/Q1ZhAvb.png)
+**Tampilan portrait**
+![enter image description here](https://photos-5.dropbox.com/t/2/AAAvUXopB4ZelqlS8LFLy1AV4bxDpMC_SkDfcCwVENnLMg/12/343631524/png/32x32/3/1459108800/0/2/portrait.png/EPjW9NcCGAwgASgB/uKa317g6nMsiVNGK00rN9--FUgGMD2g9M_m7DMp3ojw?size_mode=3&size=800x600)
+
+![enter image description here](https://photos-4.dropbox.com/t/2/AACmkgSrSif45QMu5Re9dXisQGK6sa11VjsfzSsrb1DmYA/12/343631524/png/32x32/1/_/1/2/portrait2.png/EPjW9NcCGAwgASgB/jYmRqCjgeDdCX3y5aT8UaClH9zt9hKsAzfmb9tbVHDI?size=1024x768&size_mode=3)
+
+![enter image description here](https://photos-4.dropbox.com/t/2/AAB7YNhr2T9PNbgIPnY1aRnGOZgHX5gIjkfb8HLSh-ggsQ/12/343631524/png/32x32/1/_/1/2/portrait3.png/EPjW9NcCGAwgASgB/kWTzQsAX6LSGDz9aoMy9kPQBZSbB6LoXrU9VBT5ThIE?size=1024x768&size_mode=3)
+
 **Tampilan vertikal**
-![alt text](http://i.imgur.com/L7RnXCm.png)
+![enter image description here](https://photos-6.dropbox.com/t/2/AACLkJQ_j_yeYSnV_eRDQPm3BznRgPOP_E1nD7DUn_Ztaw/12/343631524/png/32x32/1/_/1/2/landscape.png/EPjW9NcCGAwgASgB/6CxN_YofdC7FVkjEbIsDBgse2v7Mwi0_PxndOlK0kdo?size=1024x768&size_mode=3)
+
+![enter image description here](https://photos-6.dropbox.com/t/2/AAA8Ii06RI0v90gGq59_qWaXCQq4aLbUh4-iAs_Rz8XNdA/12/343631524/png/32x32/1/_/1/2/landscape2.png/EPjW9NcCGAwgASgB/8EAYsIjWHvLT95YZT4MsuFOSX2KiiuQk1Jcgk9zDyB4?size=1024x768&size_mode=3)
+
 **Tampilan *submit* jawaban**
-![alt text](http://i.imgur.com/TlaiEs9.png)
+![enter image description here](https://photos-2.dropbox.com/t/2/AABUf-bjZUDAvIF8xz6u_pW-iyvrcgck0MepheEdent3TQ/12/343631524/png/32x32/1/_/1/2/submit.png/EPjW9NcCGAwgASgB/P-gxUdugSKcj0-nNRr5vGnasI4qPna41BMQYl1479fY?size=1024x768&size_mode=3)
+
+**Tampilan log file**
+![enter image description here](https://photos-5.dropbox.com/t/2/AAAKTH1v4AB8K4pn1UH3CHiCQSfn4LKA6U3C_H2rXbSe0w/12/343631524/png/32x32/1/_/1/2/log.png/EPjW9NcCGAwgASgB/iN_RBUHJUJKJEn2Z6iaqJ-s4yFcEFyNdDJ3IVTkDe4A?size=1024x768&size_mode=3)
+
 ## Deliverables
 
 Silahkan ikuti langkah pengumpulan berikut :
@@ -91,11 +98,14 @@ Silahkan ikuti langkah pengumpulan berikut :
 - Pada Readme terdapat tampilan aplikasi.
 - Cantumkan lokasi *source code* dan *binary* dari aplikasi pada Readme.
 
-## Deadline
-Deadline pull request terakhir (termasuk commit) adalah 27 Maret 2016 pukul 23.55. 
 
 
-## Keterangan Tambahan
-Bila ada pertanyaan, mengenai tugas ini silahkan lakukan melalui milis IF3111.
+
+## Lokasi file
+Lokasi source code : GoogleMap\app\src\main\java\com\example\user\googlemap
+
+Lokasi res : GoogleMap\app\src\main\res
+
+Lokasi binary : GoogleMap\app
 
 [Markdown]: <http://dillinger.io/>
