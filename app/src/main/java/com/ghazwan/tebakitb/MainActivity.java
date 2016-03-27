@@ -1,6 +1,5 @@
 package com.ghazwan.tebakitb;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,9 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,15 +35,6 @@ public class MainActivity extends AppCompatActivity {
         nimText = (EditText) findViewById(R.id.nimEditText);
     }
 
-    /**
-     * Send the intent to Maps Activity
-     * Starting the challenge
-     */
-    public void startMapsActivity(View view) {
-
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-    }
 
     /**
      * Handle the challenge request
@@ -75,13 +63,20 @@ public class MainActivity extends AppCompatActivity {
                     activeNetworkInfo.isConnectedOrConnecting();
             if(isConnected) {
                 // start the challenge
+                JSONObject json = new JSONObject();
+                try{
+                    json.put("com", "req_loc");
+                    json.put("nim", nimInput);
+                }catch(org.json.JSONException e){
+                    // nothing
+                }
+                Client client = new Client(json, getApplicationContext());
+                client.execute();
             } else {
                 Toast connErToast = Toast.makeText(this, "You have to connected to the internet to start the challenge!", Toast.LENGTH_SHORT);
                 connErToast.show();
             }
         }
     }
-
-
 }
 

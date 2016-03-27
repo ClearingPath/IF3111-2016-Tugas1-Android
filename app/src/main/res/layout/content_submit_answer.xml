@@ -12,23 +12,30 @@
     tools:context="com.ghazwan.tebakitb.SubmitAnswer"
     tools:showIn="@layout/activity_submit_answer">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:text="@string/spinner_title"
+        android:textSize="18sp"
+        android:layout_marginTop="100dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/spinner_title"
-            android:textSize="18sp"/>
+    <Spinner
+        android:layout_width="250dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="120dp"
+        android:id="@+id/locationSpinner"
+        android:entries="@array/location_array"/>
 
-        <Spinner
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/locationSpinner"/>
 
-    </LinearLayout>
-
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/send_button"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="175dp"
+        android:layout_marginStart="275dp"
+        android:background="@drawable/send_button"
+        android:onClick="submitAnswer"
+        />
 
 </RelativeLayout>

@@ -1,13 +1,24 @@
 package com.ghazwan.tebakitb;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,18 +28,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private GoogleMap mMap;
     private String mCurrentPhotoPath;
     private String json;
+    private SensorManager mSensorManager;
+    private float curDegree = 0f;
+    private ImageView image;
+
+    LatLng destination = new LatLng(-6.8915, 107.6107);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +57,69 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+//        image = (ImageView) findViewById();
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Bundle bundle = getIntent().getExtras();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // for the system's orientation sensor registered listeners
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // to stop the listener and save battery
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        // get the angle around the z-axis rotated
+        float degree = Math.round(event.values[0]);
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int orientation = display.getRotation();
+        if (orientation == 1) {
+            /* The device is rotated to the left. */
+            degree += 90;
+            Log.v("Left", "Rotated Left");
+        } else if (orientation == 3) {
+            /* The device is rotated to the right. */
+            degree -= 90;
+            Log.v("Right", "Rotated Right");
+        }
+
+        // create a rotation animation (reverse turn degree degrees)
+        RotateAnimation ra = new RotateAnimation(
+                curDegree,
+                -degree,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        // how long the animation will take place
+        ra.setDuration(210);
+
+        // set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+
+        // Start the animation
+        image.startAnimation(ra);
+        curDegree = -degree;
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // not in use
+    }
+
 
     /**
      * Manipulates the map once available.
@@ -110,8 +192,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.sendBroadcast(mediaScanIntent);
     }
 
-    public void submitAnswer(View view) {
-        Intent submitIntent = new Intent(this, SubmitAnswer.class).putExtra(Intent.EXTRA_TEXT, json);
+    public void submitAnswerIntent(View view) {
+        Intent submitIntent = new Intent(this, SubmitAnswer.class);
+        submitIntent.putExtra("response", json.toString());
         startActivity(submitIntent);
     }
 

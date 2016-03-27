@@ -14,7 +14,6 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
-
         <EditText
             android:id="@+id/nimEditText"
             android:layout_width="wrap_content"
@@ -31,18 +30,10 @@
             android:layout_marginLeft="20dp"
             android:background="@drawable/send_button"
             android:layout_gravity="center"
-            android:onClick="startMapsActivity"
+            android:onClick="challengeReqHandle"
             />
 
 
     </LinearLayout>
-
-    <Button
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:id="@+id/camera_button"
-        android:background="@drawable/camera_button"
-        android:onClick="dispatchTakePictureIntent"
-        />
 
 </RelativeLayout>
