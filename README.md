@@ -16,10 +16,9 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 # Screenshot
 ![ScreenShot](/Screenshot/SubmitAnswer.png)
 
-[[/Screenshot/MapPortrait.png]]
+![ScreenShot](/Screenshot/MapPortrait.png)
 
-[[/Screenshot/MapLandscape.png]] 
-
+![ScreenShot](/Screenshot/MapLandscape.png)
 
 
 ## Lokasi Binary : \Tubes1\app\build\outputs\apk
