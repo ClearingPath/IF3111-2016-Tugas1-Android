@@ -116,6 +116,11 @@ public class AnswerActivity extends AppCompatActivity implements AdapterView.OnI
             case 9:
                 answer = "kubus";
                 break;
+            case 10:
+                answer = "oktagon";
+                /*  Changing specification near deadline isn't a good idea,
+                    this thing is never tested, hope for the best   */
+                break;
             default:
                 answer = "select_error";
         }

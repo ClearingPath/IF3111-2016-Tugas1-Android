@@ -1669,6 +1669,7 @@
         <item>Perpustakaan</item>
         <item>PAU</item>
         <item>Kubus</item>
+        <item>Oktagon</item>
     </string-array></file><file path="C:\Users\Asus\Documents\GitHub\Tubes1-Android\app\src\main\res\values\strings.xml" qualifiers=""><string name="title_activity_camera">CameraActivity</string><string name="app_name">Location Finder</string><string name="title_activity_answer">AnswerActivity</string><string name="ic_compass">Compass Icon</string></file><file path="C:\Users\Asus\Documents\GitHub\Tubes1-Android\app\src\main\res\values\styles.xml" qualifiers=""><style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>

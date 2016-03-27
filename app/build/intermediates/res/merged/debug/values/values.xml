@@ -11,6 +11,7 @@
         <item>Perpustakaan</item>
         <item>PAU</item>
         <item>Kubus</item>
+        <item>Oktagon</item>
     </string-array>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
