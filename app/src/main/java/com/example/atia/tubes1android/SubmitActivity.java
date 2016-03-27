@@ -86,7 +86,7 @@ public class SubmitActivity extends AppCompatActivity {
                 DataInputStream in = new DataInputStream(is);
                 response = in.readUTF();
 
-                Log.i("log", "Response: " + response);
+                Log.i("log", "Server Response: " + response);
 
                 socket.close();
 
@@ -116,6 +116,9 @@ public class SubmitActivity extends AppCompatActivity {
 
                     MapActivity.setParam(lat, lng, token);
                     MapActivity.setMarker(latlng);
+
+                    Toast.makeText(SubmitActivity.this, "Location marker set", Toast.LENGTH_SHORT).show();
+
                 } else if (status.equals("wrong_answer")) {
                     Toast.makeText(SubmitActivity.this, "Wrong answer", Toast.LENGTH_LONG).show();
                 } else if (status.equals("err")) {

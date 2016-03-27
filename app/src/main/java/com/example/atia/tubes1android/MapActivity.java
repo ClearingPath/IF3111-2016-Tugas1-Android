@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -22,7 +24,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,7 +51,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener
+{
 
     private Socket socket;
     private static GoogleMap mMap;
@@ -59,7 +65,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static double lng;
     private String response;
     private static Marker marker;
-    pri
+
+    private ImageView compassImage;
+
+    private SensorManager mSensorManager;
+    private float curDegree = 0f;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -75,6 +85,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
+            mapFragment.setRetainInstance(true);
 
             final ImageButton ibCam = (ImageButton) findViewById(R.id.ibCamera);
             ibCam.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +110,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             new FirstRequest().execute();
             first = false;
         }
+
+        compassImage = (ImageView) findViewById(R.id.compass);
+
+        // initialize sensor
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
     }
 
     @Override
@@ -149,6 +165,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // nothing happens?
             // app will crash if data is null / user presses back key without taking anything... for some reason?
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
+        if (marker != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 7));
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float degree = Math.round(event.values[0]);
+
+        RotateAnimation ra = new RotateAnimation(curDegree, -degree, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        ra.setDuration(210);
+        ra.setFillAfter(true);
+        compassImage.startAnimation(ra);
+        curDegree = -degree;
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
     private void dispatchTakePictureIntent() {
@@ -212,7 +260,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 obj.put("com", "req_loc");
                 obj.put("nim", "13512017");
 
-                Log.i("log","requesting first location");
+                Log.i("log", "requesting first location");
 
                 OutputStream os = socket.getOutputStream();
                 DataOutputStream out = new DataOutputStream(os);
@@ -221,6 +269,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 InputStream is = socket.getInputStream();
                 DataInputStream in = new DataInputStream(is);
                 response = in.readUTF();
+
+                
 
                 socket.close();
 
@@ -241,9 +291,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 lng = jsonresponse.getDouble("longitude");
                 LatLng latlng = new LatLng(lat, lng);
 
-                Toast.makeText(MapActivity.this, "requesting location", Toast.LENGTH_LONG).show();
-                Toast.makeText(MapActivity.this, "Location: " + lat + " " + lng, Toast.LENGTH_LONG).show();
-
                 Log.i("log", "Location: " + lat + "," + lng);
                 setMarker(latlng);
             } catch (JSONException e) {
@@ -251,31 +298,5 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
-
-//    private void processRequest(String response) {
-//        JSONObject jsonresponse = null;
-//        try {
-//            jsonresponse = new JSONObject(response);
-//            String status = jsonresponse.getString("status");
-//            token = jsonresponse.getString("token");
-//
-//            if (status.equals("ok")) {
-//                Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show();
-//                lat = jsonresponse.getDouble("latitude");
-//                lng = jsonresponse.getDouble("longitude");
-//                LatLng latlng = new LatLng(lat,lng);
-//                setMarker(latlng);
-//            } else if (status.equals("wrong_answer")) {
-//                Toast.makeText(this, "Wrong answer", Toast.LENGTH_SHORT).show();
-//            } else if (status.equals("finish")) {
-//                Toast.makeText(this, "FINISH", Toast.LENGTH_LONG).show();
-//            } else if (status.equals("err")) {
-//                Toast.makeText(this, "No NIM or no com", Toast.LENGTH_SHORT).show();
-//            }
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 }
