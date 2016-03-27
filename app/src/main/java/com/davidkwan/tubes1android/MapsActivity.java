@@ -11,6 +11,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -26,6 +27,17 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
@@ -46,6 +58,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private float[] rotation = new float[9];
     private float[] orientation = new float[3];
     private float currentDegree = 0f;
+
+    // For request location
+    public static String ip = "167.205.34.132";
+    public static int port = 3111;
 
     private final LocationListener locationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
@@ -86,6 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         pointer = (ImageView) findViewById(R.id.compass);
+
     }
 
     protected void onResume() {
@@ -100,37 +117,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         sensorManager.unregisterListener(this, magnetometer);
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Get the LatLng of users' current location
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            System.out.println("No permission");
-
-            return;
-        }
-        Location loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1, locationListener);
-
-        System.out.println("Testing");
-
-        // Add a marker in Institut Teknologi Bandung
-        LatLng currentLocation = new LatLng(-6.891203, 107.610407);
-        mMap.addMarker(new MarkerOptions().position(currentLocation).title("Institut Teknologi Bandung"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18.0f));
+        // When googleMap is ready, request location and put marker to the next location
+        new RequestLocation().execute();
     }
 
     public void takePicture(View view){
@@ -142,8 +134,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println("Sensor Changed");
-
         if (event.sensor == accelerometer) {
             System.arraycopy(event.values, 0, lastAccelerometer, 0, event.values.length);
             lastAccelerometerSet = true;
@@ -175,6 +165,72 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public void onSubmitAnswer(View view){
+        Intent intent = new Intent(this, SubmitAnswerActivity.class);
+        startActivity(intent);
+    }
+
+    private class RequestLocation extends AsyncTask<Void, Void, String>
+    {
+        @Override
+        protected String doInBackground(Void... params) {
+
+            try {
+                Socket socket = new Socket(ip, port);
+                JSONObject request = new JSONObject();
+                request.put("com", "req_loc");
+                request.put("nim", "13513019");
+
+                InputStream inputStream = socket.getInputStream();
+                OutputStream outputStream = socket.getOutputStream();
+
+                PrintWriter out = new PrintWriter(outputStream);
+                BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+
+                System.out.println("Request sent: " + request.toString());
+                out.println(request.toString());
+                out.flush();
+
+                String result = in.readLine();
+                System.out.println("Response received: " + result);
+
+                inputStream.close();
+                outputStream.close();
+                socket.close();
+
+                return result;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            // Add a marker from the received response
+            JSONObject jsonResult = null;
+            try {
+                jsonResult = new JSONObject(result);
+                String status = jsonResult.getString("status");
+                if(status.equals("ok")) {
+                    double latitude = jsonResult.getDouble("latitude");
+                    double longitude = jsonResult.getDouble("longitude");
+
+                    LatLng nextLocation = new LatLng(latitude, longitude);
+                    mMap.addMarker(new MarkerOptions().position(nextLocation).title("Next Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nextLocation, 18.0f));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
