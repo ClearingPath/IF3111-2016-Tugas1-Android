@@ -36,7 +36,7 @@ import java.net.Socket;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
 
-    private GoogleMap mMap;
+    private GoogleMap mMap = null;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     // For compass
@@ -103,8 +103,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     protected void onResume() {
         super.onResume();
+
+        // Restart the sensor
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+
+        // Update map when resume
+        if(mMap!=null)
+            showNextLocation();
     }
 
     protected void onPause() {
@@ -168,6 +174,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+    public void showNextLocation() {
+        // LatLng nextLocation = new LatLng(latitude, longitude);
+        System.out.println("Latitude " + latitude);
+        System.out.println("Longitude " + longitude);
+        LatLng nextLocation = new LatLng(longitude, latitude);
+        mMap.addMarker(new MarkerOptions().position(nextLocation).title("Next Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nextLocation, 18.0f));
+    }
+
     private class RequestLocation extends AsyncTask<Void, Void, String>
     {
         @Override
@@ -219,10 +234,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     longitude = jsonResult.getDouble("longitude");
                     token = jsonResult.getString("token");
 
-                    // LatLng nextLocation = new LatLng(latitude, longitude);
-                    LatLng nextLocation = new LatLng(longitude, latitude);
-                    mMap.addMarker(new MarkerOptions().position(nextLocation).title("Next Location"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nextLocation, 18.0f));
+                    showNextLocation();
                 }
 
             } catch (JSONException e) {

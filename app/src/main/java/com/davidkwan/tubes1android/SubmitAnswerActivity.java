@@ -111,6 +111,7 @@ public class SubmitAnswerActivity extends AppCompatActivity {
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
+                    finish();
                 }
                 else if (status.equals("wrong_answer")){
                     MapsActivity.token = jsonResult.getString("token");
@@ -131,6 +132,7 @@ public class SubmitAnswerActivity extends AppCompatActivity {
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
+                    finish();
                 }
 
             } catch (JSONException e) {

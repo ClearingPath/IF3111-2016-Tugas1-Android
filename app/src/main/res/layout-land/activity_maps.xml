@@ -16,31 +16,32 @@
         android:layout_gravity="right"
         android:src="@drawable/compass" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         >
 
         <ImageButton
-            android:id="@+id/camera_bt"
-            android:layout_height="100dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/add_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:src="@drawable/camera"
             android:onClick = "takePicture"
-        />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
         <ImageButton
-            android:id="@+id/message_bt"
-            android:layout_below="@+id/camera_bt"
-            android:layout_height="100dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:id="@+id/back_bt"
             android:background="@drawable/message"
             android:onClick = "onSubmitAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_bt"
+            android:layout_alignStart="@+id/add_bt"
+            android:layout_alignEnd="@+id/add_bt"
+            android:spinnerMode="dropdown" />
 
-        />
-    </LinearLayout>
+    </RelativeLayout>
 
 </fragment>
