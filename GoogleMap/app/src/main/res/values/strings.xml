@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Google Map</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_answer">AnswerActivity</string>
+    <string name="title_activity_maps">Map for PBD</string>
+    <string name="title_activity_answer">Submit Answer</string>
     <string-array name="LocationItem">
         <item>gku_barat</item>
         <item>gku_timur</item>
@@ -9,7 +9,7 @@
         <item>cc_barat</item>
         <item>cc_timur</item>
         <item>dpr</item>
-        <item>sunken</item>
+        <item>oktagon</item>
         <item>perpustakaan</item>
         <item>pau</item>
         <item>kubus</item>
