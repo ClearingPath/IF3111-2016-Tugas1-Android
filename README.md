@@ -3,10 +3,13 @@
 ## Deskripsi
 
 Aplikasi ini adalah aplikasi untuk mendapatkan lokasi yang diminta oleh server, dengan cara memetakannya kemudian dapat dikirimkan jawaban berupa sebuah gambar yang diambil pada tempat tersebut dan dikirim ke server sebagai jawaban.
-###Cara Penggunaa
+
+###Cara Penggunaan
+
 ###Tampilan Awal
+
 ### Portrait 
-![alt text](https://drive.google.com/file/d/0B0tAwxwNjP3rMUI0bW0tckJsRms/view?usp=sharing)
+![alt text](https://drive.google.com/drive/u/0/folders/0B0tAwxwNjP3rWjRUT1MyZlM2RUk)
 ### Landscape 
 ![alt text](http://i.imgur.com/sbLLuNm.png)
 
