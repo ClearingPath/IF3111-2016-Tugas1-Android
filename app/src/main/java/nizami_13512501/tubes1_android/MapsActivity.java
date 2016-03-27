@@ -40,6 +40,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng targetLatLng;
     private LatLng currentLatLng;
 
+    public static final String EXTRAS_SERVERIP = "nizami_13512501.Tubes1-Android.MapsActivity.Extras.ServerIP";
+    public static final String EXTRAS_SERVERPORT = "nizami_13512501.Tubes1-Android.MapsActivity.Extras.ServerPort";
+    public static final String EXTRAS_NIM = "nizami_13512501.Tubes1-Android.MapsActivity.Extras.ServerNIM";
+
+
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int SUBMIT_ACTIVITY_REQUEST_CODE = 101;
     private Uri fileUri;
@@ -47,24 +52,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private ServerAsistenClient serverAsistenClient;
 
-    private String SERVERASISTEN_IP;
-    private int SERVERASISTEN_PORT;
-    private String SERVERASISTEN_NIM;
+    private String serverasistenIp;
+    private int serverasistenPort;
+    private String serverasistenNim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent callerIntent = getIntent();
+
+        serverasistenIp = callerIntent.getExtras().getString(EXTRAS_SERVERIP,getString(R.string.serverasisten_ip));
+        serverasistenPort = callerIntent.getExtras().getInt(EXTRAS_SERVERPORT,getResources().getInteger(R.integer.serverasisten_port));
+        serverasistenNim = callerIntent.getExtras().getString(EXTRAS_NIM,getString(R.string.serverasisten_nim));
+
+        serverAsistenClient = new ServerAsistenClient(serverasistenIp, serverasistenPort, this);
+
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        SERVERASISTEN_IP = getString(R.string.serverasisten_ip);
-        SERVERASISTEN_PORT = getResources().getInteger(R.integer.serverasisten_port);
-        SERVERASISTEN_NIM = getString(R.string.serverasisten_nim);
-
-        serverAsistenClient = new ServerAsistenClient(SERVERASISTEN_IP, SERVERASISTEN_PORT, this);
     }
 
 
@@ -81,7 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         targetLatLng = new LatLng(0,0);
-        serverAsistenClient.doFirstRequest(SERVERASISTEN_NIM);
+        serverAsistenClient.doFirstRequest(serverasistenNim);
 
         locMgr = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -194,7 +202,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (requestCode == SUBMIT_ACTIVITY_REQUEST_CODE){
             if (resultCode == RESULT_OK){
                 String answer = data.getStringExtra("result");
-                serverAsistenClient.submitAnswer(SERVERASISTEN_NIM,answer,targetLatLng);
+                serverAsistenClient.submitAnswer(serverasistenNim,answer,targetLatLng);
             }else{
 
             }

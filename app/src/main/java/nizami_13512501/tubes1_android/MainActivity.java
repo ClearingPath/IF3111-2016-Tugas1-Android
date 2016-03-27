@@ -9,6 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,10 +30,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        //ini nanti ganti
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -53,5 +52,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSubmitButtonClick(View view){
+
+        try {
+            EditText IPInput = (EditText) findViewById(R.id.IPInput);
+            EditText PortInput = (EditText) findViewById(R.id.ServerPortInput);
+            EditText NIMInput = (EditText) findViewById(R.id.NIMInput);
+
+            String IP = IPInput.getText().toString();
+            int Port = Integer.parseInt(PortInput.getText().toString());
+            String NIM = NIMInput.getText().toString();
+
+
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra(MapsActivity.EXTRAS_SERVERIP,IP);
+            intent.putExtra(MapsActivity.EXTRAS_SERVERPORT,Port);
+            intent.putExtra(MapsActivity.EXTRAS_NIM,NIM);
+            startActivity(intent);
+
+        }catch(NumberFormatException e){
+            Toast errorToast = Toast.makeText(this,"Number Format Error",Toast.LENGTH_SHORT);
+            e.printStackTrace();
+        }
+
     }
 }

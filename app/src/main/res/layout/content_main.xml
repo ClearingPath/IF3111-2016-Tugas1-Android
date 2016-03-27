@@ -15,5 +15,59 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="server IP"
+        android:id="@+id/IPInputLabel"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/serverasisten_ip"
+        android:id="@+id/IPInput"
+        android:layout_below="@+id/IPInputLabel"
+        android:layout_centerHorizontal="true"
+        android:editable="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server port"
+        android:id="@+id/ServerPortInputLabel"
+        android:layout_below="@+id/IPInput"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3111"
+        android:id="@+id/ServerPortInput"
+        android:layout_below="@+id/ServerPortInputLabel"
+        android:layout_centerHorizontal="true"
+        android:editable="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NIM"
+        android:id="@+id/NIMInputLabel"
+        android:layout_below="@+id/ServerPortInput"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/serverasisten_nim"
+        android:id="@+id/NIMInput"
+        android:layout_below="@+id/NIMInputLabel"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="START"
+        android:id="@+id/startButton"
+        android:layout_below="@+id/NIMInput"
+        android:layout_centerHorizontal="true"
+        android:onClick="onSubmitButtonClick" />
 </RelativeLayout>
