@@ -2,8 +2,6 @@ package com.example.yoga.tubes1android;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,10 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,31 +17,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.ExecutionException;
+import java.util.Calendar;
 
 public class SubmitAnswer extends AppCompatActivity {
     private Socket socket;
@@ -59,19 +39,16 @@ public class SubmitAnswer extends AppCompatActivity {
     PrintWriter out;
     BufferedReader input;
     String json, response;
-    Intent intent;
     double mylongitude, mylatitude;
     private LocationManager locationManager = null;
     private LocationListener locationListener = null;
-    private static final String[] INITIAL_PERMS = {
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_CONTACTS
-    };
-    private static final int INITIAL_REQUEST = 1337;
     private static final String[] LOCATION_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION
     };
-    private static final int LOCATION_REQUEST = INITIAL_REQUEST + 3;
+
+    String ip="167.205.34.132";
+    int port=3111;
+    Calendar c = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +65,6 @@ public class SubmitAnswer extends AppCompatActivity {
         nim = lastintent.getStringExtra("nim");
         targetlatitude = lastintent.getDoubleExtra("latitude", 1);
         targetlongitude = lastintent.getDoubleExtra("longitude", 1.0);
-        Toast.makeText(getApplicationContext(), String.valueOf(targetlatitude), Toast.LENGTH_LONG).show();
         try {
             locationManager = (LocationManager)
                     getSystemService(getApplicationContext().LOCATION_SERVICE);
@@ -105,6 +81,8 @@ public class SubmitAnswer extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, LOCATION_PERMS, 1);
                 return;
             }
+
+
             Location loc = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
             locationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
@@ -128,6 +106,10 @@ public class SubmitAnswer extends AppCompatActivity {
                 } else {
                 }
                 return;
+            case 2:
+                boolean writeAccepted = grantResults[0]==PackageManager.PERMISSION_GRANTED;
+
+                break;
 
         }
     }
@@ -174,7 +156,7 @@ public class SubmitAnswer extends AppCompatActivity {
                         break;
                     case "DPR":ans="dpr";
                         break;
-                    case "Sunken":ans="sunken";
+                    case "Oktagon":ans="oktagon";
                         break;
                     case "Perpustakaan":ans="perpustakaan";
                         break;
@@ -197,7 +179,7 @@ public class SubmitAnswer extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             try {
-                socket = new Socket("167.205.34.132", 3111);
+                socket = new Socket(ip, port);
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                 input= new BufferedReader(new InputStreamReader(socket.getInputStream()));
             } catch (UnknownHostException e) {
@@ -251,6 +233,8 @@ public class SubmitAnswer extends AppCompatActivity {
             resultIntent.putExtra("nim",nim);
             resultIntent.putExtra("latitude", targetlatitude);
             resultIntent.putExtra("longitude", targetlongitude);
+            resultIntent.putExtra("json",c.getTime().toString()+" "+json);
+            resultIntent.putExtra("response",c.getTime().toString()+" "+response);
             setResult(Activity.RESULT_OK, resultIntent);
             finish();
 
