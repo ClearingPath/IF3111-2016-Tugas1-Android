@@ -90,7 +90,7 @@ These are the client and server communication via JSON string passed by socket c
 
 **Submission Spinner Drop Down**
 
-![Submission Spinner Drop Down](screenshots/06-SubmitSpinner)
+![Submission Spinner Drop Down](screenshots/06-SubmitSpinner.png)
 
 **Message Toast**
 
