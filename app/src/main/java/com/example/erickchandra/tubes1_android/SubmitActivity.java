@@ -77,7 +77,7 @@ public class SubmitActivity extends AppCompatActivity implements AdapterView.OnI
             case 3: return "cc_barat";
             case 4: return "cc_timur";
             case 5: return "dpr";
-            case 6: return "sunken";
+            case 6: return "oktagon"; // PERGANTIAN DARI SUNKEN DENGAN OKTAGON
             case 7: return "perpustakaan";
             case 8: return "pau";
             case 9: return "kubus";
