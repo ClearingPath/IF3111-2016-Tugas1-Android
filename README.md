@@ -9,26 +9,25 @@ Aplikasi ini adalah aplikasi untuk mendapatkan lokasi yang diminta oleh server, 
 ###Tampilan Awal
 
 ### Portrait 
-![alt text](https://drive.google.com/drive/u/0/folders/0B0tAwxwNjP3rWjRUT1MyZlM2RUk)
+![alt text](http://i.imgur.com/STbyTqa.png)
 ### Landscape 
-![alt text](http://i.imgur.com/sbLLuNm.png)
+![alt text](http://i.imgur.com/Ugja8eo.png)
 
 ### Memulai Request
-![alt text]
+![alt text](http://i.imgur.com/STbyTqa.png)
 
 ### Mendapatkan Balasan
-![alt text]
+![alt text](http://i.imgur.com/gp6DHJS.png)
 
 ### Menjawab
+![alt text](http://i.imgur.com/4Vl2aYB.png)
+
 ### Jika Benar
-![alt text]
+![alt text](http://i.imgur.com/leEe4su.png)
 
 ### Jika jawaban salah
-![alt text]
-
-### Jika Menjawab 3 kali benar
-![alt text]
+![alt text](http://i.imgur.com/JNqb0Qd.png)
 
 ### Pengambilan gambar
-![alt text]
+![alt text](http://i.imgur.com/nu3W9b5.png)
 
