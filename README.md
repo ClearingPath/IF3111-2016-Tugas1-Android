@@ -1,10 +1,8 @@
 # Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
 
-## Latar Belakang
+## Deskripsi Aplikasi
 
-Dalam tugas ini, peserta diminta untuk menemukan beberapa tempat di lingkungan ITB dengan bantuan tools yang dibangun di atas platform Android. Aplikasi tersebut dapat memandu peserta dengan menampilkan peta (Google Maps) dan arah tujuannya. Peserta diminta menemukan 3 lokasi (akan diberikan dari server). Pada setiap lokasi peserta akan diminta untuk foto-diri di lokasinya dan mengirimkan nama lokasi tempat peserta berada. 
-
-Daftar kemungkinan jawaban lokasi diberikan oleh asisten. Pastikan anda tidak typo saat mengirimkan jawaban ke server. 
+Aplikasi ini digunakan untuk menemukan beberapa tempat di lingkungan ITB. Aplikasi ini akan terkoneksi dengan server, kemudian server tersebut akan mengirimkan sebuah lokasi dalam bentuk *latitude* dan *longitude*. Aplikasi kemudian akan mengolah data lokasi tersebut dan kemudian menampilkan lokasi tersebut dalam peta. Tugas kita adalah untuk menemukan lokasi tersebut, kemudian kita diminta untuk foto-firi di lokasi dan mengirimkan jawaban berupa nama lokasi tempat tersebut.
 
 Daftar kemungkinan jawaban lokasi adalah
 
@@ -73,14 +71,25 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 {“status”:”finish”,”nim”:”13512999”,”token”:”124fewfm32r32ifmwder42”,”check”:1}
 ```
 ## Tampilan Aplikasi
-**Tampilan horizontal**
+
+####Tampilan horizontal
 ![alt text](img/map_activity.jpg "Tampilan horizontal")
 
-**Tampilan vertikal**
+####Tampilan vertikal
 ![alt text](img/map_activity-land.jpg "Tampilan vertikal")
 
-**Tampilan *submit* jawaban**
+####Tampilan *submit* jawaban
 ![alt text](img/submit_answer_activity.jpg "Tampilan submit jawaban")
 
+
+
+## Lokasi Source Code
+Source Code untuk aplikasi ini terdapat pada folder `MapApp`. Folder tersebut merupakan Android Studio Project yang dapat dibuka di Android Studio.
+
+## Lokasi Binary File
+Binary file (apk) aplikasi ini terdapat pada direktori
+```
+MapApp/app/build/outputs/apk
+```
 
 [Markdown]: <http://dillinger.io/>
