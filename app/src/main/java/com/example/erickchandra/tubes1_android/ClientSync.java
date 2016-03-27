@@ -19,8 +19,8 @@ import java.net.Socket;
 public class ClientSync extends AsyncTask <Void, Void, Void> {
     public AsyncResponse delegate = null;
 
-    public static String hostname = "api.nitho.me";
-    public static int hostport = 8080;
+    public static String hostname = "167.205.34.132";
+    public static int hostport = 3111;
     String msgSend, msgRecv;
     Socket socket;
     private ProgressDialog progressDialog;
@@ -34,33 +34,34 @@ public class ClientSync extends AsyncTask <Void, Void, Void> {
         // Opening socket
         try {
             socket = new Socket(hostname, hostport);
+            // Sending Message
+            PrintWriter output = null;
+            try {
+                output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            output.print(msgSend + "\n");
+            output.flush();
+            System.out.println("Sent message: " + msgSend);
+            Log.d(this.getClass().toString(), "Send Message: " + msgSend);
+
+            // Receiving Message
+            BufferedReader input = null;
+            try {
+                input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                msgRecv = input.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Received message: " + msgRecv);
+            Log.d(this.getClass().toString(), "Received Message: " + msgRecv);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Sending Message
-        PrintWriter output = null;
-        try {
-            output = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        output.print(msgSend + "\n");
-        output.flush();
-        System.out.println("Sent message: " + msgSend);
-        Log.d(this.getClass().toString(), "Send Message: " + msgSend);
 
-        // Receiving Message
-        BufferedReader input = null;
-        try {
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            msgRecv = input.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Received message: " + msgRecv);
-        Log.d(this.getClass().toString(), "Received Message: " + msgRecv);
     }
 
     String getRecvMsg() {
