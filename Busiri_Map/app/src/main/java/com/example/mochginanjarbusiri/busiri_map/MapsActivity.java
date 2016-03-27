@@ -241,6 +241,11 @@ public class MapsActivity extends AppCompatActivity implements SensorEventListen
             this.token = responseResult.getString("token");
             this.status = responseResult.getString("status");
 
+
+            data.putString("token", token);
+            data.putDouble("latitude", latitude);
+            data.putDouble("longitude", longitude);
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

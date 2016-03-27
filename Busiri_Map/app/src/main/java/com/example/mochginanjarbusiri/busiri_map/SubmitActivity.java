@@ -49,7 +49,7 @@ public class SubmitActivity extends AppCompatActivity {
         locations.add("cc_barat");
         locations.add("cc_timur");
         locations.add("dpr");
-        locations.add("sunken");
+        locations.add("oktagon");
         locations.add("perpustakaan");
         locations.add("pau");
         locations.add("kubus");
