@@ -31,3 +31,9 @@ Aplikasi ini adalah aplikasi untuk mendapatkan lokasi yang diminta oleh server, 
 ### Pengambilan gambar
 ![alt text](http://i.imgur.com/nu3W9b5.png)
 
+Lokasi file
+bin
+\app\build\outputs\apk
+
+src
+app/src/main/java/kevin/tubes1
