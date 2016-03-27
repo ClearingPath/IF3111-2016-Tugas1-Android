@@ -80,6 +80,10 @@ These are the client and server communication via JSON string passed by socket c
 
 ![Map Activity](screenshots/03-Map.png)
 
+**Map Activity (Landscape Mode)**
+
+![Map Activity Landscape](screenshots/03-b-MapLandscape.jpg)
+
 **Calling Camera Intent**
 
 ![Camera Intent](screenshots/04-Intent.png)
