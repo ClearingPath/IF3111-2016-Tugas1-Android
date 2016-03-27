@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">mainDiITB</string>
+    <string name="title_activity_maps">Peta</string>
+    <string name="send">SEND</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="kompas">kompas</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
