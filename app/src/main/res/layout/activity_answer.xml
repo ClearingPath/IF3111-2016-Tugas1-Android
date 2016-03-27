@@ -26,7 +26,8 @@
         android:id="@+id/spinner"
         android:layout_below="@+id/textView2"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:entries="@array/answer_array"/>
 
     <Button
         android:layout_width="wrap_content"
