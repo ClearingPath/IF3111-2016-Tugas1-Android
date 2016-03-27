@@ -13,6 +13,7 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 * Hasil reply dari server harus ditampilkan dalam bentuk *toast*.
 * Ketika aplikasi menggunakan activity yang memanggil sensor, ketika aplikasi berpindah activity maka sensor akan dilepas agar tidak boros baterai.
 
+
 ## Spesifikasi Pertukaran Pesan
 Keterangan : *Client* pada dokumen ini adalah aplikasi dan *Server* merupakan server milik asisten.
 
@@ -50,14 +51,14 @@ Jika jawaban Anda **benar dan sudah berada dilokasi terakhir**, maka:
 ```
 
 ## Spesifikasi Tampilan
-### Tampilan horizontal
+### Tampilan portrait
 
-![horizontal](/screenshot/Screenshot_horizontal.jpeg "horizontal")
+![portrait](/screenshot/Screenshot_horizontal.jpeg "portrait")
 
 
-### Tampilan vertikal
+### Tampilan landscape
 
-![vertikal](/screenshot/Screenshot_vertikal.jpeg "vertikal")
+![landscape](/screenshot/Screenshot_vertikal.jpeg "landscape")
 
 
 ### Tampilan *submit* jawaban

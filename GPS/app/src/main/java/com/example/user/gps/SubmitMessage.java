@@ -141,7 +141,7 @@ public class SubmitMessage extends AppCompatActivity {
             String response = "";
             JSONObject jsonRequest = new JSONObject();
             try {
-                LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                /*LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 LocationListener mlocListener = new LocationListener() {
                     @Override
                     public void onLocationChanged(Location loc) {
@@ -165,12 +165,12 @@ public class SubmitMessage extends AppCompatActivity {
 
                 Container.setLtd(loc.getLatitude());
                 Container.setLng(loc.getLongitude());
-
+                */
                 jsonRequest.put("com", "answer");
                 jsonRequest.put("nim", "13513003");
                 jsonRequest.put("answer", Container.getAnswer());
-                jsonRequest.put("longitude", loc.getLongitude());
-                jsonRequest.put("latitude", loc.getLatitude());
+                jsonRequest.put("longitude", Container.getLng());
+                jsonRequest.put("latitude", Container.getLtd());
                 jsonRequest.put("token", Container.getToken());
             } catch (JSONException e) {
                 e.printStackTrace();

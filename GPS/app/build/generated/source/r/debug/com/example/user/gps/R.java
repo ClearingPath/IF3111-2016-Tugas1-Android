@@ -2810,8 +2810,8 @@ containing a value of this type.
         public static final int book_now=0x7f0e0050;
         public static final int bottom=0x7f0e001d;
         public static final int btnSubmit=0x7f0e0098;
-        public static final int buttonCamera=0x7f0e0094;
-        public static final int buttonMessage=0x7f0e0095;
+        public static final int buttonCamera=0x7f0e0095;
+        public static final int buttonMessage=0x7f0e0096;
         public static final int buttonPanel=0x7f0e006b;
         public static final int buttons=0x7f0e00ab;
         public static final int buyButton=0x7f0e004d;
@@ -2877,8 +2877,8 @@ containing a value of this type.
         public static final int line3=0x7f0e00b7;
         public static final int listMode=0x7f0e000c;
         public static final int list_item=0x7f0e0068;
-        public static final int logButton=0x7f0e0092;
-        public static final int logList=0x7f0e0093;
+        public static final int logButton=0x7f0e0093;
+        public static final int logList=0x7f0e0094;
         public static final int logo_only=0x7f0e0056;
         public static final int map=0x7f0e0090;
         public static final int match_parent=0x7f0e004f;
@@ -2907,7 +2907,7 @@ containing a value of this type.
         public static final int place_autocomplete_search_input=0x7f0e00bc;
         public static final int place_autocomplete_separator=0x7f0e00be;
         public static final int play_pause=0x7f0e00a7;
-        public static final int pointer=0x7f0e0091;
+        public static final int pointer=0x7f0e0092;
         public static final int production=0x7f0e0049;
         public static final int progress_circular=0x7f0e0007;
         public static final int progress_horizontal=0x7f0e0008;
@@ -2966,7 +2966,7 @@ containing a value of this type.
         public static final int title=0x7f0e006a;
         public static final int title_bar=0x7f0e00a1;
         public static final int title_template=0x7f0e006f;
-        public static final int toolbar=0x7f0e0096;
+        public static final int toolbar=0x7f0e0091;
         public static final int top=0x7f0e0026;
         public static final int topPanel=0x7f0e006e;
         public static final int up=0x7f0e000a;

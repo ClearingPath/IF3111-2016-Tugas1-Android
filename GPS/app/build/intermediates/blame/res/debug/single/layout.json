@@ -28,12 +28,12 @@
         "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_action_mode_bar.xml"
     },
     {
-        "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_title_item.xml",
-        "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_action_bar_title_item.xml"
-    },
-    {
         "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\design_navigation_item_header.xml",
         "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.1.1\\res\\layout\\design_navigation_item_header.xml"
+    },
+    {
+        "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_bar_title_item.xml",
+        "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_action_bar_title_item.xml"
     },
     {
         "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
@@ -72,16 +72,16 @@
         "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\notification_template_media.xml"
     },
     {
-        "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_alert_dialog_button_bar_material.xml",
-        "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
+        "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\design_navigation_menu.xml",
+        "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.1.1\\res\\layout\\design_navigation_menu.xml"
     },
     {
         "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_action_menu_item_layout.xml",
         "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_action_menu_item_layout.xml"
     },
     {
-        "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\design_navigation_menu.xml",
-        "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\23.1.1\\res\\layout\\design_navigation_menu.xml"
+        "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_alert_dialog_button_bar_material.xml",
+        "source": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.1\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
     },
     {
         "merged": "C:\\Users\\user\\Documents\\GitHub\\Tubes1-Android\\GPS\\app\\build\\intermediates\\res\\merged\\debug\\layout\\place_autocomplete_item_prediction.xml",

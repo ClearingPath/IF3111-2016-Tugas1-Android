@@ -14,6 +14,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -51,7 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
+public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener {
 
     private GoogleMap mMap;
     private ImageView mPointer;
@@ -80,6 +82,10 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
         super.onCreate(savedInstanceState);
         Log.i("response :", "create");
         setContentView(R.layout.activity_google_maps);
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle("Map");
         mPointer = (ImageView) findViewById(R.id.pointer);
         initializeMap();
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -200,7 +206,7 @@ public class GoogleMapsActivity extends FragmentActivity implements OnMapReadyCa
     private void setMarker(double ltd, double lng){
         LatLng marker = new LatLng(ltd,lng);
         mMap.addMarker(new MarkerOptions().position(marker).title("Designated Location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 18));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 15));
     }
 
     @Override
