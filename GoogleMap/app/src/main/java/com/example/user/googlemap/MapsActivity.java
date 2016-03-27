@@ -55,7 +55,7 @@ import java.util.Calendar;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, SensorEventListener {
 
-    private GoogleMap mMap; 
+    private GoogleMap mMap;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
     private ImageView arrowMap;
