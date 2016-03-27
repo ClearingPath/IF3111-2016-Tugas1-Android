@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # mainDiITB
 
 mainDiITB adalah sebuah perangkat lunak berbasis Android yang bertujuan untuk memenuhi tugas besar mata kuliah IF3111 Pengembangan Aplikasi pada Platform Khusus.
@@ -51,3 +52,6 @@ MIT
 
 **Free Software!**
 
+=======
+# IF3111-2016-Tugas1-Android
+>>>>>>> 099a80cba97c50ea788525b655f4ab9669133a24
