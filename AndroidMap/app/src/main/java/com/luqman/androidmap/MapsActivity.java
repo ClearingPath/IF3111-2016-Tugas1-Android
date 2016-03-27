@@ -1,5 +1,6 @@
 package com.luqman.androidmap;
 
+import android.Manifest;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import android.content.Context;
 import android.view.animation.RotateAnimation;
 import android.view.animation.Animation;
+import android.content.pm.PackageManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -68,12 +70,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        /*
+        String ops[] = {Manifest.permission.ACCESS_FINE_LOCATION};
+        while(!canAccessLocation()) {
+            requestPermissions(ops, 1340);
+        }
+        */
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in server given latitude longitude and move the camera
         LatLng marker = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(marker).title("Marker in some place"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker, 15));
+        //mMap.setMyLocationEnabled(true);
+    }
+
+    private boolean canAccessLocation() {
+        return(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
+    }
+
+    private boolean hasPermission(String perm) {
+        return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
     }
 
     @Override
