@@ -16,13 +16,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/label_answer"
-        android:text="@string/label_answer"/>
+        android:text="@string/label_answer"
+        android:layout_margin="3pt"/>
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></Spinner>
+        android:layout_height="wrap_content"
+        android:layout_margin="2pt"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/submit_button"/>
+        android:text="@string/submit_button"
+        android:onClick="submit"/>
 </LinearLayout>

@@ -14,9 +14,21 @@
         <item>CC Barat</item>
         <item>CC Timur</item>
         <item>DPR</item>
-        <item>Sunken</item>
+        <item>Oktagon</item>
         <item>Perpustakaan</item>
         <item>PAU</item>
         <item>Kubus</item>
+    </string-array>
+    <string-array name="location_codes">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>oktagon</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
     </string-array>
 </resources>

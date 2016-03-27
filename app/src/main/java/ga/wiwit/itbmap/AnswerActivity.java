@@ -1,18 +1,26 @@
 package ga.wiwit.itbmap;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class AnswerActivity extends AppCompatActivity
     implements AdapterView.OnItemSelectedListener {
+    private int selectedPos = 0;
+    private Communicator comm = Communicator.getInstance();
+    private String[] location_codes = null;
+    final String TAG = AnswerActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +31,14 @@ public class AnswerActivity extends AppCompatActivity
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+        Resources res = getResources();
+        location_codes = res.getStringArray(R.array.location_codes);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        comm.setContext(getApplicationContext());
     }
 
     /**
@@ -41,8 +57,7 @@ public class AnswerActivity extends AppCompatActivity
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selected = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), "Selected : " + selected, Toast.LENGTH_LONG).show();
+        selectedPos = position;
     }
 
     /**
@@ -54,5 +69,8 @@ public class AnswerActivity extends AppCompatActivity
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+    public void submit() {
+        comm.answer(location_codes[selectedPos]);
     }
 }
