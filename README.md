@@ -1,4 +1,4 @@
-# Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus - 1351307 Calvin Aditya Jonathan
+# Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus - 13513077 Calvin Aditya Jonathan
 
 ## Spesifikasi Aplikasi
 
