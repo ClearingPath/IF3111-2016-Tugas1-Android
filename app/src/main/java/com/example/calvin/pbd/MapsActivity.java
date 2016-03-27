@@ -65,7 +65,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean firstRequest = true;
     private GoogleMap mMap;
     private Uri fileUri;
-    private boolean logVisible = false;
+    private boolean logVisible;
     private ImageView image;
     private ListView lv;
     private double currentDegree = 0f;
@@ -97,13 +97,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         sensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
+        ArrayAdapter<String> logAdapter = new ArrayAdapter<String>(MapsActivity.this, android.R.layout.simple_list_item_1, commLog);
+        lv = (ListView)findViewById(R.id.logList);
+        lv.setBackgroundColor(Color.WHITE);
+        lv.setAdapter(logAdapter);
+        lv.setVisibility(View.INVISIBLE);
+        logVisible = false;
+
         ((Button) findViewById(R.id.logButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayAdapter<String> logAdapter = new ArrayAdapter<String>(MapsActivity.this, android.R.layout.simple_list_item_1, commLog);
-                lv = (ListView)findViewById(R.id.logList);
-                lv.setBackgroundColor(Color.WHITE);
-                lv.setAdapter(logAdapter);
                 if (!logVisible)
                     lv.setVisibility(View.VISIBLE);
                 else
@@ -238,6 +241,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 SharedPreferences sp = getSharedPreferences("PBD", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
+                editor.putLong("latitude", Double.doubleToLongBits(latitude));
+                editor.putLong("longitude", Double.doubleToLongBits(longitude));
                 editor.putString("token", responseJSON.getString("token"));
                 editor.commit();
 

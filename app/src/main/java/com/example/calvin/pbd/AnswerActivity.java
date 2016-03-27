@@ -71,6 +71,7 @@ public class AnswerActivity extends AppCompatActivity {
                 Socket socket = new Socket(MapsActivity.serverIP, 3111);
 
                 try {
+                    /*
                     LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                     LocationListener ll = new LocationListener() {
                         @Override
@@ -89,6 +90,7 @@ public class AnswerActivity extends AppCompatActivity {
                     Location loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     latitude = loc.getLatitude();
                     longitude = loc.getLongitude();
+                    */
                 }
                 catch (SecurityException e) {
                     Log.d("MyApp", e.toString());
@@ -98,8 +100,8 @@ public class AnswerActivity extends AppCompatActivity {
                 request.put("com", "answer");
                 request.put("nim", "13513077");
                 request.put("answer", params[0]);
-                request.put("latitude", latitude);
-                request.put("longitude", longitude);
+                request.put("latitude", Double.longBitsToDouble(sp.getLong("latitude", -1)));
+                request.put("longitude", Double.longBitsToDouble(sp.getLong("longitude", -1)));
                 request.put("token", sp.getString("token", null));
 
                 InputStream inputStream = socket.getInputStream();
@@ -149,7 +151,6 @@ public class AnswerActivity extends AppCompatActivity {
                 if (status.equals("ok")) {
                     editor.putLong("latitude", Double.doubleToLongBits(responseJSON.getDouble("latitude")));
                     editor.putLong("longitude", Double.doubleToLongBits(responseJSON.getDouble("longitude")));
-                    editor.commit();
                     setResult(MapsActivity.OK);
                 }
                 else if (status.equals("wrong_answer")) {
