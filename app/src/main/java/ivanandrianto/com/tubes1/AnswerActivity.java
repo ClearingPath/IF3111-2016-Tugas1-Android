@@ -65,7 +65,7 @@ public class AnswerActivity extends AppCompatActivity {
         locations.add("cc_barat");
         locations.add("cc_timur");
         locations.add("dpr");
-        locations.add("sunken");
+        locations.add("oktagon");
         locations.add("perpustakaan");
         locations.add("pau");
         locations.add("kubus");
@@ -119,8 +119,8 @@ public class AnswerActivity extends AppCompatActivity {
                         extras.putString("status", status);
                         extras.putString("token", token);
                         if(status.equals("ok")){
-                            latitude = jsonObject.optString("longitude").toString();
-                            longitude = jsonObject.optString("latitude").toString();
+                            latitude = jsonObject.optString("latitude").toString();
+                            longitude = jsonObject.optString("longitude").toString();
                         } else if(status.equals("wrong_answer")){
                             //do-nothing
                         } else if(status.equals("finish")){
@@ -147,25 +147,9 @@ public class AnswerActivity extends AppCompatActivity {
     }
 
     private boolean checkInternetConenction() {
-        // get Connectivity Manager object to check connection
         ConnectivityManager cm =(ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if(activeNetwork!=null){
-            // Check for network connections
-            if ( activeNetwork.getState() == android.net.NetworkInfo.State.CONNECTED ||
-                    activeNetwork.getState() == android.net.NetworkInfo.State.CONNECTING ) {
-                Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
-                return true;
-            } else if ( activeNetwork.getState() == android.net.NetworkInfo.State.DISCONNECTED ) {
-                Toast.makeText(this, " Not Connected ", Toast.LENGTH_LONG).show();
-                return false;
-            } else {
-                return false;
-            }
-        } else {
-            Toast.makeText(this, " No active network ", Toast.LENGTH_LONG).show();
-            return false;
-        }
+        CheckConnection checker = new CheckConnection(getApplicationContext(),cm);
+        return checker.checkNetworkConnection();
     }
 
     public void open(){
