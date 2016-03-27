@@ -66,9 +66,9 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 ```
 ## Spesifikasi Tampilan
 **Tampilan peta**
-![alt text](map.jpg)
+![alt text](http://imgur.com/igpBp8P)
 **Tampilan *submit* jawaban**
-![alt text](submit.jpg)
+![alt text](http://imgur.com/KwgM7cd)
 
 ## Lokasi Source Code
 Source code Java terletak pada direktori berikut.
@@ -78,6 +78,12 @@ Source code Java terletak pada direktori berikut.
 Source code XML terletak pada direktori berikut.
 ```sh
 /AndroidMap/app/src/main/res/layout
+```
+
+## Lokasi binary file
+Binary file (ekstensi .apk) aplikasi Android Map ini terletak pada direktori berikut.
+```sh
+/AndroidMap/app/build/outputs/apk
 ```
 
 [Markdown]: <http://dillinger.io/>
