@@ -25,8 +25,8 @@ public class Client extends AsyncTask<Void, Void, Void> {
 
     public static final String TAG = Client.class.getSimpleName();
 
-    private String host = "api.nitho.me";
-    private int port = 8080;
+    private String host = "167.205.34.132";
+    private int port = 3111;
     private String responseLine;
 
     private Response response;

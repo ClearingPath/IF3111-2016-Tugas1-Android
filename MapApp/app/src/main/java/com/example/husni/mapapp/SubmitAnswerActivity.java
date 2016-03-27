@@ -82,8 +82,8 @@ public class SubmitAnswerActivity extends AppCompatActivity implements Response 
             case "DPR":
                 ans = "dpr";
                 break;
-            case "Sunken":
-                ans = "sunken";
+            case "Oktagon":
+                ans = "oktagon";
                 break;
             case "Perpustakaan":
                 ans = "perpustakaan";
