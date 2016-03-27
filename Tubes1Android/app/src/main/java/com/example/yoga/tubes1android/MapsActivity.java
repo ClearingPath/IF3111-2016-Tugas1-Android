@@ -81,8 +81,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // calling onClick() method
         ImageButton one = (ImageButton) findViewById(R.id.imageButton);
-        one.setOnClickListener(this); // calling onClick() method
+        one.setOnClickListener(this);
         ImageButton two = (ImageButton) findViewById(R.id.imageButton2);
         two.setOnClickListener(this);
         Button log = (Button) findViewById(R.id.log);
@@ -92,33 +93,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        //request location
         new Connect().execute("");
+        //check permission untuk menyimpan foto
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this, storageperms, 2);
             return;
         }
 
     }
+    //fungsi request permision
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
         switch (requestCode) {
 
-            case 1:
+            case 1://untuk mendapatkan lokasi device
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
 
                     return;
                 }
-            case 2:
+            case 2://untuk menyimpan foto
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 } else {
@@ -144,16 +141,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -168,15 +155,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
 
             case R.id.imageButton2:
-
-                // Do something in response to button
+                //kirimkan ke submit answer
                 Intent intent = new Intent(this, SubmitAnswer.class);
-                //Bundle b = new Bundle();
                 intent.putExtra("token", token);
                 intent.putExtra("nim",nim);
                 intent.putExtra("latitude", targetlatitude);
                 intent.putExtra("longitude", targetlongitude);
                 startActivityForResult(intent, 1);
+                //update map
                 LatLng target = new LatLng(targetlongitude, targetlatitude);
                 mMap.addMarker(new MarkerOptions().position(target).title("target"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(target, 17));
@@ -197,7 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
-            case (1) : {
+            case (1) : {//ambil nilai dari submit answer
                 if (resultCode == Activity.RESULT_OK) {
                     token=data.getStringExtra("token");
                     nim=data.getStringExtra("nim");
@@ -208,16 +194,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 break;
             }
-            case (2) :{
-                    if (resultCode == RESULT_OK) {
-
-                    }
-
-                break;
-            }
         }
     }
-
+    //intent kamera
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -230,7 +209,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Toast.makeText(getApplicationContext(), "photophile", Toast.LENGTH_LONG).show();
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, 2);
@@ -238,7 +216,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-
+    //safe file
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -255,6 +233,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return image;
     }
 
+    //perhitungan kompass
     @Override
     public void onSensorChanged(SensorEvent event) {
         float[] data;
@@ -290,7 +269,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
+    //request first location
     private class Connect extends AsyncTask<String, Void, String> {
 
         @Override

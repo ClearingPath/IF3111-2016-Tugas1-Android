@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -45,7 +44,6 @@ public class SubmitAnswer extends AppCompatActivity {
     private static final String[] LOCATION_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION
     };
-
     String ip="167.205.34.132";
     int port=3111;
     Calendar c = Calendar.getInstance();
@@ -57,31 +55,23 @@ public class SubmitAnswer extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         addListenerOnButton();
-
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //ambil data dari activity sebelum
         Intent lastintent = getIntent();
         token = lastintent.getStringExtra("token");
         nim = lastintent.getStringExtra("nim");
         targetlatitude = lastintent.getDoubleExtra("latitude", 1);
         targetlongitude = lastintent.getDoubleExtra("longitude", 1.0);
+
+        //request permision untuk get current location
         try {
             locationManager = (LocationManager)
                     getSystemService(getApplicationContext().LOCATION_SERVICE);
             locationListener = new MyLocationListener();
-
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 ActivityCompat.requestPermissions(this, LOCATION_PERMS, 1);
                 return;
             }
-
 
             Location loc = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
             locationManager.requestLocationUpdates(
@@ -95,6 +85,7 @@ public class SubmitAnswer extends AppCompatActivity {
 
     }
 
+    //fungsi request permission
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
@@ -114,6 +105,7 @@ public class SubmitAnswer extends AppCompatActivity {
         }
     }
 
+    //class untuk get curent location
     private class MyLocationListener implements LocationListener {
 
         @Override
@@ -196,13 +188,10 @@ public class SubmitAnswer extends AppCompatActivity {
                 jsonObject.put("answer", ans);
                 jsonObject.put("latitude", String.valueOf(mylatitude));
                 jsonObject.put("longitude", String.valueOf(mylongitude));
-
                 jsonObject.put("token", token);
                 json = jsonObject.toString();
-                System.out.println(json);
                 out.println(json);
                 response=input.readLine();
-                System.out.println(response);
                 final JSONObject obj=new JSONObject(response);
                 status=obj.getString("status");
                 if(status.equals("ok")){
