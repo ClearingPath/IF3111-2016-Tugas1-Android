@@ -47,40 +47,63 @@ android:orientation="horizontal"
             android:layout_above="@+id/map"
             android:layout_gravity="left|top" />
 
+        <ImageButton
+            android:layout_width="84dp"
+            android:layout_height="150dp"
+            android:id="@+id/imageButton"
+            android:layout_gravity="right|bottom"
+            android:src="@drawable/camera"
+            android:layout_alignRight="@+id/textResponse"
+            android:layout_alignEnd="@+id/textResponse"
+            android:onClick="sendPerintah"
+            android:backgroundTint="#FFFFFF" />
+
+        <ImageButton
+            android:layout_width="84dp"
+            android:layout_height="150dp"
+            android:id="@+id/imageButton2"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="right|top"
+            android:src="@drawable/submit"
+            android:onClick="sendServer"
+            android:backgroundTint="#FFFFFF" />
 
 
     </FrameLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:text="@string/send"
-        android:id="@+id/button"
-        android:layout_weight="1.0"
-        android:singleLine="false"
-        android:onClick="sendServer"
-        android:layout_gravity="right|top"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:text="@string/send"-->
+        <!--android:id="@+id/button"-->
+        <!--android:layout_weight="1.0"-->
+        <!--android:singleLine="false"-->
+        <!--android:onClick="sendServer"-->
+        <!--android:layout_gravity="right|top"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true" />-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textResponse"
-        android:layout_above="@+id/buttonfoto"
+        android:layout_above="@+id/imageButton"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="77dp"
         />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:text="Foto"
-        android:id="@+id/buttonfoto"
-        android:layout_gravity="right|bottom"
-        android:layout_weight= "1.0"
-        android:onClick="sendPerintah"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:text="Foto"-->
+        <!--android:id="@+id/buttonfoto"-->
+        <!--android:layout_gravity="right|bottom"-->
+        <!--android:layout_weight= "1.0"-->
+        <!--android:onClick="sendPerintah"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true" />-->
 
 
 </RelativeLayout>
