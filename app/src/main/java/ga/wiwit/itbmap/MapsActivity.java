@@ -159,7 +159,7 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng itb = new LatLng(Communicator.getLatitude(), Communicator.getLatitude());
+        LatLng itb = new LatLng(Communicator.getLatitude(), Communicator.getLongitude());
         mMap.addMarker(new MarkerOptions().position(itb).title("Find this location!"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(itb, 17));
     }
@@ -179,6 +179,7 @@ public class MapsActivity extends AppCompatActivity
 
     @Override
     public void processJSON(JSONObject obj) throws JSONException {
+        Toast.makeText(this, obj.toString(), Toast.LENGTH_LONG).show();
         double lat = (double)obj.get("latitude");
         double lng = (double)obj.get("longitude");
         LatLng pos = new LatLng(lat, lng);
