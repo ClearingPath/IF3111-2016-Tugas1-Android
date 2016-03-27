@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">mainDiITB</string>
+    <string name="title_activity_maps">Peta</string>
+    <string name="send">SEND</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="kompas">kompas</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="planets_array">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>oktagon</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
+
+    </string-array>
+</resources>

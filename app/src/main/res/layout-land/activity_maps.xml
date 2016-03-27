@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:map="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:name="com.google.android.gms.maps.SupportMapFragment"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="com.example.bimo.maindiitb.MapsActivity"
+android:orientation="horizontal"
+    android:weightSum="1">
+
+    <FrameLayout
+        android:id = "@+id/framing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- here can be you view -->
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            tools:context=".MapsActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_weight="0.89"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal|top" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/imageView"
+            android:src ="@drawable/north"
+            android:contentDescription="@string/kompas"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@+id/map"
+            android:layout_gravity="left|top" />
+
+
+
+    </FrameLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:text="@string/send"
+        android:id="@+id/button"
+        android:layout_weight="1.0"
+        android:singleLine="false"
+        android:onClick="sendServer"
+        android:layout_gravity="right|top"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textResponse"
+        android:layout_above="@+id/buttonfoto"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="77dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:text="Foto"
+        android:id="@+id/buttonfoto"
+        android:layout_gravity="right|bottom"
+        android:layout_weight= "1.0"
+        android:onClick="sendPerintah"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
