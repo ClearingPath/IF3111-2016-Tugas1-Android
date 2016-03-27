@@ -23,9 +23,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class SocketHub extends AsyncTask<Void, Void, Void> {
+
     private String host = "167.205.34.132";
     private int port = 3111;
-
+/*
+    private String host = "api.nitho.me";
+    private int port = 8080;
+*/
     private JSONObject message = null;
     private String responseLine;
 

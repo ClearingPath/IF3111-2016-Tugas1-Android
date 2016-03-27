@@ -12,7 +12,7 @@ Daftar kemungkinan jawaban lokasi adalah
 * cc_barat
 * cc_timur
 * dpr
-* sunken
+* oktagon
 * perpustakaan
 * pau
 * kubus
@@ -86,7 +86,7 @@ Source code XML terletak pada direktori berikut.
 ## Lokasi binary file
 Binary file (ekstensi .apk) aplikasi Android Map ini terletak pada direktori berikut.
 ```sh
-/AndroidMap/app/build/outputs/apk
+/AndroidMap/bin
 ```
 
 [Markdown]: <http://dillinger.io/>
