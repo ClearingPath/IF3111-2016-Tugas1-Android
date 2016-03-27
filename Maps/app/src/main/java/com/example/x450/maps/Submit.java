@@ -49,16 +49,15 @@ public class Submit extends AppCompatActivity implements AdapterView.OnItemSelec
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.locations, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-                location_spinner.setAdapter(adapter);
-                location_spinner.setOnItemSelectedListener(this);
+        location_spinner.setAdapter(adapter);
+        location_spinner.setOnItemSelectedListener(this);
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
         // An item was selected. You can retrieve the selected item using
-        Log.d("selected ","asaa");
         Log.d("selected ",(String) parent.getItemAtPosition(pos));
         selectedLoc= (String) parent.getItemAtPosition(pos);
 

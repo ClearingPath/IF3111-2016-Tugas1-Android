@@ -43,6 +43,7 @@ public class RW {
             File gpxfile = new File(root, filename);
 
             FileWriter writer = new FileWriter(gpxfile,true);
+            writer.append("\n");
             writer.append("\n"+cal.getTime());
             writer.append("\n"+sBody);
             writer.flush();

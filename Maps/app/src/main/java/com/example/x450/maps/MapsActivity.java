@@ -38,7 +38,7 @@ import org.json.JSONObject;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener,SensorEventListener,ResponseHandlerInterface {
 
-    private GoogleMap mMap;
+    private GoogleMap gMap;
     private RW rw;
     private ImageView mPointer;
     private SensorManager mSensorManager;
@@ -62,7 +62,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-            Log.d("in","on create");
+        Log.d("in","on create");
         rw = new RW();
         req_loc = new JSONObject();
         try {
@@ -99,12 +99,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        double laat = 107;
-        double loong = -6;
-        LatLng laatloong = new LatLng(laat,loong);
-        mark = mMap.addMarker(new MarkerOptions().position(laatloong).title("Dummy").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        mark.remove();
+        gMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -115,7 +110,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        mMap.setMyLocationEnabled(true);
+        gMap.setMyLocationEnabled(true);
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String bestProvider = locationManager.getBestProvider(criteria, true);
@@ -134,8 +129,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        gMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        gMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override
@@ -146,8 +141,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         currLat = latitude.toString();
         currLong = longitude.toString();
         LatLng latLng = new LatLng(latitude, longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        gMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        gMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         
 
     }
@@ -169,10 +164,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void toSubmit(View view){
         Intent intent = new Intent(this,Submit.class);
-        intent.putExtra("longitude", currLong);
+        intent.putExtra("longitude", longitude);
         Log.d("currLong", currLong);
         Log.d("currLat",currLat);
-        intent.putExtra("latitude", currLat);
+        intent.putExtra("latitude", latitude);
         intent.putExtra("token", token);
         startActivityForResult(intent,1);
     }
@@ -245,9 +240,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         double lat = Double.parseDouble(latitude);
         double longi = Double.parseDouble(longitude);
         LatLng latlongi = new LatLng(lat,longi);
-        mark = mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+        mark = gMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 
-//        mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+//        gMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 
     }
 
@@ -278,7 +273,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 LatLng latlongi = new LatLng(lat,longi);
                 Log.d("its", "ok");
                 mark.remove();
-                mark = mMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                mark = gMap.addMarker(new MarkerOptions().position(latlongi).title("Destination").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
             }
             else{
                 Log.d("its", "finish");
