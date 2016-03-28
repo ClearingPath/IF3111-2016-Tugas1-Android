@@ -1,3 +1,4 @@
+﻿
 ﻿# Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
 
 ## Latar Belakang
@@ -77,12 +78,13 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 ```
 ## Spesifikasi Tampilan
 **Tampilan horizontal**
-![alt text](tree/master/app/Screenshot_2016-03-27-23-33-03.jpeg)
+![alt text](app/Screenshot_2016-03-27-23-33-03.jpeg)
 **Tampilan vertikal**
-![alt text](tree/master/app/Screenshot_2016-03-28-00-06-37.jpeg)
+![alt text](app/Screenshot_2016-03-28-00-06-37.jpeg)
 **Tampilan *submit* jawaban**
-![alt text](tree/master/app/Screenshot_2016-03-27-23-33-15.jpeg)
+![alt text](app/Screenshot_2016-03-27-23-33-15.jpeg)
 ## Source Code
 Source code terletak di app\src\main
 ## Binary
 Binary terletak di app\bin
+
