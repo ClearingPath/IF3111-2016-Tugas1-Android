@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Location Finder</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="ic_compass">Compass Icon</string>
+    <string name="title_activity_answer">AnswerActivity</string>
+</resources>
