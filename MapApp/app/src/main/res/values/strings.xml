@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">MapApp</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="cameraButtonString">Take Photo</string>
+    <string name="submitButtonString">Submit Answer</string>
+    <string name="title_activity_submit_answer">Submit Answer</string>
+    <string name="SubmitAnswerButton">Submit</string>
+    <string-array name="location_array">
+        <item>GKU Barat</item>
+        <item>GKU Timur</item>
+        <item>Intel</item>
+        <item>CC Barat</item>
+        <item>CC Timur</item>
+        <item>DPR</item>
+        <item>Oktagon</item>
+        <item>Perpustakaan</item>
+        <item>PAU</item>
+        <item>Kubus</item>
+    </string-array>
+    <string name="title_activity_setup">SetupActivity</string>
+
+</resources>
