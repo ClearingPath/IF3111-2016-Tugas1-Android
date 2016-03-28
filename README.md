@@ -38,4 +38,3 @@ Aplikasi ini adalah aplikasi yang dapat menampilkan peta, mengirim dan menerima 
 \app\src\main\java\in\feryand\locationfinder
 ### res
 \app\src\main\res
-
