@@ -58,10 +58,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private Socket socket;
     private static GoogleMap mMap;
-    private boolean first = true;
+    static final boolean FIRST_VAL = true;
+    private boolean first;
     public static final int SERVERPORT = 3111;
-    private static final String ServerIP = "167.205.34.132";
-//    public static final String ServerIP = "192.168.1.9";
+//    public static final String ServerIP = "167.205.34.132";
+    public static final String ServerIP = "192.168.43.122";
     private static String token;
     private static double lat;
     private static double lng;
@@ -82,6 +83,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle("Map");
+
+            if (savedInstanceState != null) {
+                first = savedInstanceState.getBoolean("FIRST_VAL");
+            } else {
+                first = true;
+            }
 
             // show map fragment
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -196,6 +203,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean("FIRST_VAL", first);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -263,6 +276,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 DataOutputStream out = new DataOutputStream(os);
                 out.writeUTF(obj.toString());
 
+                Handler handler1 = new Handler(Looper.getMainLooper());
+                handler1.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(MapActivity.this, "Requesting location", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 InputStream is = socket.getInputStream();
                 DataInputStream in = new DataInputStream(is);
                 response = in.readUTF();
@@ -270,7 +290,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     public void run() {
-                        Toast.makeText(MapActivity.this, response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapActivity.this, response, Toast.LENGTH_LONG).show();
                     }
                 });
 
