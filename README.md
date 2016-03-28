@@ -27,3 +27,5 @@ Spesifikasi dari aplikasi yang dibangun sebagai berikut
 
 **Tampilan log komunikasi**
 ![alt text](/Screenshots/logPortrait.png)
+=======
+# IF3111-2016-Tugas1-Android
