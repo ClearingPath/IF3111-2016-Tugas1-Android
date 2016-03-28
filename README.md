@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Location Finder
 
 ## Deskripsi
@@ -37,3 +38,6 @@ bin
 
 src
 app/src/main/java/kevin/tubes1
+=======
+# IF3111-2016-Tugas1-Android
+>>>>>>> 099a80cba97c50ea788525b655f4ab9669133a24
