@@ -9,7 +9,7 @@
     <string name="cc_barat_name">CC Barat</string>
     <string name="cc_timur_name">CC Timur</string>
     <string name="dpr_name">DPR</string>
-    <string name="sunken_name">Sunken Court</string>
+    <string name="sunken_name">Oktagon</string>
     <string name="perpustakaan_name">Perpustakaan</string>
     <string name="pau_name">PAU</string>
     <string name="kubus_name">Kubus</string>
@@ -19,7 +19,7 @@
     <string name="cc_barat_code">cc_barat</string>
     <string name="cc_timur_code">cc_timur</string>
     <string name="dpr_code">dpr</string>
-    <string name="sunken_code">sunken</string>
+    <string name="sunken_code">oktagon</string>
     <string name="perpustakaan_code">perpustakaan</string>
     <string name="pau_code">pau</string>
     <string name="kubus_code">kubus</string>
