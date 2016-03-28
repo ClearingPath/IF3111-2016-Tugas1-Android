@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Tubes1</string>
+    <string name="title_activity_google_maps">Map</string>
+    <string name="ic_compass">Compass Icon</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_answer">Answer</string>
+</resources>
