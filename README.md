@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Mappie
 Tugas Besar I IF3111
 Android App mencari lokasi-lokasi di ITB dari lokasi yang diberikan oleh server. Pengguna dapat:
@@ -27,3 +28,6 @@ Toast akan diberikan setiap ada response dari server
 [apk](http://gitlab.informatika.org/ariezanadya/Tubes1-Android/tree/master/apk-debug.apk)
 
 Arieza Nadya/13512017
+=======
+# IF3111-2016-Tugas1-Android
+>>>>>>> 099a80cba97c50ea788525b655f4ab9669133a24
