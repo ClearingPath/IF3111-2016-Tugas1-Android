@@ -178,8 +178,8 @@ public class SubmitActivity extends AppCompatActivity {
                 writer.putString("Status", status);
                 writer.putString("Token", resultJSON.getString("token"));
                 if (status.equals("ok")) {
-                    writer.putLong("Longitude", resultJSON.getLong("longitude"));
-                    writer.putLong("Latitude", resultJSON.getLong("latitude"));
+                    writer.putLong("Longitude", Double.doubleToRawLongBits(resultJSON.getDouble("longitude")));
+                    writer.putLong("Latitude", Double.doubleToRawLongBits(resultJSON.getDouble("latitude")));
                     setResult(MapsActivity.OK);
                 }
                 else if (status.equals("wrong_answer")) {

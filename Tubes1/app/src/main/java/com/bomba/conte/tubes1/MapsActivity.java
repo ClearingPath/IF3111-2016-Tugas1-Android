@@ -152,8 +152,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 writer.commit();
                 writer.putString("Token", resultJSON.getString("token"));
-                writer.putLong("Latitude", resultJSON.getLong("latitude"));
-                writer.putLong("Longitude", resultJSON.getLong("longitude"));
+                writer.putLong("Latitude", Double.doubleToRawLongBits(resultJSON.getDouble("latitude")));
+                writer.putLong("Longitude", Double.doubleToRawLongBits(resultJSON.getDouble("longitude")));
                 changeMarker(Double.longBitsToDouble(storage.getLong("Latitude", 53)), Double.longBitsToDouble(storage.getLong("Longitude", 13)), "Target");
             } catch (JSONException e) {
                 e.printStackTrace();
