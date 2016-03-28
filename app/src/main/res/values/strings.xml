@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Tubes1-Android</string>
+    <string name="home_name">Android Map ITB Project</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+    <string-array name="location_array">
+        <item>GKU Barat</item>
+        <item>GKU Timur</item>
+        <item>Intel</item>
+        <item>CC Barat</item>
+        <item>CC Timur</item>
+        <item>DPR</item>
+        <item>Oktagon</item>
+        <item>Perpustakaan</item>
+        <item>PAU</item>
+        <item>Kubus</item>
+    </string-array>
+
+    <string name="title_activity_finish_fullscreen">FinishFullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>

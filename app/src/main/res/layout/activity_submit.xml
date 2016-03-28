@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="32dp"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    android:paddingTop="32dp"
+    tools:context="com.example.erickchandra.tubes1_android.SubmitActivity">
+
+    <TextView
+        android:id="@+id/text_location_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location Name:" />
+
+    <Spinner
+        android:id="@+id/spinner_choose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="32dp"
+        android:paddingBottom="32dp"
+        android:layout_below="@id/text_location_name"></Spinner>
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_choose"
+        android:text="Submit"/>
+
+</RelativeLayout>
