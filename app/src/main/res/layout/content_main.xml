@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:paddingEnd="0dp"
+    android:paddingStart="0dp"
+    tools:context="jessicahandayani.caplocs.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:id="@+id/camera_button"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/camera"
+            android:scaleType="fitCenter"
+            android:onClick="startCamera"/>
+        <ImageButton
+            android:id="@+id/display_form_button"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/submit"
+            android:scaleType="fitCenter"
+            android:onClick="startSubmitForm"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pointer"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/pointer"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp" />
+
+</RelativeLayout>
