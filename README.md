@@ -1,3 +1,4 @@
+# IF3111-2016-Tugas1-Android
 # Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
 
 ## Asumsi
@@ -48,3 +49,4 @@
 **Tampilan finish**
 
 ![alt text](https://lh3.googleusercontent.com/-aT2KflqMEP8/VvfNV58_AzI/AAAAAAAAJVQ/Cee2WxIZiasuSjnrmEfYk6lAy9cyw36fwCCo/s512-Ic42/Finish%255B1%255D.png)
+
