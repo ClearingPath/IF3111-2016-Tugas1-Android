@@ -1,4 +1,4 @@
-# Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
+﻿# Tugas Besar 1 IF3111 Pengembangan Aplikasi pada Platform Khusus
 
 ## Deskripsi Aplikasi
 
@@ -87,9 +87,6 @@ Jika jawaban Anda **benar dan sudah berada dilokasi ketiga**, maka:
 Source Code untuk aplikasi ini terdapat pada folder `MapApp`. Folder tersebut merupakan Android Studio Project yang dapat dibuka di Android Studio.
 
 ## Lokasi Binary File
-Binary file (apk) aplikasi ini terdapat pada direktori
-```
-MapApp/app/build/outputs/apk
-```
+Binary file (apk) aplikasi ini terdapat pada direktori `apk`.
 
 [Markdown]: <http://dillinger.io/>
