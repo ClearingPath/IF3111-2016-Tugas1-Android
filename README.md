@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Project 1 - Android - IF3111 Platform-based Application Development
 ## 13513021 - Erick Chandra
 
@@ -114,6 +113,3 @@ These are the client and server communication via JSON string passed by socket c
 ```
 
    [here]: <http://gitlab.informatika.org/IF3111/Tubes1-Android>
-=======
-# IF3111-2016-Tugas1-Android
->>>>>>> 099a80cba97c50ea788525b655f4ab9669133a24
