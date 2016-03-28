@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">ITB Map</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="camera_button">Camera</string>
+    <string name="answer_button">Answer</string>
+    <string name="title_activity_camera">Camera</string>
+    <string name="title_activity_answer">Submit Answer</string>
+    <string name="label_answer">Location Name:</string>
+    <string name="submit_button">SUBMIT</string>
+    <string-array name="locations">
+        <item>GKU Barat</item>
+        <item>GKU Timur</item>
+        <item>Intel</item>
+        <item>CC Barat</item>
+        <item>CC Timur</item>
+        <item>DPR</item>
+        <item>Oktagon</item>
+        <item>Perpustakaan</item>
+        <item>PAU</item>
+        <item>Kubus</item>
+    </string-array>
+    <string-array name="location_codes">
+        <item>gku_barat</item>
+        <item>gku_timur</item>
+        <item>intel</item>
+        <item>cc_barat</item>
+        <item>cc_timur</item>
+        <item>dpr</item>
+        <item>oktagon</item>
+        <item>perpustakaan</item>
+        <item>pau</item>
+        <item>kubus</item>
+    </string-array>
+</resources>

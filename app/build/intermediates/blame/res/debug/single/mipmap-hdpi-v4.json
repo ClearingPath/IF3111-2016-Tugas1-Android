@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\Projects\\ITBMap\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\ic_launcher.png",
+        "source": "D:\\Projects\\ITBMap\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Projects\\Tubes1-Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi-v4\\ic_launcher.png",
+        "source": "D:\\Projects\\Tubes1-Android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    }
+]

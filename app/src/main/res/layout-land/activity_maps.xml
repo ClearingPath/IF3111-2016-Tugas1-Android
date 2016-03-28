@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="ga.wiwit.itbmap.MapsActivity">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:layout_alignParentRight="true">
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/compass_arrow"
+        android:src="@drawable/compass_arrow" />
+
+    <LinearLayout
+        android:gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true" >
+
+        <ImageButton
+            android:gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/answer_button"
+            android:text="@string/answer_button"
+            android:src="@drawable/answer_button"
+            android:onClick="goAnswer"/>
+
+        <ImageButton
+            android:gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/camera_button"
+            android:text="@string/camera_button"
+            android:src="@drawable/camera_button"
+            android:adjustViewBounds="false"
+            android:onClick="goCamera"/>
+
+    </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
