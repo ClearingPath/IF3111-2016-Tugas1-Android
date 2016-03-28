@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Tebak ITB</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_main">Tebak ITB</string>
+    <string name="title_activity_challenge_finish">Tebak ITB</string>
+    <string name="title_activity_submit_answer">Submit Answer</string>
+    <string name="start_challenge">Start Challenge!</string>
+    <string name="camera_button">Take Picture</string>
+    <string name="send_button">Send</string>
+    <string name="nimText_hint">Insert your NIM</string>
+    <string name="app_shared_preferences">TebakITB.SHARED_PREFERENCES</string>
+    <string name="spinner_title">Location:</string>
+    <string-array name="location_array">
+        <item>GKU Barat</item>
+        <item>GKU Timur</item>
+        <item>Intel</item>
+        <item>CC Barat</item>
+        <item>CC Timur</item>
+        <item>DPR</item>
+        <item>Oktagon</item>
+        <item>Perpustakaan</item>
+        <item>PAU</item>
+        <item>Kubus</item>
+    </string-array>
+    <string name="finish">Congratulation! You have finished the challenge</string>
+</resources>
