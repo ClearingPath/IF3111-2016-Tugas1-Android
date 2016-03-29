@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
@@ -43,11 +44,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -61,8 +65,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     static final boolean FIRST_VAL = true;
     private boolean first;
     public static final int SERVERPORT = 3111;
-//    public static final String ServerIP = "167.205.34.132";
-    public static final String ServerIP = "192.168.43.122";
+    public static final String ServerIP = "89.36.220.146";
     private static String token;
     private static double lat;
     private static double lng;
@@ -89,6 +92,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             } else {
                 first = true;
             }
+
+            Log.i("log", "First: " + first);
 
             // show map fragment
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -179,7 +184,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
+
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
         if (marker != null) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 7));
         }
@@ -264,6 +270,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             response = null;
 
             try {
+                Log.i("log", "Connecting to " + ServerIP);
                 socket = new Socket(ServerIP, SERVERPORT);
 
                 JSONObject obj = new JSONObject();
@@ -271,10 +278,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 obj.put("nim", "13512017");
 
                 Log.i("log", "requesting first location");
+                Log.i("log", obj.toString());
 
-                OutputStream os = socket.getOutputStream();
-                DataOutputStream out = new DataOutputStream(os);
-                out.writeUTF(obj.toString());
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                out.println(obj);
 
                 Handler handler1 = new Handler(Looper.getMainLooper());
                 handler1.post(new Runnable() {
@@ -283,9 +290,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                 });
 
-                InputStream is = socket.getInputStream();
-                DataInputStream in = new DataInputStream(is);
-                response = in.readUTF();
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                response = in.readLine();
+                Log.i("log", response);
 
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
@@ -299,7 +307,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 return response;
 
+            } catch (JSONException e) {
+                Log.e("log", "json exception occurred");
+                e.printStackTrace();
             } catch (Exception e) {
+                Log.e("log", "exception occurred");
                 e.printStackTrace();
             }
 
@@ -312,11 +324,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 JSONObject jsonresponse = new JSONObject(response);
                 lat = jsonresponse.getDouble("latitude");
                 lng = jsonresponse.getDouble("longitude");
+                token = jsonresponse.getString("token");
                 LatLng latlng = new LatLng(lat, lng);
 
                 Log.i("log", "Location: " + lat + "," + lng);
                 setMarker(latlng);
             } catch (JSONException e) {
+                Log.e("log", "JSONException occurred");
                 e.printStackTrace();
             }
         }

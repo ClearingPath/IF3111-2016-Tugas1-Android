@@ -20,11 +20,14 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class SubmitActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -61,7 +64,7 @@ public class SubmitActivity extends AppCompatActivity implements AdapterView.OnI
         submitButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String answer = ((Spinner) findViewById(R.id.loc_spinner)).getSelectedItem().toString();
-                new SubmitLocation().execute(answer);
+                new SubmitLocation().execute(answerstr);
             }
         });
     }
@@ -111,7 +114,11 @@ public class SubmitActivity extends AppCompatActivity implements AdapterView.OnI
 
         @Override
         protected String doInBackground(String... answer) {
+
+            response = null;
+
             try {
+
                 JSONObject obj = new JSONObject();
                 obj.put("com", "answer");
                 obj.put("nim", "13512017");
@@ -124,13 +131,11 @@ public class SubmitActivity extends AppCompatActivity implements AdapterView.OnI
 
                 Socket socket = new Socket(MapActivity.ServerIP, MapActivity.SERVERPORT);
 
-                OutputStream os = socket.getOutputStream();
-                DataOutputStream out = new DataOutputStream(os);
-                out.writeUTF(obj.toString());
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                out.println(obj);
 
-                InputStream is = socket.getInputStream();
-                DataInputStream in = new DataInputStream(is);
-                response = in.readUTF();
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                response = in.readLine();
 
                 Log.i("log", "Server Response: " + response);
                 Handler handler = new Handler(Looper.getMainLooper());
@@ -145,8 +150,10 @@ public class SubmitActivity extends AppCompatActivity implements AdapterView.OnI
                 return response;
 
             } catch (JSONException e) {
+                Log.e("log", "jso");
                 e.printStackTrace();
             } catch (IOException e) {
+                Log.e("log", "ioexception");
                 e.printStackTrace();
             }
 
